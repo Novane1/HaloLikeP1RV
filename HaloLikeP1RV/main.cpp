@@ -285,7 +285,7 @@ GLvoid redimensionner(int w, int h) {
 void LoadOBJ(const char* filename) {
     std::ifstream file(filename);
     std::string line;
-
+    cout << "cine";
     if (!file.is_open()) {
         std::cerr << "Failed to open file: " << filename << std::endl;
         return;
@@ -311,35 +311,37 @@ void LoadOBJ(const char* filename) {
             while ( c != '/') {
                 iss.get(c);
             }
-            iss.ignore();
+            
             while (c != '/') {
                 iss.get(c);
             }
-            iss.ignore();
+            
             while (c!= ' ') {
                 iss.get(c);
+                
             }
-            iss.ignore();
+            cout << "space" << endl;
+            
            
             iss >> face.v2;
 
             while (c != '/') {
                 iss.get(c);
             }
-            iss.ignore();
+            
             while (c != '/') {
                 iss.get(c);
             }
-            iss.ignore();
+            
             while (c != ' ') {
                 iss.get(c);
             }
-            iss.ignore();
+            
 
             iss >> face.v3;
    
             faces.push_back(face);
-            /*cout << face.v1 << " " << face.v2 <<" " << face.v3 << endl;*/
+            cout << face.v1 << " " << face.v2 <<" " << face.v3 << endl;
    
         }
         else if (token == "vn") {
