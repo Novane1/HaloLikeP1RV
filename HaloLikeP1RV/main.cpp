@@ -8,28 +8,23 @@
 #include <glut.h>
 #include "Camera.h"
 #include "Vector3.h"
+#include "Geometry.h"
 
 using namespace std;
 
-//structures utiles
 
-struct Vertex {
-    float x, y, z;
-};
-
-struct Face {
-    int v1, v2, v3;
-};
 
 //variables utiles
 vector<Vertex> vertices;
 vector<Face> faces;
 unsigned char* image;
-GLfloat pointSize = 5.0f;
-GLint typeForme = 0;
 bool red = true;
 bool blue = true;
-GLdouble SPEED = .1;
+GLdouble SPEED = 1;
+GLdouble mouseSensitivityAngle = .005;
+GLdouble actualAngle = 3.141592/2;
+float oldMouseX = 0;
+float oldMouseY = 0;
 
 //Définition de la cméra
 Camera camera;
@@ -58,7 +53,7 @@ GLvoid affichage() {
     glClear(GL_COLOR_BUFFER_BIT); 
 
     glBegin(GL_TRIANGLES);
-    for (const Face& face : faces) {
+    for (const Face& face : faces) {// affichage de la scène
        
         glVertex3f(vertices[face.v1 - 1].x, vertices[face.v1 - 1].y, vertices[face.v1 - 1].z);
         glVertex3f(vertices[face.v2 - 1].x, vertices[face.v2 - 1].y, vertices[face.v2 - 1].z);
@@ -66,16 +61,16 @@ GLvoid affichage() {
         
     }
     glEnd();
+    
     glFlush();
     glutSwapBuffers();
 
-    
 }
 
 
-GLvoid clavier(unsigned char touche, int x, int y) {
+GLvoid clavier(unsigned char touche, int x, int y) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
 
-
+   
     switch (touche) {
 
     case 's' :
@@ -86,15 +81,43 @@ GLvoid clavier(unsigned char touche, int x, int y) {
         camera.goFrontCamera(-SPEED);
         break;
 
-    case 'q': // quitter
-    case 27:
-        exit(0);
+    case 'a':
+        camera.goSideCamera(-SPEED);
         break;
+
+    case 'd':
+        camera.goSideCamera(SPEED);
+        break;
+ 
+        
+    
+
+    //case 'q': // quitter
+    //case 27:
+    //    exit(0);
+    //    break;
     }
     glutPostRedisplay();
     
     
 
+}
+void souris(int button, int state, int x, int y){
+  //  if (button == GLUT_RIGHT_BUTTON)
+  //  {
+  //      camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle);
+  //  }
+  ///*  ;*/
+  //  
+  //  oldMouseX = x;
+  //  oldMouseY = y;
+}
+void mouseMovement(int x, int y) {
+    camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle,actualAngle);
+    oldMouseX = x;
+    oldMouseY = y;
+    camera.updateCamera();
+    glutPostRedisplay();
 }
 
 
@@ -132,7 +155,7 @@ GLvoid redimensionner(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void LoadOBJ(const char* filename) {
+void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triangulaires
     std::ifstream file(filename);
     std::string line;
     if (!file.is_open()) {
@@ -157,7 +180,7 @@ void LoadOBJ(const char* filename) {
             Face face;
             char c ='non';
             iss >> face.v1;
-
+            //passer au point suivant, en éviant le vecteur de texture et normal
             while ( c != '/') {
                 iss.get(c);
             }
@@ -174,7 +197,7 @@ void LoadOBJ(const char* filename) {
             
            
             iss >> face.v2;
-
+            // ...
             while (c != '/') {
                 iss.get(c);
             }
@@ -195,7 +218,7 @@ void LoadOBJ(const char* filename) {
    
         }
         else if (token == "vn") {
-            //pas utile pour nous
+            //pas utile pour l'instant
         }
         else if (token == "vt") {
             // idem
@@ -233,9 +256,9 @@ int main(int argc, char* argv[])
     // Définition des fonctions de callbacks
     glutDisplayFunc(affichage);
     glutKeyboardFunc(clavier);
-
+    glutPassiveMotionFunc(mouseMovement);
     glutReshapeFunc(redimensionner);
-
+    glutMouseFunc(souris);
     // Lancement de la boucle infinie GLUT
     glutMainLoop();
 

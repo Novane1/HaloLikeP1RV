@@ -1,9 +1,7 @@
-
-
 #pragma once
 
-#ifndef Vector3_h
-#define Vector3_h
+#ifndef Geometry_h
+#define Geometry_h
 // Librairies
 #pragma once
 #include "windows.h"
@@ -15,8 +13,14 @@
 #include <glut.h>
 using namespace std;
 
-struct Vector3 { // Vecteur de GLdouble en 3 dimensions
-	GLdouble x, y, z;
+
+
+struct Vertex { // Point
+    float x, y, z;
 };
 
-#endif
+struct Face { // Face Triangulaire composé de ses 3 points
+    int v1, v2, v3;
+};
+
+#endif once

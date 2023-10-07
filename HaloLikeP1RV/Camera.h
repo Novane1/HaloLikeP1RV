@@ -20,11 +20,11 @@ class Camera {
 
 
 public :
-	void updateCamera();
-	void updateCameraDebug();
-	void goFrontCamera(float z);
+	void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
+	void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
+	void goSideCamera(float speed);
 	Camera();
-	void getPosZ();
+	void updateRotation(GLdouble x, GLdouble y, GLdouble oldX, GLdouble oldY, GLdouble mouseSensitivityAngle, GLdouble& actualAngle);
 };
 
 #endif
