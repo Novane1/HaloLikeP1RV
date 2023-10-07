@@ -22,9 +22,10 @@ bool red = true;
 bool blue = true;
 GLdouble SPEED = 1;
 GLdouble mouseSensitivityAngle = .005;
-GLdouble actualAngle = 3.141592/2;
-float oldMouseX = 0;
-float oldMouseY = 0;
+GLdouble actualAngleX = 3.141592/2;
+GLdouble actualAngleY = 0;
+float oldMouseX = -1;
+float oldMouseY = -1;
 
 //Définition de la cméra
 Camera camera;
@@ -113,9 +114,15 @@ void souris(int button, int state, int x, int y){
   //  oldMouseY = y;
 }
 void mouseMovement(int x, int y) {
-    camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle,actualAngle);
+    /*if ((oldMouseX < 0) && (oldMouseY < 0))
+    {
+        oldMouseX = x;
+        oldMouseY = y;
+    }*/
+    camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle,actualAngleX,actualAngleY);
     oldMouseX = x;
     oldMouseY = y;
+
     camera.updateCamera();
     glutPostRedisplay();
 }

@@ -57,19 +57,25 @@ Camera::Camera()
 	camera_up_vector.z = 0;
 }
 
-void Camera::updateRotation(GLdouble x, GLdouble y, GLdouble oldX, GLdouble oldY, GLdouble mouseSensitivityAngle, GLdouble& actualAngle){
+void Camera::updateRotation(GLdouble x, GLdouble y, GLdouble oldX, GLdouble oldY, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY){
 
 
+	actualAngleX += mouseSensitivityAngle * (x - oldX);
+	camera_center_vector.x = camera_position.x + cos(actualAngleX)*4; // le 4, c'est la distance de la caméra à l'endroit où elle regarde
+	camera_center_vector.z = camera_position.z + sin(actualAngleX)*4;
+	
+	actualAngleY += mouseSensitivityAngle * (y- oldY);
 	
 
-	actualAngle += mouseSensitivityAngle * (x - oldX);
-
-	camera_center_vector.x = camera_position.x + cos(actualAngle)*4;
-	camera_center_vector.z = camera_position.z + sin(actualAngle)*4;
-	
-	cout << actualAngle << endl;
-
+	camera_center_vector.y = camera_position.y + sin(actualAngleY) * 4;
+	camera_center_vector.z = camera_position.z + cos(actualAngleY) * 4;
+	/*cout << camera_center_vector.x << " " << camera_center_vector.z <<" " << camera_center_vector.y << endl;*/
 	this->updateCamera();
+
+	
+	//cout << actualAngleX*360/2/ 3.141592 << " " << actualAngleY * 360 / 2 / 3.141592 << endl;
+
+	
 }
 
 
