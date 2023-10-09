@@ -11,6 +11,7 @@
 #include <GL/gl.h>
 #include <glut.h>
 #include "Vector3.h"
+#include <GLFW/glfw3.h>
 using namespace std;
 // Définition de la classe caméra
 class Camera {
