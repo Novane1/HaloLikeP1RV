@@ -65,6 +65,9 @@ GLvoid affichage() {
         
     }
 
+    camera.goFrontCamera(dZ);
+    camera.goSideCamera(dZ);
+
     glEnd();
    
 
@@ -79,28 +82,59 @@ GLvoid affichage() {
 GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
 
     
-    if(scancode== glfwGetKeyScancode(GLFW_KEY_W)){ // avance
+    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!GLFW_RELEASE){ // avance
         
+        dZ = -SPEED;
         
-        camera.goFrontCamera(-SPEED);
     
     }
-    if (scancode == glfwGetKeyScancode(GLFW_KEY_S)) { // recule
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_W)) && GLFW_RELEASE) { // avance
 
+        dZ = 0;
 
-        camera.goFrontCamera(+SPEED);
 
     }
-    if (scancode == glfwGetKeyScancode(GLFW_KEY_Q)) {
 
 
-        camera.goSideCamera(SPEED);
+    
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S) && !GLFW_RELEASE)) { // recule
+
+
+        dZ = SPEED;
 
     }
-    if (scancode == glfwGetKeyScancode(GLFW_KEY_D)) {
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S) && GLFW_RELEASE)) { // recule
 
 
-        camera.goSideCamera(-SPEED);
+        dZ = 0;
+
+    }
+
+
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_Q) && !GLFW_RELEASE)) {
+
+
+        dX = -SPEED;
+
+    }
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_Q) && GLFW_RELEASE)) {
+
+
+        dX = 0;
+
+    }
+
+
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D) && !GLFW_RELEASE)) {
+
+
+        dX = SPEED;
+
+    }
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D) && GLFW_RELEASE)) {
+
+
+        dX = 0;
 
     }
 
