@@ -90,12 +90,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
@@ -116,7 +116,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -161,7 +161,70 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Geometry.h" />
+    <ClInclude Include="glm\glm\common.hpp" />
+    <ClInclude Include="glm\glm\exponential.hpp" />
+    <ClInclude Include="glm\glm\ext.hpp" />
+    <ClInclude Include="glm\glm\fwd.hpp" />
+    <ClInclude Include="glm\glm\geometric.hpp" />
+    <ClInclude Include="glm\glm\glm.hpp" />
+    <ClInclude Include="glm\glm\gtc\bitfield.hpp" />
+    <ClInclude Include="glm\glm\gtc\color_space.hpp" />
+    <ClInclude Include="glm\glm\gtc\constants.hpp" />
+    <ClInclude Include="glm\glm\gtc\epsilon.hpp" />
+    <ClInclude Include="glm\glm\gtc\integer.hpp" />
+    <ClInclude Include="glm\glm\gtc\matrix_access.hpp" />
+    <ClInclude Include="glm\glm\gtc\matrix_integer.hpp" />
+    <ClInclude Include="glm\glm\gtc\matrix_inverse.hpp" />
+    <ClInclude Include="glm\glm\gtc\matrix_transform.hpp" />
+    <ClInclude Include="glm\glm\gtc\noise.hpp" />
+    <ClInclude Include="glm\glm\gtc\packing.hpp" />
+    <ClInclude Include="glm\glm\gtc\quaternion.hpp" />
+    <ClInclude Include="glm\glm\gtc\random.hpp" />
+    <ClInclude Include="glm\glm\gtc\reciprocal.hpp" />
+    <ClInclude Include="glm\glm\gtc\round.hpp" />
+    <ClInclude Include="glm\glm\gtc\type_aligned.hpp" />
+    <ClInclude Include="glm\glm\gtc\type_precision.hpp" />
+    <ClInclude Include="glm\glm\gtc\type_ptr.hpp" />
+    <ClInclude Include="glm\glm\gtc\ulp.hpp" />
+    <ClInclude Include="glm\glm\gtc\vec1.hpp" />
+    <ClInclude Include="glm\glm\integer.hpp" />
+    <ClInclude Include="glm\glm\mat2x2.hpp" />
+    <ClInclude Include="glm\glm\mat2x3.hpp" />
+    <ClInclude Include="glm\glm\mat2x4.hpp" />
+    <ClInclude Include="glm\glm\mat3x2.hpp" />
+    <ClInclude Include="glm\glm\mat3x3.hpp" />
+    <ClInclude Include="glm\glm\mat3x4.hpp" />
+    <ClInclude Include="glm\glm\mat4x2.hpp" />
+    <ClInclude Include="glm\glm\mat4x3.hpp" />
+    <ClInclude Include="glm\glm\mat4x4.hpp" />
+    <ClInclude Include="glm\glm\matrix.hpp" />
+    <ClInclude Include="glm\glm\packing.hpp" />
+    <ClInclude Include="glm\glm\trigonometric.hpp" />
+    <ClInclude Include="glm\glm\vec2.hpp" />
+    <ClInclude Include="glm\glm\vec3.hpp" />
+    <ClInclude Include="glm\glm\vec4.hpp" />
+    <ClInclude Include="glm\glm\vector_relational.hpp" />
     <ClInclude Include="Vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glm\glm\gtc\bitfield.inl" />
+    <None Include="glm\glm\gtc\color_space.inl" />
+    <None Include="glm\glm\gtc\constants.inl" />
+    <None Include="glm\glm\gtc\epsilon.inl" />
+    <None Include="glm\glm\gtc\integer.inl" />
+    <None Include="glm\glm\gtc\matrix_access.inl" />
+    <None Include="glm\glm\gtc\matrix_inverse.inl" />
+    <None Include="glm\glm\gtc\matrix_transform.inl" />
+    <None Include="glm\glm\gtc\noise.inl" />
+    <None Include="glm\glm\gtc\packing.inl" />
+    <None Include="glm\glm\gtc\quaternion.inl" />
+    <None Include="glm\glm\gtc\quaternion_simd.inl" />
+    <None Include="glm\glm\gtc\random.inl" />
+    <None Include="glm\glm\gtc\reciprocal.inl" />
+    <None Include="glm\glm\gtc\round.inl" />
+    <None Include="glm\glm\gtc\type_precision.inl" />
+    <None Include="glm\glm\gtc\type_ptr.inl" />
+    <None Include="glm\glm\gtc\ulp.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -10,9 +10,9 @@
 #include "Vector3.h"
 #include "Geometry.h"
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
+
 
 using namespace std;
 
@@ -29,7 +29,9 @@ GLdouble actualAngleX = 3.141592/2;
 GLdouble actualAngleY = 0;
 float oldMouseX = -1;
 float oldMouseY = -1;
-
+float dX = 0; // décalage selon l'axe X en déplacement
+float dZ = 0;// décalage selon l'axe Z en déplacement
+glm::mat4 view; // matrice de vue
 //Définition de la cméra
 Camera camera;
 
@@ -64,6 +66,8 @@ GLvoid affichage() {
     }
 
     glEnd();
+   
+
 
     
     
@@ -72,40 +76,35 @@ GLvoid affichage() {
 }
 //
 //
-//GLvoid clavier(unsigned char touche, int x, int y) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
-//
-//   
-//    switch (touche) {
-//
-//    case 's' :
-//        camera.goFrontCamera(SPEED);
-//        break;
-//
-//    case 'z':
-//        camera.goFrontCamera(-SPEED);
-//        break;
-//
-//    case 'a':
-//        camera.goSideCamera(-SPEED);
-//        break;
-//
-//    case 'd':
-//        camera.goSideCamera(SPEED);
-//        break;
-// 
-//        
-//    
-//
-//    //case 'q': // quitter
-//    //case 27:
-//    //    exit(0);
-//    //    break;
-//    }
-//    glutPostRedisplay();
-//    
-//    
-//
-//}
+GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
+
+    
+    if(scancode== glfwGetKeyScancode(GLFW_KEY_W)){ // avance
+        
+        
+        camera.goFrontCamera(-SPEED);
+    
+    }
+    if (scancode == glfwGetKeyScancode(GLFW_KEY_S)) { // recule
+
+
+        camera.goFrontCamera(+SPEED);
+
+    }
+    if (scancode == glfwGetKeyScancode(GLFW_KEY_Q)) {
+
+
+        camera.goSideCamera(SPEED);
+
+    }
+    if (scancode == glfwGetKeyScancode(GLFW_KEY_D)) {
+
+
+        camera.goSideCamera(-SPEED);
+
+    }
+
+}
 //void souris(int button, int state, int x, int y){
 //  //  if (button == GLUT_RIGHT_BUTTON)
 //  //  {
@@ -238,45 +237,6 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
 }
 
 
-//int main(int argc, char* argv[])
-//{
-//   
-//    LoadOBJ("Modele/icosphere.obj");
-//
-//    // Initialisation de GLUT
-//    glutInit(&argc, argv);
-//    // Choix du mode d'affichage (ici RVB)
-//    //glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH);
-//    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-//    // Position initiale de la fenetre GLUT
-//    glutInitWindowPosition(200, 200);
-//    // Taille initiale de la fenetre GLUT
-//    glutInitWindowSize(windowW, windowH);
-//    // Creation de la fenetre GLUT
-//    glutCreateWindow("carré");
-//
-//    // Définition de la couleur d'effacement du framebuffer
-//    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-//
-//
-//    // Blend
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//
-//    // Définition des fonctions de callbacks
-//    glutDisplayFunc(affichage);
-//    glutKeyboardFunc(clavier);
-//    glutPassiveMotionFunc(mouseMovement);
-//    glutReshapeFunc(redimensionner);
-//    glutMouseFunc(souris);
-//    // Lancement de la boucle infinie GLUT
-//    glutMainLoop();
-//
-//
-//
-//    return 0;
-//}
-
 
 
 int main() {
@@ -285,7 +245,10 @@ int main() {
         std::cerr << "Failed to initialize GLFW" << std::endl;
         return -1;
     } 
-    LoadOBJ("Modele/icosphere.obj");
+
+    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/icosphere.obj");
+    
+
 
     // Create a GLFW window
     GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Cube Example", nullptr, nullptr);
@@ -294,27 +257,32 @@ int main() {
         glfwTerminate();
         return -1;
     }
+    glfwSetKeyCallback(window, clavier);
+
 
     // Make the OpenGL context current
     glfwMakeContextCurrent(window);
 
    
     glEnable(GL_DEPTH_TEST);
+    glViewport(0, 0, 800, 600);
+
+    // Projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
     // Main loop
     while (!glfwWindowShouldClose(window)) {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glFrustum(-1.0, 1.0, -1.0, 1.0, 1.0, 10.0);
-
-
+        
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        glTranslatef(0.0f, 0.0f, -5.0f);
-    
-        affichage();
+        camera.updateCamera();
+
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        affichage(); // affiche ma scène
 
 
 

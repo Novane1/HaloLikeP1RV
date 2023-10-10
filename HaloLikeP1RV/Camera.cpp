@@ -15,15 +15,13 @@ using namespace std;
 
 void Camera::updateCamera()
 {
-	//On réinitialise
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	// Changement de position de la caméra
+	
+	
+
 	gluLookAt(camera_position.x, camera_position.y, camera_position.z,
 		camera_center_vector.x, camera_center_vector.y, camera_center_vector.z,
 		camera_up_vector.x, camera_up_vector.y, camera_up_vector.z);
-	/*cout << "a";*/
+	
 }
 
 

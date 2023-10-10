@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\glm">
+      <UniqueIdentifier>{4369c49b-a102-43e8-b943-699c98ffad16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\glm\gtc">
+      <UniqueIdentifier>{5688c5ac-11f3-47c8-a3d8-19f9d6618c3e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -35,5 +41,190 @@
     <ClInclude Include="Geometry.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="glm\glm\common.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\exponential.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\ext.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\fwd.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\geometric.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\glm.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\integer.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat2x2.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat2x3.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat2x4.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat3x2.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat3x3.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat3x4.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat4x2.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat4x3.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\mat4x4.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\matrix.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\packing.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\trigonometric.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\vec2.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\vec3.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\vec4.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\vector_relational.hpp">
+      <Filter>Fichiers d%27en-tête\glm</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\bitfield.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\color_space.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\constants.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\epsilon.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\integer.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\matrix_access.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\matrix_integer.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\matrix_inverse.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\matrix_transform.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\noise.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\packing.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\quaternion.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\random.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\reciprocal.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\round.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\type_aligned.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\type_precision.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\type_ptr.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\ulp.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="glm\glm\gtc\vec1.hpp">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="glm\glm\gtc\bitfield.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\color_space.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\constants.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\epsilon.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\integer.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\matrix_access.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\matrix_inverse.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\matrix_transform.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\noise.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\packing.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\quaternion.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\quaternion_simd.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\random.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\reciprocal.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\round.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\type_precision.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\type_ptr.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
+    <None Include="glm\glm\gtc\ulp.inl">
+      <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </None>
   </ItemGroup>
 </Project>
