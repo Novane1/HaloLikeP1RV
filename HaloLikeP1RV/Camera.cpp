@@ -28,9 +28,10 @@ void Camera::updateCamera()
 
 void Camera::goFrontCamera(float speed)
 {
-	
-	camera_position.z = camera_position.z + speed;
-	camera_center_vector.z = camera_center_vector.z + speed;
+	glm::vec3 target =  camera_position - camera_center_vector;// vector forward
+	glm::normalize(target);// normalizing so we have just the direction 
+	camera_position = camera_position + speed*target; // we go in the direction of the vector forward at the speed we chosed
+	camera_center_vector = camera_center_vector + speed * target; // we change the target of the camera 
 	this->updateCamera();
 	
 	
@@ -38,8 +39,10 @@ void Camera::goFrontCamera(float speed)
 
 void Camera::goSideCamera(float speed)
 {
-	camera_position.x = camera_position.x + speed;
-	camera_center_vector.x = camera_center_vector.x + speed;
+	glm::vec3 target = camera_position - camera_center_vector; // vector forward
+	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
+	camera_position = camera_position + speed * right; // we go in the direction of the vector forward at the speed we chosed
+	camera_center_vector = camera_center_vector + speed * right; // we change the target of the camera 
 	this->updateCamera();
 }
 
@@ -56,18 +59,22 @@ Camera::Camera()
 	camera_up_vector.z = 0;
 }
 
-void Camera::updateRotation(GLdouble x, GLdouble y, GLdouble oldX, GLdouble oldY, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY){
+void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY){
 
 
-	actualAngleX += mouseSensitivityAngle * (x - oldX);
-	camera_center_vector.x = camera_position.x + cos(actualAngleX)*4; // le 4, c'est la distance de la caméra à l'endroit où elle regarde
-	camera_center_vector.z = camera_position.z + sin(actualAngleX)*4;
-	
-	actualAngleY += mouseSensitivityAngle * (y- oldY);
-	
+	actualAngleX += mouseSensitivityAngle * (xOffset);
+	actualAngleY += mouseSensitivityAngle * (yOffset);
 
+	if (actualAngleY >= 3.141592/2) {
+		actualAngleY = 3.141592/2;
+	}
+	if (actualAngleY <= -3.141592/2) {
+		actualAngleY = -3.141592/2;
+	}
+
+	camera_center_vector.x = camera_position.x + cos(actualAngleX) * 4; // le 4, c'est la distance de la caméra à l'endroit où elle regarde
+	camera_center_vector.z = camera_position.z + sin(actualAngleX) * 4;
 	camera_center_vector.y = camera_position.y + sin(actualAngleY) * 4;
-	camera_center_vector.z = camera_position.z + cos(actualAngleY) * 4;
 	/*cout << camera_center_vector.x << " " << camera_center_vector.z <<" " << camera_center_vector.y << endl;*/
 	this->updateCamera();
 

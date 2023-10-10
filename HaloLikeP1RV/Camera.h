@@ -19,7 +19,7 @@ public :
 	void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
 	void goSideCamera(float speed);
 	Camera();
-	void updateRotation(GLdouble x, GLdouble y, GLdouble oldX, GLdouble oldY, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY);
+	void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY);
 };
 
 #endif

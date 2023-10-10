@@ -23,12 +23,16 @@ vector<Face> faces;
 unsigned char* image;
 bool red = true;
 bool blue = true;
-GLdouble SPEED = 1;
+GLdouble SPEED = .1;
 GLdouble mouseSensitivityAngle = .005;
 GLdouble actualAngleX = 3.141592/2;
 GLdouble actualAngleY = 0;
+const GLdouble minYAngle = -3.141592 / 2.0; // Minimum angle (e.g., -90 degrees)
+const GLdouble maxYAngle = 3.141592 / 2.0;
 float oldMouseX = -1;
 float oldMouseY = -1;
+float xOffset = 0;
+float yOffset = 0;
 float dX = 0; // décalage selon l'axe X en déplacement
 float dZ = 0;// décalage selon l'axe Z en déplacement
 glm::mat4 view; // matrice de vue
@@ -66,7 +70,7 @@ GLvoid affichage() {
     }
 
     camera.goFrontCamera(dZ);
-    camera.goSideCamera(dZ);
+    camera.goSideCamera(dX);
 
     glEnd();
    
@@ -82,13 +86,13 @@ GLvoid affichage() {
 GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
 
     
-    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!GLFW_RELEASE){ // avance
+    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!(action==GLFW_RELEASE)){ // avance
         
         dZ = -SPEED;
         
     
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_W)) && GLFW_RELEASE) { // avance
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_W)) && (action == GLFW_RELEASE)) { // avance
 
         dZ = 0;
 
@@ -97,13 +101,13 @@ GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) 
 
 
     
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S) && !GLFW_RELEASE)) { // recule
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && !(action == GLFW_RELEASE)) { // recule
 
 
         dZ = SPEED;
 
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S) && GLFW_RELEASE)) { // recule
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && (action == GLFW_RELEASE)) { // recule
 
 
         dZ = 0;
@@ -111,13 +115,13 @@ GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) 
     }
 
 
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_Q) && !GLFW_RELEASE)) {
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && !(action == GLFW_RELEASE)) {
 
 
-        dX = -SPEED;
+        dX = SPEED;
 
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_Q) && GLFW_RELEASE)) {
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && (action == GLFW_RELEASE)) {
 
 
         dX = 0;
@@ -125,13 +129,13 @@ GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) 
     }
 
 
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D) && !GLFW_RELEASE)) {
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && !(action == GLFW_RELEASE)) {
 
 
-        dX = SPEED;
+        dX = -SPEED;
 
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D) && GLFW_RELEASE)) {
+    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && (action == GLFW_RELEASE)) {
 
 
         dX = 0;
@@ -139,6 +143,16 @@ GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) 
     }
 
 }
+GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
+{
+    xOffset = xpos - oldMouseX;
+    yOffset = oldMouseY - ypos;
+    oldMouseX = xpos;
+    oldMouseY = ypos;
+    camera.updateRotation(xOffset, yOffset, mouseSensitivityAngle,actualAngleX,actualAngleY);
+}
+
+
 //void souris(int button, int state, int x, int y){
 //  //  if (button == GLUT_RIGHT_BUTTON)
 //  //  {
@@ -292,7 +306,8 @@ int main() {
         return -1;
     }
     glfwSetKeyCallback(window, clavier);
-
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, souris_au_centre);
 
     // Make the OpenGL context current
     glfwMakeContextCurrent(window);
@@ -304,7 +319,7 @@ int main() {
     // Projection matrix
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+    gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
     // Main loop
     while (!glfwWindowShouldClose(window)) {
 
