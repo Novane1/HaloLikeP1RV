@@ -10,6 +10,7 @@
 #include "Vector3.h"
 #include "Geometry.h"
 #include <GLFW/glfw3.h>
+#include "stb_image.h"
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
 
@@ -23,8 +24,8 @@ vector<Face> faces;
 unsigned char* image;
 bool red = true;
 bool blue = true;
-GLdouble SPEED = .1;
-GLdouble mouseSensitivityAngle = .005;
+GLdouble SPEED = .05;
+GLdouble mouseSensitivityAngle = .002;
 GLdouble actualAngleX = 3.141592/2;
 GLdouble actualAngleY = 0;
 const GLdouble minYAngle = -3.141592 / 2.0; // Minimum angle (e.g., -90 degrees)
@@ -38,8 +39,6 @@ float dZ = 0;// décalage selon l'axe Z en déplacement
 glm::mat4 view; // matrice de vue
 //Définition de la cméra
 Camera camera;
-
-
 
 // Taille de la fenêtre
 int windowW = 640;
@@ -60,86 +59,52 @@ float far1 = 100.0f;
 GLvoid affichage() {
     
     
+
     glBegin(GL_TRIANGLES);
     for (const Face& face : faces) {// affichage de la scène
-       
+
+        //glColor3f(vertices[face.v1 - 1].r, vertices[face.v1 - 1].v, vertices[face.v1 - 1].b);
         glVertex3f(vertices[face.v1 - 1].x, vertices[face.v1 - 1].y, vertices[face.v1 - 1].z);
+        //glColor3f(vertices[face.v2 - 1].r, vertices[face.v2 - 1].v, vertices[face.v2 - 1].b);
         glVertex3f(vertices[face.v2 - 1].x, vertices[face.v2 - 1].y, vertices[face.v2 - 1].z);
-        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);
-        
+        //glColor3f(vertices[face.v3 - 1].r, vertices[face.v3 - 1].v, vertices[face.v3 - 1].b);
+        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);        
     }
 
     camera.goFrontCamera(dZ);
     camera.goSideCamera(dX);
 
     glEnd();
-   
-
-
-    
-    
-
-
 }
-//
-//
+
 GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
 
-    
-    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!(action==GLFW_RELEASE)){ // avance
-        
+    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!(action==GLFW_RELEASE)){ // avance  
         dZ = -SPEED;
-        
-    
     }
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_W)) && (action == GLFW_RELEASE)) { // avance
-
         dZ = 0;
-
-
     }
 
-
-    
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && !(action == GLFW_RELEASE)) { // recule
-
-
         dZ = SPEED;
-
     }
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && (action == GLFW_RELEASE)) { // recule
-
-
         dZ = 0;
-
     }
-
 
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && !(action == GLFW_RELEASE)) {
-
-
         dX = SPEED;
-
     }
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && (action == GLFW_RELEASE)) {
-
-
         dX = 0;
-
     }
-
 
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && !(action == GLFW_RELEASE)) {
-
-
         dX = -SPEED;
-
     }
     if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && (action == GLFW_RELEASE)) {
-
-
         dX = 0;
-
     }
 
 }
@@ -151,7 +116,6 @@ GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
     oldMouseY = ypos;
     camera.updateRotation(xOffset, yOffset, mouseSensitivityAngle,actualAngleX,actualAngleY);
 }
-
 
 //void souris(int button, int state, int x, int y){
 //  //  if (button == GLUT_RIGHT_BUTTON)
@@ -228,11 +192,12 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
 
         if (token == "v") { // on ajoute un format du type v x y z
             Vertex vertex;
-            iss >> vertex.x >> vertex.y >> vertex.z;
+            iss >> vertex.x >> vertex.y >> vertex.z; //>> vertex.r >> vertex.v >> vertex.b;
             vertices.push_back(vertex);
         }
         else if (token == "f") { // format du type f x/y/z x/y/z x/y/z, où seul les x nous interesse. 
             // il s'agit de tout les triplets de points formant des triangles
+        
 
             Face face;
             char c ='non';
@@ -284,9 +249,6 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
     file.close();
 }
 
-
-
-
 int main() {
     // Initialize GLFW
     if (!glfwInit()) {
@@ -294,8 +256,8 @@ int main() {
         return -1;
     } 
 
-    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/icosphere.obj");
-    
+    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/sword.obj");
+   
 
 
     // Create a GLFW window

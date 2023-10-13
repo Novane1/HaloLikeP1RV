@@ -19,6 +19,9 @@
     <Filter Include="Fichiers d%27en-tête\glm\gtc">
       <UniqueIdentifier>{5688c5ac-11f3-47c8-a3d8-19f9d6618c3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\stb">
+      <UniqueIdentifier>{ff151bc6-015d-4573-af92-46dd2d7d01fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="Vector3.cpp">
       <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Objet3D.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_vorbis.c">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +178,69 @@
     </ClInclude>
     <ClInclude Include="glm\glm\gtc\vec1.hpp">
       <Filter>Fichiers d%27en-tête\glm\gtc</Filter>
+    </ClInclude>
+    <ClInclude Include="Objet3D.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_voxel_render.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_c_lexer.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_connected_components.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_divide.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_ds.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_dxt.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_easy_font.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_herringbone_wang_tile.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_hexwave.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_image.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_image_resize2.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_image_write.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_include.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_leakcheck.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_perlin.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_rect_pack.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_sprintf.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_textedit.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_tilemap_editor.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\HaloLikeP1RV\HaloLikeP1RV\stb-master\stb_truetype.h">
+      <Filter>Fichiers d%27en-tête\stb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

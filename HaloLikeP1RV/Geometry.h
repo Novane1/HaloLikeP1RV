@@ -17,6 +17,7 @@ using namespace std;
 
 struct Vertex { // Point
     float x, y, z;
+    float r, v, b;
 };
 
 struct Face { // Face Triangulaire composé de ses 3 points
