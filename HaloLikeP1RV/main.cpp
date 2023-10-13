@@ -5,22 +5,26 @@
 #include <vector>
 #include <sstream>
 #include <GL/gl.h>
-#include <glut.h>
+//#include <glut.h>
 #include "Camera.h"
-#include "Vector3.h"
+//#include "Vector3.h"
 #include "Geometry.h"
 #include <GLFW/glfw3.h>
-#include "stb_image.h"
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 
 using namespace std;
 
-
-//variables utiles
+// VARIABLES GLOBALES
 vector<Vertex> vertices;
 vector<Face> faces;
+vector<Tex> texture;
 unsigned char* image;
 bool red = true;
 bool blue = true;
@@ -37,8 +41,8 @@ float yOffset = 0;
 float dX = 0; // décalage selon l'axe X en déplacement
 float dZ = 0;// décalage selon l'axe Z en déplacement
 glm::mat4 view; // matrice de vue
-//Définition de la cméra
-Camera camera;
+Camera camera; //Définition de la caméra
+GLuint textureID;
 
 // Taille de la fenêtre
 int windowW = 640;
@@ -57,22 +61,30 @@ float far1 = 100.0f;
 //
 //// Definition de la fonction d'affichage
 GLvoid affichage() {
-    
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_TRIANGLES);
+
     for (const Face& face : faces) {// affichage de la scène
 
+        // Gris
+        glColor3f(0.9f, 0.9f, 0.9f);
         //glColor3f(vertices[face.v1 - 1].r, vertices[face.v1 - 1].v, vertices[face.v1 - 1].b);
+        glTexCoord2f(texture[face.vt1 - 1].v1, texture[face.vt1 - 1].v2);
         glVertex3f(vertices[face.v1 - 1].x, vertices[face.v1 - 1].y, vertices[face.v1 - 1].z);
         //glColor3f(vertices[face.v2 - 1].r, vertices[face.v2 - 1].v, vertices[face.v2 - 1].b);
+        glTexCoord2f(texture[face.vt2 - 1].v1, texture[face.vt2 - 1].v2);
         glVertex3f(vertices[face.v2 - 1].x, vertices[face.v2 - 1].y, vertices[face.v2 - 1].z);
         //glColor3f(vertices[face.v3 - 1].r, vertices[face.v3 - 1].v, vertices[face.v3 - 1].b);
-        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);        
+        glTexCoord2f(texture[face.vt3 - 1].v1, texture[face.vt3 - 1].v2);
+        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);  
     }
 
     camera.goFrontCamera(dZ);
     camera.goSideCamera(dX);
 
     glEnd();
+    glDisable(GL_TEXTURE_2D);
 }
 
 GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
@@ -174,6 +186,28 @@ GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
 //    glMatrixMode(GL_MODELVIEW);
 //}
 //
+void loadTexture() {
+    glEnable(GL_DEPTH_TEST);
+
+    // Load the texture
+    int width, height, channels;
+    unsigned char* image = stbi_load("ground grass 01-m-color.png", &width, &height, &channels, 0);
+
+    if (image == NULL) {
+        printf("Failed to load texture\n");
+        exit(1);
+    }
+
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    stbi_image_free(image);
+}
 void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triangulaires
     std::ifstream file(filename);
     std::string line;
@@ -200,23 +234,30 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
             iss >> face.v1;
             //passer au point suivant, en éviant le vecteur de texture et normal
             while ( c != '/') { iss.get(c); } 
+            iss >> face.vt1;
             while (c != '/') { iss.get(c); } 
             while (c!= ' ') { iss.get(c); }
 
             iss >> face.v2;
             // ...
             while (c != '/') { iss.get(c); }
+            iss >> face.vt2;
             while (c != '/') { iss.get(c); }
             while (c != ' ') { iss.get(c); }
             
             iss >> face.v3;
+            while (c != '/') { iss.get(c); }
+            iss >> face.vt3;
             faces.push_back(face);
         } 
         else if (token == "vn") {
             //pas utile pour l'instant
         }
-        else if (token == "vt") {
-            // idem
+        // Coordonnées de texture
+        else if (token == "vt") { 
+            Tex tex;
+            iss >> tex.v1 >> tex.v2;
+            texture.push_back(tex);
         }
     }
     file.close();
@@ -231,7 +272,7 @@ int main() {
     } 
 
     LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/terrain.obj");
-   
+    loadTexture();
 
 
     // Create a GLFW window

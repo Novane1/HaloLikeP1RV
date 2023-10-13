@@ -88,9 +88,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Dev\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -105,9 +105,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Dev\glfw-3.3.8.bin.WIN32\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\glm;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
