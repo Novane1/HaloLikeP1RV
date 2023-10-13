@@ -58,8 +58,6 @@ float far1 = 100.0f;
 //// Definition de la fonction d'affichage
 GLvoid affichage() {
     
-    
-
     glBegin(GL_TRIANGLES);
     for (const Face& face : faces) {// affichage de la scène
 
@@ -187,58 +185,33 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
     while (std::getline(file, line)) {
         std::istringstream iss(line);
         std::string token;
-
         iss >> token;
 
         if (token == "v") { // on ajoute un format du type v x y z
             Vertex vertex;
             iss >> vertex.x >> vertex.y >> vertex.z; //>> vertex.r >> vertex.v >> vertex.b;
             vertices.push_back(vertex);
-        }
+        } 
         else if (token == "f") { // format du type f x/y/z x/y/z x/y/z, où seul les x nous interesse. 
+            
             // il s'agit de tout les triplets de points formant des triangles
-        
-
             Face face;
             char c ='non';
             iss >> face.v1;
             //passer au point suivant, en éviant le vecteur de texture et normal
-            while ( c != '/') {
-                iss.get(c);
-            }
-            
-            while (c != '/') {
-                iss.get(c);
-            }
-            
-            while (c!= ' ') {
-                iss.get(c);
-                
-            }
+            while ( c != '/') { iss.get(c); } 
+            while (c != '/') { iss.get(c); } 
+            while (c!= ' ') { iss.get(c); }
 
-            
-           
             iss >> face.v2;
             // ...
-            while (c != '/') {
-                iss.get(c);
-            }
+            while (c != '/') { iss.get(c); }
+            while (c != '/') { iss.get(c); }
+            while (c != ' ') { iss.get(c); }
             
-            while (c != '/') {
-                iss.get(c);
-            }
-            
-            while (c != ' ') {
-                iss.get(c);
-            }
-            
-
             iss >> face.v3;
-   
             faces.push_back(face);
-
-   
-        }
+        } 
         else if (token == "vn") {
             //pas utile pour l'instant
         }
@@ -248,7 +221,6 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
     }
     file.close();
 }
-
 int main() {
     // Initialize GLFW
     if (!glfwInit()) {
@@ -256,7 +228,7 @@ int main() {
         return -1;
     } 
 
-    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/sword.obj");
+    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/terrain.obj");
    
 
 
@@ -283,19 +255,13 @@ int main() {
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
     // Main loop
-    while (!glfwWindowShouldClose(window)) {
-
-        
-        
+    while (!glfwWindowShouldClose(window)) { 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         camera.updateCamera();
 
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         affichage(); // affiche ma scène
-
-
 
         // Swap the front and back buffers
         glfwSwapBuffers(window);
@@ -303,9 +269,7 @@ int main() {
         // Poll for and process events
         glfwPollEvents();
     }
-
     // Terminate GLFW
     glfwTerminate();
-
     return 0;
 }
