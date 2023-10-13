@@ -221,6 +221,8 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
     }
     file.close();
 }
+
+//          MAIN()
 int main() {
     // Initialize GLFW
     if (!glfwInit()) {
@@ -228,7 +230,7 @@ int main() {
         return -1;
     } 
 
-    LoadOBJ("C:/Users/Eleve/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/terrain.obj");
+    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/terrain.obj");
    
 
 
