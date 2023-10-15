@@ -118,34 +118,7 @@ GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
     camera.updateRotation(xOffset, yOffset, mouseSensitivityAngle,actualAngleX,actualAngleY);
 }
 
-//GLuint LoadTexture(const char* path) {
-//    // Load the image using STB Image
-//    int width, height, channels;
-//    unsigned char* image = stbi_load(path, &width, &height, &channels, 0);
-//
-//    if (!image) {
-//        std::cout << "Failed to load texture: " << path << std::endl;
-//        return 0;
-//    }
-//
-//    GLuint textureID;
-//    glGenTextures(1, &textureID);
-//    glBindTexture(GL_TEXTURE_2D, textureID);
-//
-//    // Set texture parameters for basic rendering
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//
-//    // Load the image data into the texture
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-//
-//    // Free the image data
-//    stbi_image_free(image);
-//
-//    return textureID;
-//}
+
 void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triangulaires
     std::ifstream file(filename);
     std::string line;
@@ -198,6 +171,7 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
         else if (token == "vt") { 
             Tex tex;
             iss >> tex.v1 >> tex.v2;
+           
             texture.push_back(tex);
         }
     }
@@ -262,9 +236,10 @@ int main() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
     // Load the texture
-    GLuint textureID = LoadTexture("Spartan_Arms_Mat_baseColor.png");
-
-    LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/player.obj");
+    GLuint textureID = LoadTexture("helmet.png");
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+    LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/helmet.obj");
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
@@ -273,9 +248,10 @@ int main() {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         camera.updateCamera();
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Enable texturing
+        
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureID);
 
