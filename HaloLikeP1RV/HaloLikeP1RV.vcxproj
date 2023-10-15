@@ -90,12 +90,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
@@ -116,7 +116,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -124,15 +124,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\GLUT\include;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Dev\GLUT\include;C:\Dev\GLUT\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Dev\GLUT\include;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\GLUT\include;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glut32.lib;glu32.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
@@ -142,15 +142,17 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\GLUT\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Dev\GLUT\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glut32.lib;glu32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

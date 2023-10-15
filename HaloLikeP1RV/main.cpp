@@ -22,13 +22,14 @@
 using namespace std;
 
 // VARIABLES GLOBALES
+int width, height, channels;
 vector<Vertex> vertices;
 vector<Face> faces;
 vector<Tex> texture;
-unsigned char* image;
+
 bool red = true;
 bool blue = true;
-GLdouble SPEED = .05;
+GLdouble SPEED = .01;
 GLdouble mouseSensitivityAngle = .002;
 GLdouble actualAngleX = 3.141592/2;
 GLdouble actualAngleY = 0;
@@ -42,7 +43,7 @@ float dX = 0; // décalage selon l'axe X en déplacement
 float dZ = 0;// décalage selon l'axe Z en déplacement
 glm::mat4 view; // matrice de vue
 Camera camera; //Définition de la caméra
-GLuint textureID;
+
 
 // Taille de la fenêtre
 int windowW = 640;
@@ -51,25 +52,19 @@ float focale = 65.0f;
 float near1 = 0.1f;
 float far1 = 100.0f;
 //
-//// Déclarations des fonctions de rappel (callbacks)
-//GLvoid affichage();
-//GLvoid clavier(unsigned char touche, int x, int y);
-//
-//GLvoid redimensionner(int w, int h);
-//
-//
-//
+// Déclarations des fonctions de rappel (callbacks)
+
+
+
+
 //// Definition de la fonction d'affichage
 GLvoid affichage() {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_TRIANGLES);
-
     for (const Face& face : faces) {// affichage de la scène
 
-        // Gris
-        glColor3f(0.9f, 0.9f, 0.9f);
-        //glColor3f(vertices[face.v1 - 1].r, vertices[face.v1 - 1].v, vertices[face.v1 - 1].b);
+      // Gris
+
+      //glColor3f(vertices[face.v1 - 1].r, vertices[face.v1 - 1].v, vertices[face.v1 - 1].b);
         glTexCoord2f(texture[face.vt1 - 1].v1, texture[face.vt1 - 1].v2);
         glVertex3f(vertices[face.v1 - 1].x, vertices[face.v1 - 1].y, vertices[face.v1 - 1].z);
         //glColor3f(vertices[face.v2 - 1].r, vertices[face.v2 - 1].v, vertices[face.v2 - 1].b);
@@ -77,14 +72,10 @@ GLvoid affichage() {
         glVertex3f(vertices[face.v2 - 1].x, vertices[face.v2 - 1].y, vertices[face.v2 - 1].z);
         //glColor3f(vertices[face.v3 - 1].r, vertices[face.v3 - 1].v, vertices[face.v3 - 1].b);
         glTexCoord2f(texture[face.vt3 - 1].v1, texture[face.vt3 - 1].v2);
-        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);  
+        glVertex3f(vertices[face.v3 - 1].x, vertices[face.v3 - 1].y, vertices[face.v3 - 1].z);
     }
 
-    camera.goFrontCamera(dZ);
-    camera.goSideCamera(dX);
-
     glEnd();
-    glDisable(GL_TEXTURE_2D);
 }
 
 GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
@@ -127,87 +118,34 @@ GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
     camera.updateRotation(xOffset, yOffset, mouseSensitivityAngle,actualAngleX,actualAngleY);
 }
 
-//void souris(int button, int state, int x, int y){
-//  //  if (button == GLUT_RIGHT_BUTTON)
-//  //  {
-//  //      camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle);
-//  //  }
-//  ///*  ;*/
-//  //  
-//  //  oldMouseX = x;
-//  //  oldMouseY = y;
+//GLuint LoadTexture(const char* path) {
+//    // Load the image using STB Image
+//    int width, height, channels;
+//    unsigned char* image = stbi_load(path, &width, &height, &channels, 0);
+//
+//    if (!image) {
+//        std::cout << "Failed to load texture: " << path << std::endl;
+//        return 0;
+//    }
+//
+//    GLuint textureID;
+//    glGenTextures(1, &textureID);
+//    glBindTexture(GL_TEXTURE_2D, textureID);
+//
+//    // Set texture parameters for basic rendering
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//
+//    // Load the image data into the texture
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+//
+//    // Free the image data
+//    stbi_image_free(image);
+//
+//    return textureID;
 //}
-//void mouseMovement(int x, int y) {
-//    /*if ((oldMouseX < 0) && (oldMouseY < 0))
-//    {
-//        oldMouseX = x;
-//        oldMouseY = y;
-//    }*/
-//    camera.updateRotation(x, y, oldMouseX, oldMouseY, mouseSensitivityAngle,actualAngleX,actualAngleY);
-//    oldMouseX = x;
-//    oldMouseY = y;
-//
-//    camera.updateCamera();
-//    glutPostRedisplay();
-//}
-//
-//
-//
-//// Callback de redimensionnement de la fenêtre
-//GLvoid redimensionner(int w, int h) {
-//    // Garde les valeurs
-//    windowW = w;
-//    windowH = h;
-//    // eviter une division par 0
-//    if (windowH == 0)
-//        windowH = 1;
-//
-//    float ratio = (float)windowW / (float)windowH;
-//    std::cout << "Ratio : " << ratio << std::endl;
-//
-//    // Projection
-//    glMatrixMode(GL_PROJECTION);
-//
-//    // Resetting matrix
-//    glLoadIdentity();
-//
-//
-//
-//    glViewport(0, 0, windowW, windowH);
-//
-//    // Mise en place de la perspective
-//
-//    gluPerspective(focale, float(windowW) / float(windowH), near1, far1);
-//
-//    // Placement de la caméra
-//    camera.updateCamera();
-//
-//    // Retourne a la pile modelview
-//    glMatrixMode(GL_MODELVIEW);
-//}
-//
-void loadTexture() {
-    glEnable(GL_DEPTH_TEST);
-
-    // Load the texture
-    int width, height, channels;
-    unsigned char* image = stbi_load("ground grass 01-m-color.png", &width, &height, &channels, 0);
-
-    if (image == NULL) {
-        printf("Failed to load texture\n");
-        exit(1);
-    }
-
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    stbi_image_free(image);
-}
 void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triangulaires
     std::ifstream file(filename);
     std::string line;
@@ -226,15 +164,16 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
             iss >> vertex.x >> vertex.y >> vertex.z; //>> vertex.r >> vertex.v >> vertex.b;
             vertices.push_back(vertex);
         } 
-        else if (token == "f") { // format du type f x/y/z x/y/z x/y/z, où seul les x nous interesse. 
+        else if (token == "f") { // format du type f x/y/z x/y/z x/y/z, où seul les x et y nous interesse. 
             
             // il s'agit de tout les triplets de points formant des triangles
             Face face;
             char c ='non';
             iss >> face.v1;
-            //passer au point suivant, en éviant le vecteur de texture et normal
+            //passer au point suivant, en évitant le vecteur  normal
             while ( c != '/') { iss.get(c); } 
             iss >> face.vt1;
+            
             while (c != '/') { iss.get(c); } 
             while (c!= ' ') { iss.get(c); }
 
@@ -242,12 +181,14 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
             // ...
             while (c != '/') { iss.get(c); }
             iss >> face.vt2;
+            
             while (c != '/') { iss.get(c); }
             while (c != ' ') { iss.get(c); }
             
             iss >> face.v3;
             while (c != '/') { iss.get(c); }
             iss >> face.vt3;
+            
             faces.push_back(face);
         } 
         else if (token == "vn") {
@@ -263,56 +204,100 @@ void LoadOBJ(const char* filename) { // Load un objet .obj avec des faces triang
     file.close();
 }
 
-//          MAIN()
+////          MAIN()
+
+
+
+////////////////////////////////////////////////////
+
+ /// Function to load a texture from a file
+GLuint LoadTexture(const char* path) {
+    // Load the image using STB Image
+    int width, height, channels;
+    unsigned char* image = stbi_load(path, &width, &height, &channels, 0);
+
+    if (!image) {
+        std::cout << "Failed to load texture: " << path << std::endl;
+        return 0;
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Set texture parameters for basic rendering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Load the image data into the texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+    // Free the image data
+    stbi_image_free(image);
+
+    return textureID;
+}
+
 int main() {
     // Initialize GLFW
+    
     if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
+        std::cout << "Failed to initialize GLFW" << std::endl;
         return -1;
-    } 
-
-    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/terrain.obj");
-    loadTexture();
-
+    }
 
     // Create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Cube Example", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Texture Example", nullptr, nullptr);
     if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
+        std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return -1;
     }
+
+
+    glfwMakeContextCurrent(window);
     glfwSetKeyCallback(window, clavier);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
+    // Load the texture
+    GLuint textureID = LoadTexture("Spartan_Arms_Mat_baseColor.png");
 
-    // Make the OpenGL context current
-    glfwMakeContextCurrent(window);
-
-   
-    glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, 800, 600);
-
-    // Projection matrix
+    LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/player.obj");
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-    // Main loop
-    while (!glfwWindowShouldClose(window)) { 
+
+    while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         camera.updateCamera();
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        affichage(); // affiche ma scène
+        // Enable texturing
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID);
 
-        // Swap the front and back buffers
+        /*glBegin(GL_QUADS);
+        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
+        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
+        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
+        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
+        glEnd();*/
+
+        affichage();
+
+        camera.goFrontCamera(dZ);
+        camera.goSideCamera(dX);
+        glDisable(GL_TEXTURE_2D);
+
         glfwSwapBuffers(window);
-
-        // Poll for and process events
         glfwPollEvents();
     }
-    // Terminate GLFW
+
+    // Clean up
     glfwTerminate();
+
     return 0;
 }
