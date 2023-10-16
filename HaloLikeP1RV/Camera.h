@@ -13,7 +13,6 @@ class Camera {
 	glm::vec3 camera_up_vector;
 	glm::vec3 camera_center_vector;
 
-
 public :
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
 	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 

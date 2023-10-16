@@ -17,14 +17,17 @@
 #include "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-
+#include "Player.h"
 
 using namespace std;
 
 // VARIABLES GLOBALES
 int width, height, channels;
+//Objets
+Player player1;
 Objet3D player;
-
+Objet3D knife;
+//
 vector<Vertex> vertices;
 vector<Face> faces;
 vector<Tex> texture;
@@ -32,9 +35,9 @@ vector<Tex> texture;
 bool red = true;
 bool blue = true;
 GLdouble SPEED = .03;
-GLdouble strafeSpeed = 0.01;
+GLdouble strafeSpeed = 0.02;
 GLdouble walkSpeed = 0.03;
-GLdouble runSpeed = 0.1;
+GLdouble runSpeed = 0.06;
 GLdouble mouseSensitivityAngle = .002;
 GLdouble actualAngleX = 3.141592/2;
 GLdouble actualAngleY = 0;
@@ -57,44 +60,40 @@ float focale = 65.0f;
 float near1 = 0.1f;
 float far1 = 100.0f;
 
+std::vector<bool> keys(GLFW_KEY_LAST, false);
 
-GLvoid clavier(GLFWwindow* window, int key, int scancode, int action, int mods) { // récupère un input clavier dans touche, (x,y) donne les coord. de la souris
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_LEFT_SHIFT)) && !(action == GLFW_RELEASE))
-    {
-        SPEED = runSpeed;
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (key >= 0 && key < GLFW_KEY_LAST) {
+        if (action == GLFW_PRESS) {
+            // Set the flag for the pressed key to true.
+            keys[key] = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            // Set the flag for the released key to false.
+            keys[key] = false;
+        }
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_LEFT_SHIFT)) && (action == GLFW_RELEASE))
-    {
-        SPEED = walkSpeed;
-    }
-    if((scancode== glfwGetKeyScancode(GLFW_KEY_W))&&!(action==GLFW_RELEASE)){ // avance  
-        dZ = -SPEED;
-    }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_W)) && (action == GLFW_RELEASE)) { // avance
-        dZ = 0;
-    }
+}
 
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && !(action == GLFW_RELEASE)) { // recule
-        dZ = SPEED;
-    }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_S)) && (action == GLFW_RELEASE)) { // recule
-        dZ = 0;
-    }
+GLvoid clavier() { 
 
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && !(action == GLFW_RELEASE)) {
-        dX = strafeSpeed;
+    if (keys[GLFW_KEY_LEFT_SHIFT]) { SPEED = runSpeed;  }
+    else { SPEED = walkSpeed; }
+   
+    if (keys[GLFW_KEY_W]) { dZ = -SPEED; cout << "w"; }
+    else{
+        if (keys[GLFW_KEY_S]) { dZ = SPEED; cout << "s"; }
+        else { dZ = 0; }
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_A)) && (action == GLFW_RELEASE)) {
-        dX = 0;
-    }
+    
 
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && !(action == GLFW_RELEASE)) {
-        dX = -strafeSpeed;
+    if (keys[GLFW_KEY_A]) { dX = strafeSpeed; cout << "a"; }
+    else {
+        if (keys[GLFW_KEY_D]) { dX = -strafeSpeed; cout << "d" << endl; }
+        else { dX = 0; }
     }
-    if ((scancode == glfwGetKeyScancode(GLFW_KEY_D)) && (action == GLFW_RELEASE)) {
-        dX = 0;
-    }
-
+    
+ 
 }
 GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
 {
@@ -226,16 +225,24 @@ int main() {
 
 
     glfwMakeContextCurrent(window);
-    glfwSetKeyCallback(window, clavier);
+    glfwSetKeyCallback(window, keyCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
-    // Load the texture
-    LoadTexture("zelda.png",player);
+    // Load the texture and object
+    LoadTexture("zelda.png",player1);
+    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj", player1);
+    LoadTexture("knife.png", knife);
+    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knife.obj", knife);
+
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     //LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/helmet.obj");
-    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj",player);
+    
+
+
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
+
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
@@ -249,17 +256,14 @@ int main() {
         // Enable texturing
         
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, player.getTexture().getID());
+        
+        clavier();
+        player1.affichage();
+        glDisable(GL_DEPTH_TEST);
+        knife.affichage();
+        glEnable(GL_DEPTH_TEST);
 
-        /*glBegin(GL_QUADS);
-        glTexCoord2f(0.0f, 0.0f); glVertex2f(-1.0f, -1.0f);
-        glTexCoord2f(1.0f, 0.0f); glVertex2f(1.0f, -1.0f);
-        glTexCoord2f(1.0f, 1.0f); glVertex2f(1.0f, 1.0f);
-        glTexCoord2f(0.0f, 1.0f); glVertex2f(-1.0f, 1.0f);
-        glEnd();*/
-
-        player.affichage();
-
+        
         camera.goFrontCamera(dZ);
         camera.goSideCamera(dX);
         glDisable(GL_TEXTURE_2D);

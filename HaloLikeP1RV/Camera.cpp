@@ -28,6 +28,8 @@ void Camera::updateCamera()
 
 void Camera::goFrontCamera(float speed)
 {
+	
+	
 	glm::vec3 target =  camera_position - camera_center_vector;// vector forward
 	glm::normalize(target);// normalizing so we have just the direction 
 	camera_position = camera_position + speed*target; // we go in the direction of the vector forward at the speed we chosed
@@ -50,10 +52,10 @@ Camera::Camera()
 {
 	camera_position.x = 0;
 	camera_position.y = 0;
-	camera_position.z = 4;
+	camera_position.z = 0;
 	camera_center_vector.x = 0;
 	camera_center_vector.y = 0;
-	camera_center_vector.z = 0;
+	camera_center_vector.z = -4;
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
 	camera_up_vector.z = 0;

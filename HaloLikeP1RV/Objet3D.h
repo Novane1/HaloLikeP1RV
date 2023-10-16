@@ -22,6 +22,6 @@ public :
 	void setTexture(Texture t);
 	void affichage();
 	Objet3D();
-
+	
 };
 

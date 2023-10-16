@@ -42,7 +42,7 @@ void Objet3D::setTexture(Texture t)
 
 void Objet3D::affichage()
 {
-    
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
         glBegin(GL_TRIANGLES);
         for (const Face& face : faces) {// affichage de la scène
 
