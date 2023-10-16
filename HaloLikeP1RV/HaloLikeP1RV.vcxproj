@@ -159,7 +159,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stb-master\stb_vorbis.c" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -209,6 +211,7 @@
     <ClInclude Include="glm\glm\vec4.hpp" />
     <ClInclude Include="glm\glm\vector_relational.hpp" />
     <ClInclude Include="Objet3D.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
     <ClInclude Include="stb-master\stb_c_lexer.h" />
     <ClInclude Include="stb-master\stb_divide.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="stb-master\stb_tilemap_editor.h" />
     <ClInclude Include="stb-master\stb_truetype.h" />
     <ClInclude Include="stb-master\stb_voxel_render.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>

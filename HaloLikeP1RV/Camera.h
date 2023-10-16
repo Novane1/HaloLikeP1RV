@@ -18,8 +18,8 @@ public :
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
 	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
 	virtual void goSideCamera(float speed);
-	Camera();
 	virtual void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY);
+	Camera();
 };
 
 #endif
