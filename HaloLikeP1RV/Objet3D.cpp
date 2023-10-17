@@ -1,4 +1,7 @@
 #include "Objet3D.h"
+#include <glad/glad.h>
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
 
 vector<Vertex> Objet3D::getVertices()
 {
@@ -42,6 +45,10 @@ void Objet3D::setTexture(Texture t)
 
 void Objet3D::affichage()
 {
+
+        glm::mat4 mvpMatrix = projectionMatrix * viewMatrix;
+        GLint mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
+        glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
         glBindTexture(GL_TEXTURE_2D, texture.getID());
         glBegin(GL_TRIANGLES);
         for (const Face& face : faces) {// affichage de la scène
@@ -65,7 +72,7 @@ void Objet3D::affichage()
 
 Objet3D::Objet3D()
 {
-    ;
+    viewMatrix = glm::mat4(1.0f);
 }
 
 

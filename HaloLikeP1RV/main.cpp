@@ -4,10 +4,10 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <GL/gl.h>
+#include <glad/glad.h>
+//#include <GL/GL.h>
 //#include <glut.h>
 #include "Camera.h"
-//#include "Vector3.h"
 #include "Geometry.h"
 #include <GLFW/glfw3.h>
 #include "glm/glm/glm.hpp"
@@ -24,9 +24,12 @@ using namespace std;
 // VARIABLES GLOBALES
 int width, height, channels;
 //Objets
-Player player1;
+
 Objet3D player;
-Objet3D knife;
+
+
+
+
 //
 vector<Vertex> vertices;
 vector<Face> faces;
@@ -80,16 +83,16 @@ GLvoid clavier() {
     if (keys[GLFW_KEY_LEFT_SHIFT]) { SPEED = runSpeed;  }
     else { SPEED = walkSpeed; }
    
-    if (keys[GLFW_KEY_W]) { dZ = -SPEED; cout << "w"; }
+    if (keys[GLFW_KEY_W]) { dZ = -SPEED;  }
     else{
-        if (keys[GLFW_KEY_S]) { dZ = SPEED; cout << "s"; }
+        if (keys[GLFW_KEY_S]) { dZ = SPEED; }
         else { dZ = 0; }
     }
     
 
-    if (keys[GLFW_KEY_A]) { dX = strafeSpeed; cout << "a"; }
+    if (keys[GLFW_KEY_A]) { dX = strafeSpeed;  }
     else {
-        if (keys[GLFW_KEY_D]) { dX = -strafeSpeed; cout << "d" << endl; }
+        if (keys[GLFW_KEY_D]) { dX = -strafeSpeed;  }
         else { dX = 0; }
     }
     
@@ -225,18 +228,28 @@ int main() {
 
 
     glfwMakeContextCurrent(window);
+
+    if (!gladLoadGL()) {
+        // Handle error
+        glfwTerminate();
+        return -1;
+    }
+   
     glfwSetKeyCallback(window, keyCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
-    // Load the texture and object
-    LoadTexture("zelda.png",player1);
-    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj", player1);
-    LoadTexture("knife.png", knife);
-    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knife.obj", knife);
 
+
+    // Load the texture and object
+    LoadTexture("zelda.png",player);
+    LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj", player);
+
+
+
+  
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    //LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/helmet.obj");
+
     
 
 
@@ -246,6 +259,8 @@ int main() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+
+
 
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
@@ -258,10 +273,8 @@ int main() {
         glEnable(GL_TEXTURE_2D);
         
         clavier();
-        player1.affichage();
-        glDisable(GL_DEPTH_TEST);
-        knife.affichage();
-        glEnable(GL_DEPTH_TEST);
+        player.affichage();
+        
 
         
         camera.goFrontCamera(dZ);
@@ -277,3 +290,115 @@ int main() {
 
     return 0;
 }
+
+
+
+
+
+//const char* vertexShaderSource = R"(
+//    #version 330 core
+//    layout(location = 0) in vec3 aPos;
+//
+//    uniform mat4 model;
+//    uniform mat4 view;
+//    uniform mat4 projection;
+//
+//    void main() {
+//        gl_Position = projection * view * model * vec4(aPos, 1.0);
+//    }
+//)";
+//
+//const char* fragmentShaderSource = R"(
+//    #version 330 core
+//    out vec4 FragColor;
+//
+//    void main() {
+//        FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+//    }
+//)";
+//
+//int main() {
+//    if (!glfwInit()) {
+//        std::cerr << "Failed to initialize GLFW" << std::endl;
+//        return -1;
+//    }
+//
+//    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+//    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+//
+//    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL View Matrix", nullptr, nullptr);
+//    if (!window) {
+//        std::cerr << "Failed to create GLFW window" << std::endl;
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    glfwMakeContextCurrent(window);
+//
+//    if (glewInit() != GLEW_OK) {
+//        std::cerr << "Failed to initialize GLEW" << std::endl;
+//        glfwTerminate();
+//        return -1;
+//    }
+//
+//    Shader shader(vertexShaderSource, fragmentShaderSource);
+//
+//    float vertices[] = {
+//        -0.5f, -0.5f, 0.0f,
+//         0.5f, -0.5f, 0.0f,
+//         0.5f,  0.5f, 0.0f,
+//        -0.5f,  0.5f, 0.0f
+//    };
+//
+//    unsigned int indices[] = {
+//        0, 1, 2,
+//        2, 3, 0
+//    };
+//
+//    unsigned int VBO, VAO, EBO;
+//    glGenVertexArrays(1, &VAO);
+//    glGenBuffers(1, &VBO);
+//    glGenBuffers(1, &EBO);
+//
+//    glBindVertexArray(VAO);
+//    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+//
+//    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+//
+//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+//    glEnableVertexAttribArray(0);
+//
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+//    glBindVertexArray(0);
+//
+//    glm::mat4 model = glm::mat4(1.0f);
+//    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+//    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+//
+//    shader.use();
+//    shader.setMat4("model", model);
+//    shader.setMat4("view", view);
+//    shader.setMat4("projection", projection);
+//
+//    while (!glfwWindowShouldClose(window)) {
+//        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT);
+//
+//        glBindVertexArray(VAO);
+//        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+//        glBindVertexArray(0);
+//
+//        glfwSwapBuffers(window);
+//        glfwPollEvents();
+//    }
+//
+//    glDeleteVertexArrays(1, &VAO);
+//    glDeleteBuffers(1, &VBO);
+//    glDeleteBuffers(1, &EBO);
+//
+//    glfwTerminate();
+//
+//    return 0;
+//}

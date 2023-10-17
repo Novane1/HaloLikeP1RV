@@ -1,6 +1,10 @@
 #pragma once
+#ifndef Objet3D_h
+#define Objet3D_h
 #include "Geometry.h"
 #include "Texture.h"
+
+glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 class Objet3D
 {
 protected :
@@ -8,6 +12,7 @@ protected :
 	vector<Face> faces;
 	vector<Tex> textureCoord;
 	Texture texture;
+	glm::mat4 viewMatrix;
 
 
 
@@ -25,3 +30,4 @@ public :
 	
 };
 
+#endif

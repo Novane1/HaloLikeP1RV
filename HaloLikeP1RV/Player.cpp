@@ -5,9 +5,16 @@ glm::vec3 Player::getPosition()
 	return position;
 }
 
-glm::vec3 Player::setPosition(glm::vec3 v)
+void Player::setPosition(glm::vec3 v)
 {
 	position = v;
+}
+
+
+
+void Player::setPlayer(Objet3D *p)
+{
+	player = p;
 }
 
 void Player::affichage()

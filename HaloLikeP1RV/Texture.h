@@ -1,4 +1,6 @@
 #pragma once
+#ifndef Texture_h
+#define Texture_h
 #include "Geometry.h"
 #include <GL/gl.h>
 class Texture
@@ -11,4 +13,6 @@ public :
 	Texture();
 	void setID(GLuint n);
 };
+
+#endif
 

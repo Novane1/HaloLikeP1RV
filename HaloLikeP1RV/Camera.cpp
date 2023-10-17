@@ -21,6 +21,7 @@ void Camera::updateCamera()
 	gluLookAt(camera_position.x, camera_position.y, camera_position.z,
 		camera_center_vector.x, camera_center_vector.y, camera_center_vector.z,
 		camera_up_vector.x, camera_up_vector.y, camera_up_vector.z);
+	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	
 }
 
@@ -59,6 +60,7 @@ Camera::Camera()
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
 	camera_up_vector.z = 0;
+	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 }
 
 void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY){
@@ -84,6 +86,16 @@ void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivi
 	//cout << actualAngleX*360/2/ 3.141592 << " " << actualAngleY * 360 / 2 / 3.141592 << endl;
 
 	
+}
+
+void Camera::updateViewMatrix()
+{
+	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
+}
+
+glm::vec3 Camera::getPosition()
+{
+	return camera_position;
 }
 
 

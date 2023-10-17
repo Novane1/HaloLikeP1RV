@@ -90,13 +90,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dev\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;glu32.lib;opengl32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\GLUT\include;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Dev\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
@@ -117,7 +117,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\lib-vc2019;C:\Dev\glfw-3.3.8.bin.WIN32\lib-vc2022;C:\Dev\GLUT\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glu32.lib;opengl32.lib;glut32.lib;glfw3.lib;glfw3_mt.lib;glfw3dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;glfw3_mt.lib;glfw3dll.lib;glu32.lib;opengl32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -156,10 +156,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb-master\stb_vorbis.c" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -212,6 +214,7 @@
     <ClInclude Include="glm\glm\vector_relational.hpp" />
     <ClInclude Include="Objet3D.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
     <ClInclude Include="stb-master\stb_c_lexer.h" />
     <ClInclude Include="stb-master\stb_divide.h" />
