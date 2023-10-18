@@ -1,8 +1,18 @@
-#include "Objet3D.h"
+#include <windows.h>
 #include <glad/glad.h>
+#include "Objet3D.h"
+#include <iostream>
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
-
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/type_ptr.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+#include <sstream>
+#include <fstream>
+using namespace std;
 vector<Vertex> Objet3D::getVertices()
 {
     return vertices;
@@ -45,10 +55,10 @@ void Objet3D::setTexture(Texture t)
 
 void Objet3D::affichage()
 {
-
+        glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
         glm::mat4 mvpMatrix = projectionMatrix * viewMatrix;
-        GLint mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
-        glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
+        //GLint mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
+        //glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
         glBindTexture(GL_TEXTURE_2D, texture.getID());
         glBegin(GL_TRIANGLES);
         for (const Face& face : faces) {// affichage de la scène
@@ -73,6 +83,102 @@ void Objet3D::affichage()
 Objet3D::Objet3D()
 {
     viewMatrix = glm::mat4(1.0f);
+}
+
+void Objet3D::LoadTexture(const char* path)
+{
+        // Load the image using STB Image
+        int width, height, channels;
+        unsigned char* image = stbi_load(path, &width, &height, &channels, 0);
+
+        if (!image) {
+            cout << "Failed to load texture: " << path << endl;
+            return;
+        }
+
+        GLuint textureID;
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+
+        // Set texture parameters for basic rendering
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        // Load the image data into the texture
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+
+        // Free the image data
+        stbi_image_free(image);
+        Texture tex;
+        tex.setID(textureID);
+        texture = tex;
+    
+}
+
+void Objet3D::LoadOBJ(const char* filename)
+{
+
+        std::ifstream file(filename);
+        std::string line;
+
+        if (!file.is_open()) {
+            std::cerr << "Failed to open file: " << filename << std::endl;
+            return;
+        }
+
+        while (std::getline(file, line)) {
+            std::istringstream iss(line);
+            std::string token;
+            iss >> token;
+
+            if (token == "v") { // on ajoute un format du type v x y z
+                Vertex vertex;
+                iss >> vertex.x >> vertex.y >> vertex.z; //>> vertex.r >> vertex.v >> vertex.b;
+                vertices.push_back(vertex);
+            }
+            else if (token == "f") { // format du type f x/y/z x/y/z x/y/z, où seul les x et y nous interesse. 
+
+                // il s'agit de tout les triplets de points formant des triangles
+                Face face;
+                char c = 'non';
+                iss >> face.v1;
+                //passer au point suivant, en évitant le vecteur  normal
+                while (c != '/') { iss.get(c); }
+                iss >> face.vt1;
+
+                while (c != '/') { iss.get(c); }
+                while (c != ' ') { iss.get(c); }
+
+                iss >> face.v2;
+                // ...
+                while (c != '/') { iss.get(c); }
+                iss >> face.vt2;
+
+                while (c != '/') { iss.get(c); }
+                while (c != ' ') { iss.get(c); }
+
+                iss >> face.v3;
+                while (c != '/') { iss.get(c); }
+                iss >> face.vt3;
+
+                faces.push_back(face);
+            }
+            else if (token == "vn") {
+                //pas utile pour l'instant
+            }
+            // Coordonnées de texture
+            else if (token == "vt") {
+                Tex tex;
+                iss >> tex.v1 >> tex.v2;
+                tex.v2 = 1.0 - tex.v2;
+                textureCoord.push_back(tex);
+            }
+        }
+        file.close();
+        
+    
 }
 
 

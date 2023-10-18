@@ -1,16 +1,12 @@
 //Librairies
-
-#include "windows.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <sstream>
+#include <windows.h>
 #include <GL/gl.h>
 #include <glut.h>
 #include "Camera.h"
+#include <iostream>
 //#include "Vector3.h"
 #include <GLFW/glfw3.h>
-
+#include "glm/glm/gtc/type_ptr.hpp"
 using namespace std;
 
 void Camera::updateCamera()
@@ -51,6 +47,9 @@ void Camera::goSideCamera(float speed)
 
 Camera::Camera()
 {
+	camera_initial_position.x = 0;
+	camera_initial_position.y = 0;
+	camera_initial_position.z = 0;
 	camera_position.x = 0;
 	camera_position.y = 0;
 	camera_position.z = 0;
@@ -61,9 +60,23 @@ Camera::Camera()
 	camera_up_vector.y = 1;
 	camera_up_vector.z = 0;
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
+	actualAngleX = 3.141592 / 2;
+	actualAngleY = 0;
+	c = 0;
 }
 
-void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle, GLdouble& actualAngleX, GLdouble& actualAngleY){
+void Camera::affichageUI()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	glRotatef(50, 0, 1, 0);
+	
+	Ui.affichage();
+
+}
+
+void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle){
 
 
 	actualAngleX += mouseSensitivityAngle * (xOffset);
@@ -76,7 +89,7 @@ void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivi
 		actualAngleY = -3.141592/2;
 	}
 
-	camera_center_vector.x = camera_position.x + cos(actualAngleX) * 4; // le 4, c'est la distance de la caméra à l'endroit où elle regarde
+	camera_center_vector.x = camera_position.x + cos(actualAngleX) * 4; 
 	camera_center_vector.z = camera_position.z + sin(actualAngleX) * 4;
 	camera_center_vector.y = camera_position.y + sin(actualAngleY) * 4;
 	/*cout << camera_center_vector.x << " " << camera_center_vector.z <<" " << camera_center_vector.y << endl;*/
@@ -91,6 +104,11 @@ void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivi
 void Camera::updateViewMatrix()
 {
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
+}
+
+void Camera::setUI(UI o)
+{
+	Ui = o;
 }
 
 glm::vec3 Camera::getPosition()

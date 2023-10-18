@@ -1,4 +1,6 @@
+#include <windows.h>
 #include "Texture.h"
+#include <gl/GL.h>
 
 GLuint Texture::getID()
 {

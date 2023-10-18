@@ -1,3 +1,4 @@
+#include <windows.h>
 #include "Player.h"
 
 glm::vec3 Player::getPosition()
@@ -20,4 +21,10 @@ void Player::setPlayer(Objet3D *p)
 void Player::affichage()
 {
 	player->affichage();
+}
+
+Player::Player()
+{
+
+	position = { 0,0,0 };
 }

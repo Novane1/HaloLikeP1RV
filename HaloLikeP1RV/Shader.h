@@ -1,11 +1,11 @@
 #ifndef SHADER_H
 #define SHADER_H
+//#include <glad/glad.h>
 
-#include <GLFW/glfw3.h>
 #include "glm/glm/glm.hpp"
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/type_ptr.hpp"
-#include <glad/glad.h>
+
 #include <string>
 
 class Shader {

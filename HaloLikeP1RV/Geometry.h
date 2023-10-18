@@ -2,18 +2,6 @@
 
 #ifndef Geometry_h
 #define Geometry_h
-// Librairies
-#pragma once
-#include "windows.h"
-#include <iostream>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <GL/gl.h>
-#include <glut.h>
-using namespace std;
-
-
 
 struct Vertex { // Point
     float x, y, z;
@@ -23,11 +11,10 @@ struct Tex {
     float v1, v2;
 };
 
-
 struct Face { // Face Triangulaire composé de ses 3 points
     int v1, v2, v3;
     int vt1, vt2, vt3;
 };
 
 
-#endif once
+#endif 

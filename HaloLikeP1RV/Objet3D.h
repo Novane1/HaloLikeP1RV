@@ -1,10 +1,13 @@
 #pragma once
 #ifndef Objet3D_h
 #define Objet3D_h
-#include "Geometry.h"
+#include <vector>
 #include "Texture.h"
+#include "glm/glm/glm.hpp"
+#include "glm/glm/gtc/matrix_transform.hpp"
 
-glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+using namespace std;
 class Objet3D
 {
 protected :
@@ -13,6 +16,7 @@ protected :
 	vector<Tex> textureCoord;
 	Texture texture;
 	glm::mat4 viewMatrix;
+	
 
 
 
@@ -27,6 +31,8 @@ public :
 	void setTexture(Texture t);
 	void affichage();
 	Objet3D();
+	void LoadTexture(const char* path);
+	void LoadOBJ(const char* filename);
 	
 };
 
