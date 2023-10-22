@@ -12,6 +12,7 @@
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
 #include "UI.h"
+#include "Player.h"
 using namespace std;
 // Définition de la classe caméra
 class Camera {
@@ -23,7 +24,8 @@ class Camera {
 	GLdouble actualAngleX ;
 	GLdouble actualAngleY ;
 	UI Ui;
-	int c;
+	Player player;
+	
 public :
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
 	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
@@ -32,7 +34,10 @@ public :
 	virtual void updateViewMatrix();
 	virtual void setUI(UI o);
 	virtual glm::vec3 getPosition();
-	virtual void affichageUI();
+	virtual void affichageUI(std::vector<bool> keys);
+	virtual void affichagePlayer();
+	virtual void setPlayer(Player p);
+
 	Camera();
 };
 

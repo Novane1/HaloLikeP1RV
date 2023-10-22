@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Dev\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
@@ -156,7 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />

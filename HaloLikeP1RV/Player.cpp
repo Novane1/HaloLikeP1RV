@@ -13,14 +13,14 @@ void Player::setPosition(glm::vec3 v)
 
 
 
-void Player::setPlayer(Objet3D *p)
+void Player::setPlayer(Objet3D p)
 {
 	player = p;
 }
 
 void Player::affichage()
 {
-	player->affichage();
+	player.affichage();
 }
 
 Player::Player()

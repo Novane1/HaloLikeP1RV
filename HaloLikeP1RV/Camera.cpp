@@ -62,18 +62,30 @@ Camera::Camera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	actualAngleX = 3.141592 / 2;
 	actualAngleY = 0;
-	c = 0;
+	
 }
 
-void Camera::affichageUI()
+void Camera::affichageUI(std::vector<bool> keys)
 {
+	glPushMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glRotatef(50, 0, 1, 0);
-	
-	Ui.affichage();
+	Ui.affichage(keys);
+	glPopMatrix();
+}
 
+void Camera::affichagePlayer()
+{
+	glPushMatrix();
+	glTranslatef(camera_position.x - camera_initial_position.x-1, camera_position.y - camera_initial_position.y-1, camera_position.z - camera_initial_position.z-1);
+	player.affichage();
+	glPopMatrix();
+}
+
+void Camera::setPlayer(Player p)
+{
+	player = p;
 }
 
 void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle){

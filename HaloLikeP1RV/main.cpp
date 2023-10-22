@@ -23,8 +23,11 @@ using namespace std;
 int width, height, channels;
 //Objets
 Objet3D player;
+Player testPlayer;
+Objet3D playerObj;
 UI listUI;
 Objet3D gun;
+Objet3D second;
 //Variables main
 vector<Vertex> vertices;
 vector<Face> faces;
@@ -34,7 +37,7 @@ bool blue = true;
 GLdouble SPEED = .03;
 GLdouble strafeSpeed = 0.02;
 GLdouble walkSpeed = 0.03;
-GLdouble runSpeed = 0.06;
+GLdouble runSpeed = 0.05;
 GLdouble mouseSensitivityAngle = .002;
 const GLdouble minYAngle = -3.141592 / 2.0; // Minimum angle (e.g., -90 degrees)
 const GLdouble maxYAngle = 3.141592 / 2.0;
@@ -127,17 +130,28 @@ int main() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
 
-
+  
     // Load the texture and object
     player.LoadTexture("zelda.png");
-    player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+
+    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+    player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+    playerObj.LoadTexture("testPlayer.png");
+    playerObj.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj");
     gun.LoadTexture("gun.png");
-    gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
+    gun.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
+    testPlayer.setPlayer(playerObj);
+    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
     listUI.AddObject(gun);
+
+    /*gun.LoadTexture("gun.png");
+* 
+    gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
+    listUI.AddObject(gun);*/
 
 
     camera.setUI(listUI);
-
+    camera.setPlayer(testPlayer);
   
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -157,9 +171,22 @@ int main() {
         
         clavier();
         player.affichage();
-        camera.affichageUI();
         
 
+        camera.affichageUI(keys);
+        //camera.affichagePlayer();
+        //second.affichage();
+        
+        glPushMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glDisable(GL_DEPTH_TEST);
+        glTranslatef(0, 0, -100);
+        GLUquadricObj* quadric = gluNewQuadric();
+        gluPartialDisk(quadric, 0.0, 1.0, 100, 1, 0.0, 360.0);
+        glEnable(GL_DEPTH_TEST);
+        glPopMatrix();
+        
         
         camera.goFrontCamera(dZ);
         camera.goSideCamera(dX);
