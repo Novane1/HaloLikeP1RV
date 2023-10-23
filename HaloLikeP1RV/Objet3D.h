@@ -12,6 +12,7 @@ class Objet3D
 {
 protected :
 	vector<Vertex> vertices;
+	vector<glm::vec3> norms;
 	vector<Face> faces;
 	vector<Tex> textureCoord;
 	Texture texture;
@@ -23,6 +24,7 @@ protected :
 public :
 	vector<Vertex> getVertices();
 	vector<Face> getFaces();  
+	vector<glm::vec3> getNormals();
 	Texture getTexture();
 	vector<Tex> getTextureCoord();
 	void setVertices(vector<Vertex> v);

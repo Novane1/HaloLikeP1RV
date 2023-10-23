@@ -12,47 +12,50 @@
 #include "stb_image_write.h"
 #include <sstream>
 #include <fstream>
+
 using namespace std;
+
+
+// Getters
 vector<Vertex> Objet3D::getVertices()
 {
     return vertices;
 }
-
 vector<Face> Objet3D::getFaces()
 {
     return faces;
 }
-
+vector<glm::vec3> Objet3D::getNormals()
+{
+    return norms;
+}
 Texture Objet3D::getTexture()
 {
     return texture;
 }
-
 vector<Tex> Objet3D::getTextureCoord()
 {
     return textureCoord;
 }
-
+// Setters
 void Objet3D::setVertices(vector<Vertex> v)
 {
     vertices = v;
 }
-
 void Objet3D::setFaces(vector<Face> f)
 {
     faces = f;
 }
-
 void Objet3D::setTextureCoord(vector<Tex> t)
 {
     textureCoord = t;
 }
-
 void Objet3D::setTexture(Texture t)
 {
     texture = t;
 }
 
+// Methodes
 void Objet3D::affichage()
 {
         glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
@@ -144,11 +147,12 @@ void Objet3D::LoadOBJ(const char* filename)
                 Face face;
                 char c = 'non';
                 iss >> face.v1;
-                //passer au point suivant, en évitant le vecteur  normal
+                //passer au point suivant
                 while (c != '/') { iss.get(c); }
                 iss >> face.vt1;
 
                 while (c != '/') { iss.get(c); }
+                iss >> face.normal;
                 while (c != ' ') { iss.get(c); }
 
                 iss >> face.v2;
@@ -166,7 +170,10 @@ void Objet3D::LoadOBJ(const char* filename)
                 faces.push_back(face);
             }
             else if (token == "vn") {
-                //pas utile pour l'instant
+                glm::vec3 norm;
+                iss >> norm.x >> norm.y >> norm.z;
+
+                norms.push_back(norm);
             }
             // Coordonnées de texture
             else if (token == "vt") {

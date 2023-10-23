@@ -28,6 +28,10 @@ Objet3D playerObj;
 UI listUI;
 Objet3D gun;
 Objet3D second;
+// TEST NAVMESH
+Objet3D monde;
+Objet3D navMesh;
+// FIN TEST
 //Variables main
 vector<Vertex> vertices;
 vector<Face> faces;
@@ -132,17 +136,25 @@ int main() {
 
   
     // Load the texture and object
-    player.LoadTexture("zelda.png");
+    //player.LoadTexture("zelda.png");
 
-    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
-    player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
-    playerObj.LoadTexture("testPlayer.png");
-    playerObj.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj");
-    gun.LoadTexture("gun.png");
-    gun.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
-    testPlayer.setPlayer(playerObj);
-    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
-    listUI.AddObject(gun);
+    //player.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj"); // JACOB
+    ////player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj"); // NATHAN
+    //playerObj.LoadTexture("testPlayer.png");
+    //playerObj.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj"); // JACOB
+    ////playerObj.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj"); // NATHAN
+    //gun.LoadTexture("gun.png");
+    //gun.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj"); // JACOB
+    ////gun.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj"); // NATHAN
+    //testPlayer.setPlayer(playerObj);
+    ////player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+    //listUI.AddObject(gun);
+
+
+    // TEST NAVMESH 
+    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Surface.obj");
+    navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Surface_NavMesh.obj");
+    // FIN TEST
 
     /*gun.LoadTexture("gun.png");
 * 
@@ -170,8 +182,8 @@ int main() {
         glEnable(GL_TEXTURE_2D);
         
         clavier();
-        player.affichage();
-        
+        //player.affichage();
+        monde.affichage(); // TEST NAVMESH
 
         camera.affichageUI(keys);
         //camera.affichagePlayer();
@@ -181,7 +193,7 @@ int main() {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         glDisable(GL_DEPTH_TEST);
-        glTranslatef(0, 0, -100);
+        glTranslatef(0, 0, -100); // Placement du point de visée
         GLUquadricObj* quadric = gluNewQuadric();
         gluPartialDisk(quadric, 0.0, 1.0, 100, 1, 0.0, 360.0);
         glEnable(GL_DEPTH_TEST);

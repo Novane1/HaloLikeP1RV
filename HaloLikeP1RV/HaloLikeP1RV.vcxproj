@@ -90,7 +90,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\glad\include;C:\Dev\GLUT\include;C:\Users\Utilisateur\source\repos\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Utilisateur\Documents\glfw-3.3.8.bin.WIN32\include;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\stb-master;C:\Users\Eleve\source\repos\Novane1\HaloLikeP1RV\HaloLikeP1RV\glm\glm;C:\Dev\glfw-3.3.8.bin.WIN32\include;C:\Dev\glad\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,11 +156,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="rayon.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="stb-master\stb_vorbis.c" />
     <ClCompile Include="Texture.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="glm\glm\vector_relational.hpp" />
     <ClInclude Include="Objet3D.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="rayon.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
     <ClInclude Include="stb-master\stb_c_lexer.h" />
