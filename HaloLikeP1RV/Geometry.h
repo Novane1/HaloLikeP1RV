@@ -19,5 +19,12 @@ struct Face { // Face Triangulaire composé de ses 3 points
     int normal;
 };
 
+struct vraiFace {
+    glm::vec3 vertexA;
+    glm::vec3 vertexB;
+    glm::vec3 vertexC;
+    //glm::vec2 texCoords;
+    glm::vec3 normal;
+};
 
 #endif 

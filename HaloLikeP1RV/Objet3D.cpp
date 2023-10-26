@@ -37,6 +37,10 @@ vector<Tex> Objet3D::getTextureCoord()
 {
     return textureCoord;
 }
+vector<vraiFace> Objet3D::getvraiFaces()
+{
+    return vraiFaces;
+}
 // Setters
 void Objet3D::setVertices(vector<Vertex> v)
 {
@@ -53,6 +57,43 @@ void Objet3D::setTextureCoord(vector<Tex> t)
 void Objet3D::setTexture(Texture t)
 {
     texture = t;
+}
+
+void Objet3D::setVraiFaces()
+{
+    vraiFace trueface;
+    glm::vec3 tmp;
+    glm::vec2 tmp2;
+
+
+    for (const Face& face : faces) {
+        
+        tmp.x = vertices[face.v1 - 1].x; tmp.y = vertices[face.v1 - 1].y; tmp.z = vertices[face.v1 - 1].z;
+
+        trueface.vertexA = tmp;
+
+        tmp.x = vertices[face.v2 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
+
+        trueface.vertexB = tmp;
+
+        tmp.x = vertices[face.v3 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
+
+        trueface.vertexC = tmp;
+
+        // Coordonnées de texture, non utilisé pour l'instant
+        /*tmp2.x = textureCoord[face.vt1 - 1].v1;
+        tmp2.y = textureCoord[face.vt1 - 1].v2;
+
+        trueface.texCoords = tmp2;*/
+
+        tmp = norms[face.normal - 1];
+
+        trueface.normal = tmp;
+
+        vraiFaces.push_back(trueface);
+    }
+
+    return;
 }
 
 // Methodes
@@ -152,7 +193,7 @@ void Objet3D::LoadOBJ(const char* filename)
                 iss >> face.vt1;
 
                 while (c != '/') { iss.get(c); }
-                iss >> face.normal;
+                //iss >> face.normal;                                                   TODO
                 while (c != ' ') { iss.get(c); }
 
                 iss >> face.v2;

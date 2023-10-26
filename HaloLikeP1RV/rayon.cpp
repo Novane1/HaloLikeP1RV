@@ -1,5 +1,11 @@
 #include "rayon.h"
+#include "glm/glm/glm.hpp"
+#include "Camera.h"
+#include "Objet3D.h"
 
+#define DISTANCECALCUL 20
+
+// Contructeurs
 rayon::rayon(glm::vec3 O, glm::vec3 D)
 {
 	Origin = O;
@@ -10,15 +16,17 @@ rayon::rayon(Camera& camera)
 	Origin = camera.getPosition();
 	return;
 }
-int rayon::getOx() const
+
+// Getters
+float rayon::getOx()
 {
 	return Origin.x;
 }
-int rayon::getOy() const
+float rayon::getOy() 
 {
 	return Origin.y;
 }
-int rayon::getOz() const
+float rayon::getOz() 
 {
 	return Origin.z;
 }
@@ -32,18 +40,54 @@ void rayon::setLocation(glm::vec3 O)
 	return;
 }
 
-glm::vec3 rayon::ptIntersectionF(Objet3D& NM) const
+glm::vec3 rayon::ptIntersectionF(Objet3D& NM, Camera& cam) const
 {
-	glm::vec3 pt; // pt d'intersection
-	glm::vec3 faceNormal;
-	glm::vec3 facex, facey, facez;
-	
+	vector<vraiFace> faces = NM.getvraiFaces();
+	glm::vec3 pt;// pt d'intersection
+	glm::vec3 down;
+	down.x = 0;
+	down.y = -1;
+	down.z = 0;
 
 	// Pour toutes les faces, vérifier l'intersection puis l'inclusion du pt dans la surface de la face.
-	for (vector<Face>::iterator it = navMesh.begin(); it != navMesh.end(); it++) {
-		faceNormal = NM.
+	for (const vraiFace& face : faces) {
+		// Verifier si proche
+		if (length(face.vertexA - cam.getPosition()) < DISTANCECALCUL ||
+			length(face.vertexA - cam.getPosition()) < DISTANCECALCUL ||
+			length(face.vertexA - cam.getPosition()) < DISTANCECALCUL) {
+
+			// Vérification que "down" et la normale ne soit pas parralèle 
+			if (dot(down, face.normal) != 0) {
+				float D = -dot(face.normal, face.vertexA);
+				float distance = -(dot(face.normal, cam.getPosition()) + D) / dot(face.normal, down);
+
+				// Vérification de distance > 0 (le plan bien "devant" le rayon)
+				if (distance > 0) {
+					// on calcule maintenant trois produits vectoriels et on vérifie que P intersecte bien avec le triangle
+					pt = cam.getPosition() + distance * down; // Position de l'intersetion
+					glm::vec3 AB = face.vertexB - face.vertexA;
+					glm::vec3 Apt = pt - face.vertexA;
+
+					glm::vec3 AC = face.vertexC - face.vertexA;
+					glm::vec3 Cpt = pt - face.vertexC;
+
+					glm::vec3 BC = face.vertexC - face.vertexB;
+					glm::vec3 Bpt = pt - face.vertexB;
+
+					glm::vec3 normi = cross(AB, AC);
+
+					// Dernière verification
+					if (dot(cross(AB, Apt), normi) > 0 &&
+						dot(cross(Cpt, AC), normi) > 0 &&
+						dot(cross(BC, Bpt), normi) > 0)
+					{
+						return pt; // Retourner la valeure finale de pt
+					}
+				}
+			}
+		}
 	}
 
+	return cam.getPosition();
 
-	return;
 }

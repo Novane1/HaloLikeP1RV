@@ -16,6 +16,7 @@
 #include "glm/glm/gtc/matrix_transform.hpp"
 #include "Objet3D.h"
 #include "Player.h"
+#include "rayon.h"
 
 using namespace std;
 
@@ -152,8 +153,8 @@ int main() {
 
 
     // TEST NAVMESH 
-    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Surface.obj");
-    navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Surface_NavMesh.obj");
+    monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    navMesh.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/navMesh.obj");
     // FIN TEST
 
     /*gun.LoadTexture("gun.png");
@@ -171,6 +172,9 @@ int main() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+    
+    rayon downSnap(camera);
+    
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -202,6 +206,7 @@ int main() {
         
         camera.goFrontCamera(dZ);
         camera.goSideCamera(dX);
+        
         glDisable(GL_TEXTURE_2D);
 
         glfwSwapBuffers(window);
