@@ -50,8 +50,6 @@ glm::vec3 rayon::ptIntersectionF(Objet3D& NM, Camera& cam) const
 	down.y = -1;
 	down.z = 0;
 
-	if(faces == NULL)
-
 	// Pour toutes les faces, vérifier l'intersection puis l'inclusion du pt dans la surface de la face.
 	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
 		// Verifier si proche
