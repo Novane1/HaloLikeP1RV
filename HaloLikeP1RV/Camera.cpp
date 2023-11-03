@@ -6,74 +6,22 @@
 #include <iostream>
 //#include "Vector3.h"
 #include <GLFW/glfw3.h>
-#include "rayon.h"
 #include "glm/glm/gtc/type_ptr.hpp"
+#include "rayon.h"
+
 using namespace std;
 
-void Camera::updateCamera()
-{
-	//gluLookAt(camera_position.x, /*camera_position.y*/ 0 , camera_position.z,
-	//camera_center_vector.x, camera_center_vector.y, camera_center_vector.z,
-	//camera_up_vector.x, camera_up_vector.y, camera_up_vector.z);
-	//camera_position.y = 0;
-	//viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
-
-	const float movementSpeed = 0.1f;
-	const float rotationSpeed = 0.1f;
-
-	// Get user input for camera movement and rotation
-	// Update camera_position and camera_center_vector accordingly
-
-	// Ensure the camera stays at a constant Y level
-	camera_position.y = 0;
-
-	// Limit the vertical viewing angle to avoid excessive tilting
-	const float minVerticalAngle = -89.0f;
-	const float maxVerticalAngle = 89.0f;
-
-	glm::vec3 direction = camera_center_vector - camera_position;
-	float distance = glm::length(direction);
-	float pitch = glm::degrees(asin(direction.y / distance));
-	pitch = glm::clamp(pitch, minVerticalAngle, maxVerticalAngle);
-
-	direction = glm::rotate(direction, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-	camera_center_vector = camera_position + direction;
-
-	// Update the viewMatrix
-	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
-}
-
-
-
-void Camera::goFrontCamera(float speed)
-{
-	glm::vec3 target = camera_position - camera_center_vector;// vector forward
-
-	glm::normalize(target);// normalizing so we have just the direction 
-	camera_position = camera_position + speed*target; // we go in the direction of the vector forward at the speed we chosed
-	camera_center_vector = camera_center_vector + speed * target; // we change the target of the camera 
-	this->updateCamera();
-}
-
-void Camera::goSideCamera(float speed)
-{
-	glm::vec3 target = camera_position - camera_center_vector; // vector forward
-	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
-	camera_position = camera_position + speed * right; // we go in the direction of the vector forward at the speed we chosed
-	camera_center_vector = camera_center_vector + speed * right; // we change the target of the camera 
-	this->updateCamera();
-}
-
+// Constructeur de base
 Camera::Camera()
 {
 	camera_initial_position.x = 0;
 	camera_initial_position.y = 0;
 	camera_initial_position.z = 0;
 	camera_position.x = 0;
-	camera_position.y = 0;
+	camera_position.y = 3;
 	camera_position.z = 0;
 	camera_center_vector.x = 0;
-	camera_center_vector.y = 0;
+	camera_center_vector.y = 3;
 	camera_center_vector.z = -4;
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
@@ -82,6 +30,37 @@ Camera::Camera()
 	actualAngleX = 3.141592 / 2;
 	actualAngleY = 0;
 	
+}
+
+// Movement de la caméra
+void Camera::updateCamera()
+{
+	gluLookAt(camera_position.x, camera_position.y, camera_position.z,
+		camera_center_vector.x, camera_center_vector.y, camera_center_vector.z,
+		camera_up_vector.x, camera_up_vector.y, camera_up_vector.z);
+	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
+	//camera_position.y = 0;
+}
+void Camera::goFrontCamera(float speed, glm::vec3 inter, float hauteur)
+{
+	
+
+	glm::vec3 target = camera_position - camera_center_vector;// vector forward
+	target.y = inter.y + hauteur; // hauteur de la caméra par rapport à l'intersection
+	glm::normalize(target);// normalizing so we have just the direction 
+	camera_position = camera_position + speed * target; // we go in the direction of the vector forward
+	camera_center_vector = camera_center_vector + speed * target; // we change the target of the camera 
+	this->updateCamera();
+}
+void Camera::goSideCamera(float speed, glm::vec3 inter, float hauteur)
+{
+	glm::vec3 target = camera_position - camera_center_vector; // vector forward
+	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
+	right.y = inter.y + hauteur; // hauteur de la caméra par rapport à l'intersection
+	
+	camera_position = camera_position + speed * right; // we go in the direction of the vector right
+	camera_center_vector = camera_center_vector + speed * right; // we change the target of the camera 
+	this->updateCamera();
 }
 
 void Camera::affichageUI(std::vector<bool> keys)

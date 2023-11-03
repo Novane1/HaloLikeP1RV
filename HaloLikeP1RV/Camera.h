@@ -28,8 +28,8 @@ class Camera {
 	
 public :
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
-	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
-	virtual void goSideCamera(float speed);
+	virtual void goFrontCamera(float speed, glm::vec3 inter, float hauteur); // Augmente la coordonnée Z  de la caméra de z 
+	virtual void goSideCamera(float speed, glm::vec3 inter, float hauteur);
 	virtual void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle);
 	virtual void updateViewMatrix();
 	virtual void setUI(UI o);

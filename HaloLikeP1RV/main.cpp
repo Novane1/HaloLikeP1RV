@@ -21,6 +21,9 @@
 using namespace std;
 
 // VARIABLES GLOBALES
+
+#define _HEIGHT 1.5
+
 int width, height, channels;
 //Objets
 Objet3D player;
@@ -173,8 +176,9 @@ int main() {
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
     
-    rayon downSnap(camera);
-    
+    rayon downSnap(camera); // Initalisation du rayon de projection pour la coordonnée en y
+    glm::vec3 intersection(0.0f);
+
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -204,8 +208,16 @@ int main() {
         glPopMatrix();
         
         
-        camera.goFrontCamera(dZ);
-        camera.goSideCamera(dX);
+        intersection = downSnap.ptIntersectionF(monde, camera);
+        cout << "Intersection : (" << intersection.x << ", "  // Vérification de l'intersection
+                                   << intersection.y << ", " 
+                                   << intersection.z << ")" << endl;
+        cout << "Camera :       (" << camera.getPosition().x << ", "  // Vérification de l'intersection
+            << camera.getPosition().y << ", "
+            << camera.getPosition().z << ")" << endl;
+
+        camera.goFrontCamera(dZ, intersection, _HEIGHT);
+        camera.goSideCamera(dX, intersection, _HEIGHT);
         
         glDisable(GL_TEXTURE_2D);
 

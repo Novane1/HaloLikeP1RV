@@ -15,6 +15,11 @@
 
 using namespace std;
 
+// Constructeur
+Objet3D::Objet3D()
+{
+    viewMatrix = glm::mat4(1.0f);
+}
 
 // Getters
 vector<Vertex> Objet3D::getVertices()
@@ -124,10 +129,7 @@ void Objet3D::affichage()
     
 }
 
-Objet3D::Objet3D()
-{
-    viewMatrix = glm::mat4(1.0f);
-}
+
 
 void Objet3D::LoadTexture(const char* path)
 {
