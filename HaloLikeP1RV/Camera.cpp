@@ -1,11 +1,10 @@
 //Librairies
 #include <windows.h>
-#include <GL/gl.h>
+#include <glad/glad.h>
 #include <glut.h>
 #include "Camera.h"
 #include <iostream>
 //#include "Vector3.h"
-#include <GLFW/glfw3.h>
 #include "glm/glm/gtc/type_ptr.hpp"
 #include "rayon.h"
 
@@ -18,10 +17,10 @@ Camera::Camera()
 	camera_initial_position.y = 0;
 	camera_initial_position.z = 0;
 	camera_position.x = 0;
-	camera_position.y = 3;
+	camera_position.y = 0;
 	camera_position.z = 0;
 	camera_center_vector.x = 0;
-	camera_center_vector.y = 3;
+	camera_center_vector.y = 0;
 	camera_center_vector.z = -4;
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
@@ -32,7 +31,29 @@ Camera::Camera()
 	
 }
 
-// Movement de la caméra
+// GETTERS
+glm::vec3 Camera::getTarget()
+{
+	return camera_center_vector;
+}
+
+// SETTERS
+void Camera::setPlayer(Player p)
+{
+	player = p;
+}
+
+void Camera::sethauteur(glm::vec3 inter, float hauteur)
+{
+	float delta = camera_position.y;
+	camera_position.y = inter.y + hauteur;
+	delta = camera_position.y - delta;
+
+	camera_center_vector.y += delta;
+	//this->updateCamera();
+}
+
+// METHODES
 void Camera::updateCamera()
 {
 	gluLookAt(camera_position.x, camera_position.y, camera_position.z,
@@ -41,38 +62,35 @@ void Camera::updateCamera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	//camera_position.y = 0;
 }
-void Camera::goFrontCamera(float speed, glm::vec3 inter, float hauteur)
+void Camera::goFrontCamera(float speed)
 {
-	
-
 	glm::vec3 target = camera_position - camera_center_vector;// vector forward
-	target.y = inter.y + hauteur; // hauteur de la caméra par rapport à l'intersection
 	glm::normalize(target);// normalizing so we have just the direction 
-	camera_position = camera_position + speed * target; // we go in the direction of the vector forward
-	camera_center_vector = camera_center_vector + speed * target; // we change the target of the camera 
-	this->updateCamera();
+	camera_position.x = camera_position.x + speed * target.x; // we go in the direction of the vector forward
+	camera_position.z = camera_position.z + speed * target.z;
+	camera_center_vector.x = camera_center_vector.x + speed * target.x; // we change the target of the camera 
+	camera_center_vector.z = camera_center_vector.z + speed * target.z;
+	//this->updateCamera();
 }
-void Camera::goSideCamera(float speed, glm::vec3 inter, float hauteur)
+void Camera::goSideCamera(float speed)
 {
 	glm::vec3 target = camera_position - camera_center_vector; // vector forward
 	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
-	right.y = inter.y + hauteur; // hauteur de la caméra par rapport à l'intersection
 	
-	camera_position = camera_position + speed * right; // we go in the direction of the vector right
-	camera_center_vector = camera_center_vector + speed * right; // we change the target of the camera 
-	this->updateCamera();
+	camera_position.x = camera_position.x + speed * right.x; // we go in the direction of the vector right
+	camera_position.z = camera_position.z + speed * right.z; // we go in the direction of the vector right
+	camera_center_vector.x = camera_center_vector.x + speed * right.x; // we change the target of the camera 
+	camera_center_vector.z = camera_center_vector.z + speed * right.z;
+	//this->updateCamera();
 }
-
-void Camera::affichageUI(std::vector<bool> keys)
+void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick)
 {
-	glPushMatrix();
+	glPushMatrix();// On sauvegarde la matrice actuelle, vu que l'on veut effectuer des modifs de cette matrice seulement pour l'UI
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	Ui.affichage(keys);
-	glPopMatrix();
+	glLoadIdentity(); // On reset la matrice de vue à l'identité, comme ca on affichage par rapport à la caméra et les objets restent ainsi fixes par rapport à la caméra
+	Ui.affichage(keys, mouseClick);
+	glPopMatrix();// On reprend la matrice qui était présente avant l'affichage de l'UI
 }
-
 void Camera::affichagePlayer()
 {
 	glPushMatrix();
@@ -80,12 +98,10 @@ void Camera::affichagePlayer()
 	player.affichage();
 	glPopMatrix();
 }
-
-void Camera::setPlayer(Player p)
+void Camera::changeState(bool b, int i)
 {
-	player = p;
+	Ui.changeState(b, i);
 }
-
 void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle){
 
 
@@ -103,18 +119,18 @@ void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivi
 	camera_center_vector.z = camera_position.z + sin(actualAngleX) * 4;
 	camera_center_vector.y = camera_position.y + sin(actualAngleY) * 4;
 	/*cout << camera_center_vector.x << " " << camera_center_vector.z <<" " << camera_center_vector.y << endl;*/
-	this->updateCamera();
+	//this->updateCamera();
 
 	
 	//cout << actualAngleX*360/2/ 3.141592 << " " << actualAngleY * 360 / 2 / 3.141592 << endl;
 
 	
 }
-
 void Camera::updateViewMatrix()
 {
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 }
+
 
 void Camera::setUI(UI o)
 {

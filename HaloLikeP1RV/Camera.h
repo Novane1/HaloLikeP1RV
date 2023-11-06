@@ -3,7 +3,7 @@
 #define Camera_h
 
 //Librairies
-#include <GL/gl.h>
+#include <glad/glad.h>
 
 /*#ifndef APIENTRY
 #define APIENTRY
@@ -27,18 +27,31 @@ class Camera {
 	Player player;
 	
 public :
+	
+	// CONSTRUCTEURS
+	Camera();
+
+	// GETTERS
+	virtual glm::vec3 getPosition();
+	virtual glm::vec3 getTarget();
+
+	// SETTERS
+	virtual void sethauteur(glm::vec3 inter, float hauteur);
+	virtual void setUI(UI o);
+	virtual void setPlayer(Player p);
+	
+	// METHODES
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
-	virtual void goFrontCamera(float speed, glm::vec3 inter, float hauteur); // Augmente la coordonnée Z  de la caméra de z 
-	virtual void goSideCamera(float speed, glm::vec3 inter, float hauteur);
+	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
+	virtual void goSideCamera(float speed);
 	virtual void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle);
 	virtual void updateViewMatrix();
-	virtual void setUI(UI o);
-	virtual glm::vec3 getPosition();
-	virtual void affichageUI(std::vector<bool> keys);
+	virtual void affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick);
 	virtual void affichagePlayer();
-	virtual void setPlayer(Player p);
+	virtual void changeState(bool b, int i);// change l'état d'un élément de l'UI de notre caméra
+	
 
-	Camera();
+	
 };
 
 #endif

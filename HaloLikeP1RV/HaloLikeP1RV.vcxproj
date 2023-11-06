@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Ennemi.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -169,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Ennemi.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="glm\glm\common.hpp" />
     <ClInclude Include="glm\glm\exponential.hpp" />

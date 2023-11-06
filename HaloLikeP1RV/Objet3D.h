@@ -3,9 +3,7 @@
 #define Objet3D_h
 #include <vector>
 #include "Texture.h"
-#include "glm/glm/glm.hpp"
-#include "glm/glm/gtc/matrix_transform.hpp"
-
+#include "Shader.h"
 
 using namespace std;
 class Objet3D
@@ -18,6 +16,16 @@ protected :
 	vector<Tex> textureCoord;
 	Texture texture;
 	glm::mat4 viewMatrix;
+	
+	// SHADERS
+	// Pour l'affichage en OpenGL moderne
+	GLuint VAO;
+	GLuint VBO, EBO;
+	vector<GLuint> indices; // indice pour rendre le pointTexture. Elle vaudra 0,1,2,...,pointTexture.size()-1
+	vector<PointText> pointsTexture;  // liste des points à rendre dans l'ordre
+	// la différence avec vertices est que là, les points sont dans l'ordre de l'afichage et in n'y a donc pas besoin d'indices 
+	// même si on utilise quand même indices, qui est juste une liste croissante incrémenté de 1 en 1
+
 
 	// Nouvelle structure de données pour face, permettant de tout stocker dans un vector
 	vector<vraiFace> vraiFaces;
@@ -50,7 +58,8 @@ public :
 	void affichage();
 	void LoadTexture(const char* path);
 	void LoadOBJ(const char* filename);
-	
+	void affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
+
 };
 
 #endif

@@ -2,7 +2,7 @@
 #ifndef Texture_h
 #define Texture_h
 #include "Geometry.h"
-#include <GL/gl.h>
+#include <glad/glad.h>
 class Texture
 {
 protected :

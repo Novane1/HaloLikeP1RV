@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "Objet3D.h"
 
-#define DISTANCECALCUL 20
+#define DISTANCECALCUL 2
 
 // Contructeurs
 rayon::rayon(glm::vec3 O, glm::vec3 D)
@@ -54,14 +54,15 @@ glm::vec3 rayon::ptIntersectionF(Objet3D& NM, Camera& cam) const
 	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
 		// Verifier si proche
 		if (length((*face).vertexA - cam.getPosition()) < DISTANCECALCUL ||
-			length((*face).vertexA - cam.getPosition()) < DISTANCECALCUL ||
-			length((*face).vertexA - cam.getPosition()) < DISTANCECALCUL) {
+			length((*face).vertexB - cam.getPosition()) < DISTANCECALCUL ||
+			length((*face).vertexC - cam.getPosition()) < DISTANCECALCUL) {
 
-			// Vérification que "down" et la normale ne soit pas parralèle 
+			// Vérification que "down" et la normale ne soit pas perpndiculaires 
 			if (dot(down, (*face).normal) != 0) {
 				float D = -dot((*face).normal, (*face).vertexA);
 				float distance = -(dot((*face).normal, cam.getPosition()) + D) / dot((*face).normal, down);
-				std::cout << "Distance : " << distance << endl;
+				//std::cout << "Distance : " << distance << endl;
+				
 				// Vérification de distance > 0 (le plan bien "devant" le rayon)
 				if (distance > 0) {
 					// on calcule maintenant trois produits vectoriels et on vérifie que P intersecte bien avec le triangle

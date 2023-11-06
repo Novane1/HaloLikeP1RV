@@ -18,7 +18,7 @@ class rayon
 	// ATTRIBUTS ///////////////////////////////////////
 	glm::vec3 Origin;
 
-	vector<Face> navMesh;
+	//vector<Face> navMesh;
 
 	/* POUR IMPLEMENTATION D'AUTRES DIRECTIONS PLUS TARD
 	glm::vec3 Direction; */

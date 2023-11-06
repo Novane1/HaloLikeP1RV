@@ -70,29 +70,27 @@ void Objet3D::setVraiFaces()
     glm::vec3 tmp;
     glm::vec2 tmp2;
 
+    //cout << norms.size() << endl;
+    //cout << faces.size() << endl;
 
     for (const Face& face : faces) {
         
         tmp.x = vertices[face.v1 - 1].x; tmp.y = vertices[face.v1 - 1].y; tmp.z = vertices[face.v1 - 1].z;
-
         trueface.vertexA = tmp;
 
         tmp.x = vertices[face.v2 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
-
         trueface.vertexB = tmp;
 
         tmp.x = vertices[face.v3 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
-
         trueface.vertexC = tmp;
 
         // Coordonnées de texture, non utilisé pour l'instant
         /*tmp2.x = textureCoord[face.vt1 - 1].v1;
         tmp2.y = textureCoord[face.vt1 - 1].v2;
-
         trueface.texCoords = tmp2;*/
 
+        //cout << face.normal - 1 << endl;
         tmp = norms[face.normal - 1];
-
         trueface.normal = tmp;
 
         vraiFaces.push_back(trueface);
@@ -129,7 +127,40 @@ void Objet3D::affichage()
     
 }
 
+void Objet3D::affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp)
+{
 
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
+    float fov = glm::radians(90.0f);  // Field of view in radians
+    float aspectRatio = 800.0f / 600.0f;  // Width divided by height
+    float nearClip = 0.1f;
+    float farClip = 100.0f;
+
+    // Create the projection matrix
+    glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
+
+    // Initialize as the identity matrix
+    glm::vec3 worldPosition = glm::vec3(1, 0, 0);  // Replace x, y, z with the desired world position
+    model = glm::translate(model, worldPosition);
+    // Use the shader program and set the model matrix as a uniform.
+    glUseProgram(shader.getShader());
+    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+    glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
+
+    glBindTexture(GL_TEXTURE_2D, texture.getID());
+    //Display
+    glBindVertexArray(VAO);
+
+    glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
+    //End of display
+    glBindVertexArray(0);
+    glUseProgram(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 
 void Objet3D::LoadTexture(const char* path)
 {
@@ -193,10 +224,11 @@ void Objet3D::LoadOBJ(const char* filename)
                 //passer au point suivant
                 while (c != '/') { iss.get(c); }
                 iss >> face.vt1;
-
+                c = 'non';
                 while (c != '/') { iss.get(c); }
-                //iss >> face.normal;                                                   TODO
-                while (c != ' ') { iss.get(c); }
+                //while (c != '/') { iss.get(c); }
+                iss >> face.normal;
+                while (c != ' ') {iss.get(c); }
 
                 iss >> face.v2;
                 // ...
@@ -204,7 +236,7 @@ void Objet3D::LoadOBJ(const char* filename)
                 iss >> face.vt2;
 
                 while (c != '/') { iss.get(c); }
-                while (c != ' ') { iss.get(c); }
+                while (c != ' ' ) { iss.get(c); }
 
                 iss >> face.v3;
                 while (c != '/') { iss.get(c); }
@@ -226,9 +258,54 @@ void Objet3D::LoadOBJ(const char* filename)
                 textureCoord.push_back(tex);
             }
         }
+        this->setVraiFaces();
+        //cout << vraiFaces.size() << endl;
         file.close();
         
-    
+        for (const Face& face : faces) { // on met en place la liste de tout les points avec leur coordonnée de texture
+
+            PointText p;
+
+            p.position.x = vertices[face.v1 - 1].x;
+            p.position.y = vertices[face.v1 - 1].y;
+            p.position.z = vertices[face.v1 - 1].z;
+            p.u = textureCoord[face.vt1 - 1].v1;
+            p.v = textureCoord[face.vt1 - 1].v2;
+            pointsTexture.push_back(p);
+            p.position.x = vertices[face.v2 - 1].x;
+            p.position.y = vertices[face.v2 - 1].y;
+            p.position.z = vertices[face.v2 - 1].z;
+            p.u = textureCoord[face.vt2 - 1].v1;
+            p.v = textureCoord[face.vt2 - 1].v2;
+            pointsTexture.push_back(p);
+            p.position.x = vertices[face.v3 - 1].x;
+            p.position.y = vertices[face.v3 - 1].y;
+            p.position.z = vertices[face.v3 - 1].z;
+            p.u = textureCoord[face.vt3 - 1].v1;
+            p.v = textureCoord[face.vt3 - 1].v2;
+            pointsTexture.push_back(p);
+
+
+        }
+        // Création du VAO , VBO et EBO, puis link avec le VAO pour pouvoir tout encapsuler dedans
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glGenBuffers(1, &EBO);
+        // on set notre liste d'indices en 0, 1, 2, ... pointsTexture.size() car ils sont déjà dans l'ordre d'affichage
+        for (int i = 0; i < pointsTexture.size(); i++) {
+            indices.push_back(i);
+        }
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, pointsTexture.size() * sizeof(PointText), pointsTexture.data(), GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(PointText), (void*)offsetof(PointText, position));
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(PointText), (void*)offsetof(PointText, u));
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
 }
 
 

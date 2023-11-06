@@ -1,12 +1,9 @@
 //Librairies
 #include <windows.h>
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 #include <sstream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include "UI.h"
 #include <glut.h>
 #include "Camera.h"
@@ -17,6 +14,9 @@
 #include "Objet3D.h"
 #include "Player.h"
 #include "rayon.h"
+#include "Shader.h"
+#include "Ennemi.h"
+#include <GLFW/glfw3.h>
 
 using namespace std;
 
@@ -32,6 +32,9 @@ Objet3D playerObj;
 UI listUI;
 Objet3D gun;
 Objet3D second;
+Objet3D knifeHandle;
+Objet3D knifeBlade;
+Objet3D glove;
 // TEST NAVMESH
 Objet3D monde;
 Objet3D navMesh;
@@ -64,7 +67,25 @@ float focale = 65.0f;
 float near1 = 0.1f;
 float far1 = 100.0f;
 std::vector<bool> keys(GLFW_KEY_LAST, false);
+std::vector<bool> mouseClick(2, false);
+bool shouldExit = false;
 
+GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        mouseClick[0] = true;
+        // Il faut faire des dégats sur ennemi
+        //////////////////////////////////////////
+    }
+    else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
+        mouseClick[0] = false;
+    }
+    else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS) {
+        mouseClick[1] = true;
+    }
+    else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
+        mouseClick[1] = false;
+    }
+}
 GLvoid keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key >= 0 && key < GLFW_KEY_LAST) {
         if (action == GLFW_PRESS) {
@@ -76,26 +97,31 @@ GLvoid keyCallback(GLFWwindow* window, int key, int scancode, int action, int mo
             keys[key] = false;
         }
     }
+
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        // Set a flag or perform some action to exit the application
+        shouldExit = true;
+    }
 }
 GLvoid clavier() { 
 
-    if (keys[GLFW_KEY_LEFT_SHIFT]) { SPEED = runSpeed;  }
+    if (keys[GLFW_KEY_LEFT_SHIFT]) { SPEED = runSpeed; }
     else { SPEED = walkSpeed; }
-   
-    if (keys[GLFW_KEY_W]) { dZ = -SPEED;  }
-    else{
+
+    if (keys[GLFW_KEY_W]) { dZ = -SPEED; }
+    else {
         if (keys[GLFW_KEY_S]) { dZ = SPEED; }
         else { dZ = 0; }
     }
-    
 
-    if (keys[GLFW_KEY_A]) { dX = strafeSpeed;  }
+
+    if (keys[GLFW_KEY_A]) { dX = strafeSpeed; }
     else {
-        if (keys[GLFW_KEY_D]) { dX = -strafeSpeed;  }
+        if (keys[GLFW_KEY_D]) { dX = -strafeSpeed; }
         else { dX = 0; }
     }
-    
- 
+    if (keys[GLFW_KEY_C]) { camera.changeState(false, 0); camera.changeState(true, 1); camera.changeState(true, 2); camera.changeState(true, 3); }
+    if (keys[GLFW_KEY_Z]) { camera.changeState(true, 0); camera.changeState(false, 1); camera.changeState(false, 2); camera.changeState(false, 3); }
 }
 GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
 {
@@ -107,6 +133,11 @@ GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
 }
 
 
+GLfloat Norme(glm::vec3 vec1, glm::vec3 vec2) {
+    GLfloat n; 
+    // TODO
+    return 0.0;
+}
 
 
 int main() {
@@ -118,7 +149,14 @@ int main() {
     }
 
     // Create a GLFW window
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Texture Example", nullptr, nullptr);
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+    // Get the video mode of the monitor
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    // Create a fullscreen window
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Fullscreen Game", monitor, NULL);
+
     if (!window) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -137,36 +175,50 @@ int main() {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(window, souris_au_centre);
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
-  
-    // Load the texture and object
-    //player.LoadTexture("zelda.png");
-
-    //player.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj"); // JACOB
-    ////player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj"); // NATHAN
-    //playerObj.LoadTexture("testPlayer.png");
-    //playerObj.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj"); // JACOB
-    ////playerObj.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/testPlayer.obj"); // NATHAN
-    //gun.LoadTexture("gun.png");
-    //gun.LoadOBJ("C:/Utilisateurs/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj"); // JACOB
-    ////gun.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj"); // NATHAN
-    //testPlayer.setPlayer(playerObj);
-    ////player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
-    //listUI.AddObject(gun);
-
-
-    // TEST NAVMESH 
+    // LOAD OBJETS DE JACOB
     monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     navMesh.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/navMesh.obj");
-    // FIN TEST
+    
+    player.LoadTexture("zelda.png");
+    player.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
 
-    /*gun.LoadTexture("gun.png");
-* 
-    gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
-    listUI.AddObject(gun);*/
+    knifeHandle.LoadTexture("knifeHandle.png");
+    knifeHandle.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
+
+    knifeBlade.LoadTexture("knifeBlade.png");
+    knifeBlade.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
+
+    glove.LoadTexture("glove.png");
+    glove.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    // FIN LOAD
+
+    //// LOAD OBJETS DE NATHAN
+    //monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    //navMesh.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/navMesh.obj");
+
+    //player.LoadTexture("zelda.png");
+    //player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+
+    //knifeHandle.LoadTexture("knifeHandle.png");
+    //knifeHandle.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
+
+    //knifeBlade.LoadTexture("knifeBlade.png");
+    //knifeBlade.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
+
+    //glove.LoadTexture("glove.png");
+    //glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    //// FIN LOAD
 
 
+    listUI.AddObject(gun);
+    listUI.AddObject(knifeHandle);
+    listUI.AddObject(knifeBlade);
+    listUI.AddObject(glove);
+    //
     camera.setUI(listUI);
+    camera.changeState(0, false);
     camera.setPlayer(testPlayer);
   
     glEnable(GL_DEPTH_TEST);
@@ -175,6 +227,42 @@ int main() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+    
+    // Shader in CG
+    const char* vertexShaderSource = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    void main() {
+        gl_Position =   projection *view *model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+    }
+)";
+
+
+    const char* fragmentShaderSource = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+    vec4 texColor = texture(texture1, TexCoord); 
+    vec4 redColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
+
+    float blendFactor = 0.5; // You can change this value
+
+    FragColor = mix(texColor, redColor, blendFactor);
+    }
+)";
+
+    Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     
     rayon downSnap(camera); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
@@ -192,11 +280,11 @@ int main() {
         clavier();
         //player.affichage();
         monde.affichage(); // TEST NAVMESH
+        player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+        //player.affichage2();
+        glove.affichage();
+        camera.affichageUI(keys, mouseClick);
 
-        camera.affichageUI(keys);
-        //camera.affichagePlayer();
-        //second.affichage();
-        
         glPushMatrix();
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -206,23 +294,36 @@ int main() {
         gluPartialDisk(quadric, 0.0, 1.0, 100, 1, 0.0, 360.0);
         glEnable(GL_DEPTH_TEST);
         glPopMatrix();
-        
-        
-        intersection = downSnap.ptIntersectionF(monde, camera);
-        cout << "Intersection : (" << intersection.x << ", "  // Vérification de l'intersection
-                                   << intersection.y << ", " 
-                                   << intersection.z << ")" << endl;
-        cout << "Camera :       (" << camera.getPosition().x << ", "  // Vérification de l'intersection
-            << camera.getPosition().y << ", "
-            << camera.getPosition().z << ")" << endl;
 
-        camera.goFrontCamera(dZ, intersection, _HEIGHT);
-        camera.goSideCamera(dX, intersection, _HEIGHT);
-        
+        camera.goFrontCamera(dZ);
+        camera.goSideCamera(dX);
+
+
+        // Calcul d'intersection
+        if (dZ != 0 || dX != 0) {
+            
+            intersection = downSnap.ptIntersectionF(monde, camera);
+
+            // DEBUG de la distance d'intersection
+            //cout << "Intersection : (" << intersection.x << ", "  // Vérification de l'intersection
+            //    << intersection.y << ", "
+            //    << intersection.z << ")" << endl;
+            //cout << "Camera :       (" << camera.getPosition().x << ", "  // Vérification de l'intersection
+            //    << camera.getPosition().y << ", "
+            //    << camera.getPosition().z << ")" << endl; 
+
+            camera.sethauteur(intersection, _HEIGHT);
+        }
+
         glDisable(GL_TEXTURE_2D);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
+
+        // Exit on Echap
+        if (shouldExit) {
+            break;
+        }
     }
 
     // Clean up
@@ -230,146 +331,3 @@ int main() {
 
     return 0;
 }
-
-
-
-
-/*
-// Define the vertices of a square.
-GLfloat vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.5f,  0.5f, 0.0f,
-    -0.5f,  0.5f, 0.0f
-};
-
-// Define the indices for drawing the square as two triangles.
-GLuint indices[] = {
-    0, 1, 2,
-    2, 3, 0
-};
-
-const char* vertexShaderSource = R"(
-    #version 330 core
-    layout(location = 0) in vec3 aPos;
-    uniform mat4 model;
-    void main() {
-        gl_Position = model * vec4(aPos, 1.0);
-    }
-)";
-
-const char* fragmentShaderSource = R"(
-    #version 330 core
-    out vec4 FragColor;
-    void main() {
-        FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-    }
-)";
-
-int main() {
-    // Initialize GLFW.
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW" << std::endl;
-        return -1;
-    }
-
-    // Create a GLFW window.
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Square Movement Example", NULL, NULL);
-    if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    // Load OpenGL function pointers (using GLAD).
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cerr << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    // Compile and link shaders.
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    // Set up vertex array and buffer objects.
-    GLuint VAO, VBO, EBO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // Specify vertex attribute pointers.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-
-    // Create and initialize the model matrix.
-    glm::mat4 model = glm::mat4(1.0f);  // Identity matrix
-    GLfloat translation = 0.0f;
-    GLfloat speed = 0.005f;
-
-    // Main rendering loop.
-    while (!glfwWindowShouldClose(window)) {
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Apply translation to the model matrix for right and left movement.
-        model = glm::translate(model, glm::vec3(translation, 0.0f, 0.0f));
-
-        // Use the shader program and set the model matrix as a uniform.
-        glUseProgram(shaderProgram);
-        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
-
-        // Bind the VAO and draw the square.
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        glBindVertexArray(0);
-        glUseProgram(0);
-
-        // Update the translation for continuous movement.
-        if (translation >= 0.5f || translation <= -0.5f) {
-            speed = -speed;
-        }
-        translation += speed;
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    // Cleanup and terminate GLFW.
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
-
-    glfwTerminate();
-
-    return 0;
-}
-*/
