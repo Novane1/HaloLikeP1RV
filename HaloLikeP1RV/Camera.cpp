@@ -14,13 +14,13 @@ using namespace std;
 Camera::Camera()
 {
 	camera_initial_position.x = 0;
-	camera_initial_position.y = 0;
+	camera_initial_position.y = 1.5;
 	camera_initial_position.z = 0;
 	camera_position.x = 0;
-	camera_position.y = 0;
+	camera_position.y = 1.5;
 	camera_position.z = 0;
 	camera_center_vector.x = 0;
-	camera_center_vector.y = 0;
+	camera_center_vector.y = 1.5;
 	camera_center_vector.z = -4;
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
@@ -41,6 +41,11 @@ glm::vec3 Camera::getTarget()
 void Camera::setPlayer(Player p)
 {
 	player = p;
+}
+
+void Camera::addY(float y)
+{
+	camera_position.y += y;
 }
 
 void Camera::sethauteur(glm::vec3 inter, float hauteur)
@@ -93,10 +98,12 @@ void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick)
 }
 void Camera::affichagePlayer()
 {
+	glDisable(GL_DEPTH_TEST);
 	glPushMatrix();
 	glTranslatef(camera_position.x - camera_initial_position.x-1, camera_position.y - camera_initial_position.y-1, camera_position.z - camera_initial_position.z-1);
 	player.affichage();
 	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }
 void Camera::changeState(bool b, int i)
 {

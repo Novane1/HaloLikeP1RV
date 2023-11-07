@@ -22,7 +22,7 @@ using namespace std;
 
 // VARIABLES GLOBALES
 
-#define _HEIGHT 1.5
+#define _HEIGHT 4.0
 
 int width, height, channels;
 //Objets
@@ -38,6 +38,8 @@ Objet3D glove;
 // TEST NAVMESH
 Objet3D monde;
 Objet3D navMesh;
+//Debug
+glm::vec3 previousCam(0, 0, 0);
 // FIN TEST
 //Variables main
 vector<Vertex> vertices;
@@ -148,15 +150,15 @@ int main() {
         return -1;
     }
 
-    // Create a GLFW window
-    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    //// Create a GLFW window
+    //GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 
-    // Get the video mode of the monitor
-    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    //// Get the video mode of the monitor
+    //const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-    // Create a fullscreen window
-    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Fullscreen Game", monitor, NULL);
-
+    //// Create a fullscreen window
+    //GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Fullscreen Game", monitor, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "My GLFW Window", nullptr, nullptr);
     if (!window) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
@@ -178,7 +180,7 @@ int main() {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     // LOAD OBJETS DE JACOB
-    monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    /*monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     navMesh.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/navMesh.obj");
     
     player.LoadTexture("zelda.png");
@@ -191,24 +193,24 @@ int main() {
     knifeBlade.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
     glove.LoadTexture("glove.png");
-    glove.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    glove.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");*/
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    //monde.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
-    //navMesh.LoadOBJ("C:/Users/jaco2/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/navMesh.obj");
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
-    //player.LoadTexture("zelda.png");
-    //player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+    player.LoadTexture("zelda.png");
+    player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
 
-    //knifeHandle.LoadTexture("knifeHandle.png");
-    //knifeHandle.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
+    knifeHandle.LoadTexture("knifeHandle.png");
+    knifeHandle.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
 
-    //knifeBlade.LoadTexture("knifeBlade.png");
-    //knifeBlade.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
+    knifeBlade.LoadTexture("knifeBlade.png");
+    knifeBlade.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
-    //glove.LoadTexture("glove.png");
-    //glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    glove.LoadTexture("glove.png");
+    glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
     //// FIN LOAD
 
 
@@ -264,7 +266,7 @@ int main() {
 
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     
-    rayon downSnap(camera); // Initalisation du rayon de projection pour la coordonnée en y
+    rayon downSnap(camera,navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
 
     while (!glfwWindowShouldClose(window)) {
@@ -285,6 +287,10 @@ int main() {
         glove.affichage();
         camera.affichageUI(keys, mouseClick);
 
+
+        glEnable(GL_CULL_FACE);
+
+
         glPushMatrix();
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -298,23 +304,27 @@ int main() {
         camera.goFrontCamera(dZ);
         camera.goSideCamera(dX);
 
-
+        
         // Calcul d'intersection
         if (dZ != 0 || dX != 0) {
             
-            intersection = downSnap.ptIntersectionF(monde, camera);
+            glm::vec3 prevI = intersection;
+            intersection = downSnap.ptIntersectionF(camera.getPosition());
+            if (intersection != glm::vec3{ -100,-100,-100 })
+            {
+                camera.sethauteur(intersection, _HEIGHT);
+            }
+            
+ 
+            
+            
 
-            // DEBUG de la distance d'intersection
-            //cout << "Intersection : (" << intersection.x << ", "  // Vérification de l'intersection
-            //    << intersection.y << ", "
-            //    << intersection.z << ")" << endl;
-            //cout << "Camera :       (" << camera.getPosition().x << ", "  // Vérification de l'intersection
-            //    << camera.getPosition().y << ", "
-            //    << camera.getPosition().z << ")" << endl; 
 
-            camera.sethauteur(intersection, _HEIGHT);
+
         }
-
+        
+        
+;
         glDisable(GL_TEXTURE_2D);
 
         glfwSwapBuffers(window);

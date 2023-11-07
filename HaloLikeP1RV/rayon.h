@@ -17,7 +17,7 @@ class rayon
 {
 	// ATTRIBUTS ///////////////////////////////////////
 	glm::vec3 Origin;
-
+	vector<vraiFace> faces;
 	//vector<Face> navMesh;
 
 	/* POUR IMPLEMENTATION D'AUTRES DIRECTIONS PLUS TARD
@@ -26,8 +26,8 @@ class rayon
 public :
 
 	// CONSTRUCTEURS ///////////////////////////////////
-	rayon(glm::vec3 O, glm::vec3 D);
-	rayon(Camera &camera);
+	rayon(glm::vec3 O, glm::vec3 D, vector<vraiFace> f);
+	rayon(Camera &camera, vector<vraiFace> f);
 
 
 	// GETTERS /////////////////////////////////////////
@@ -55,7 +55,7 @@ public :
 	// Point d'intersection entre plan et rayon
 
 	// Point d'intersection (si intersection) entre face et rayon
-	glm::vec3 ptIntersectionF(Objet3D &NavMesh, Camera& cam) const;
+	glm::vec3 ptIntersectionF( glm::vec3 pos);
 
 
 };

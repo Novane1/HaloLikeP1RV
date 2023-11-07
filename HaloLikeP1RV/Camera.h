@@ -39,7 +39,7 @@ public :
 	virtual void sethauteur(glm::vec3 inter, float hauteur);
 	virtual void setUI(UI o);
 	virtual void setPlayer(Player p);
-	
+	virtual void addY(float y);
 	// METHODES
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
 	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
