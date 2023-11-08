@@ -44,64 +44,119 @@ void rayon::setLocation(glm::vec3 O)
 	return;
 }
 
+bool RayIntersectsTriangle(glm::vec3 rayOrigin,
+	glm::vec3 rayVector,
+	glm::vec3 vertex0,
+	glm::vec3 vertex1,
+	glm::vec3 vertex2,
+	glm::vec3& outIntersectionPoint)
+{
+
+	const float EPSILON = 0.0000001;
+	glm::vec3 edge1, edge2, h, s, q;
+	float a, f, u, v;
+	edge1 = vertex1 - vertex0;
+	edge2 = vertex2 - vertex0;
+	h = glm::cross(rayVector,edge2);
+	a = glm::dot(edge1, h);
+	if (a > -EPSILON && a < EPSILON)
+		return false;    // This ray is parallel to this triangle.
+	f = 1.0 / a;
+	s = rayOrigin - vertex0;
+	u = f * dot(s,h);
+	if (u < 0.0 || u > 1.0)
+		return false;
+	q = cross(s,edge1);
+	v = f * dot(rayVector,q);
+	if (v < 0.0 || u + v > 1.0)
+		return false;
+	// At this stage we can compute t to find out where the intersection point is on the line.
+	float t = f * dot(edge2,q);
+	if (t > EPSILON || t < -EPSILON) // ray intersection
+	{
+		outIntersectionPoint = rayOrigin + rayVector * t;
+		return true;
+	}
+	else { 
+
+		return false; }// This means that there is a line intersection but not a ray intersection.
+
+}
+bool RayIntersectsTriangle2(glm::vec3 rayOrigin,
+	glm::vec3 rayVector,
+	glm::vec3 vertex0,
+	glm::vec3 vertex1,
+	glm::vec3 vertex2,
+	glm::vec3& outIntersectionPoint)
+{
+
+	const float EPSILON = 0.0000001;
+	glm::vec3 edge1, edge2, h, s, q;
+	float a, f, u, v;
+	edge1 = vertex2 - vertex1;
+	edge2 = vertex2 - vertex0;;
+	h = glm::cross(rayVector, edge2);
+	a = glm::dot(edge1, h);
+	if (a > -EPSILON && a < EPSILON)
+		return false;    // This ray is parallel to this triangle.
+	f = 1.0 / a;
+	s = rayOrigin - vertex0;
+	u = f * dot(s, h);
+	if (u < 0.0 || u > 1.0)
+		return false;
+	q = cross(s, edge1);
+	v = f * dot(rayVector, q);
+	if (v < 0.0 || u + v > 1.0)
+		return false;
+	// At this stage we can compute t to find out where the intersection point is on the line.
+	float t = f * dot(edge2, q);
+	if (t > EPSILON || t < -EPSILON) // ray intersection
+	{
+		outIntersectionPoint = rayOrigin + rayVector * t;
+		return true;
+	}
+	else {
+
+		return false;
+	}// This means that there is a line intersection but not a ray intersection.
+
+}
 glm::vec3 rayon::ptIntersectionF( glm::vec3 pos)
 {
-	//pos.y += 20;
 	
+	cout << pos.x << " " << pos.y << " " << pos.z << endl;
 	glm::vec3 pt(0.0f);// pt d'intersection
 	glm::vec3 down;
 	down.x = 0;
 	down.y = -1;
 	down.z = 0;
 
+	
+
+
 	// Pour toutes les faces, vérifier l'intersection puis l'inclusion du pt dans la surface de la face.
 	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
 		 //Verifier si proche
-		
 		if (length((*face).vertexA - pos) < DISTANCECALCUL ||
 			length((*face).vertexB - pos) < DISTANCECALCUL ||
-			length((*face).vertexC - pos) < DISTANCECALCUL) {
+			length((*face).vertexC - pos) < DISTANCECALCUL) 
+		{
+			bool isOk = RayIntersectsTriangle(pos, down, (*face).vertexC, (*face).vertexB, (*face).vertexA, pt);
+			if (isOk) { return pt; }
+			else {
 
-			// Vérification que "down" et la normale ne soit pas perpndiculaires 
-			if (      dot(down, (*face).normal    ) != 0) {
-				///(glm::length(down)* glm::length((*face).normal))  
-				float D = -dot((*face).normal, (*face).vertexA);
-				float distance = -(dot((*face).normal, pos) + D) / dot((*face).normal, down);
-				//std::cout << "Distance : " << distance << endl;
-				
-				// Vérification de distance > 0 (le plan bien "devant" le rayon)
-				if (distance > 0) {
-					// on calcule maintenant trois produits vectoriels et on vérifie que P intersecte bien avec le triangle
-					pt = pos + distance * down; // Position de l'intersetion
-					glm::vec3 AB = (*face).vertexB - (*face).vertexA;
-					glm::vec3 Apt = pt - (*face).vertexA;
-
-					glm::vec3 AC = (*face).vertexC - (*face).vertexA;
-					glm::vec3 Cpt = pt - (*face).vertexC;
-
-					glm::vec3 BC = (*face).vertexC - (*face).vertexB;
-					glm::vec3 Bpt = pt - (*face).vertexB;
-
-					glm::vec3 normi = cross(AB, AC);
-
-					// Dernière verification
-					if (dot(cross(AB, Apt), normi) > 0 &&
-						dot(cross(Cpt, AC), normi) > 0 &&
-						dot(cross(BC, Bpt), normi) > 0)
-					{
-						
-						return pt; // Retourner la valeure finale de pt
-					}
-					
-				}
+				isOk = RayIntersectsTriangle2(pos, down, (*face).vertexC, (*face).vertexB, (*face).vertexA, pt);
 			}
+			if (isOk)
+			{
+				return pt;
+			}
+			
 		}
-
-		
-		
 	}
-
-	 pt = { -100,-100,-100 };
-	return pt;
-
+	pt = { -100,-100,-100 }; return pt;
+		
 }
+
+		
+

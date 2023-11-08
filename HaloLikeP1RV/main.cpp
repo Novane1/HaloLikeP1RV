@@ -199,7 +199,7 @@ int main() {
     //// LOAD OBJETS DE NATHAN
     monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
-
+    monde.LoadTexture("Terrain.png");
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
 
@@ -314,12 +314,7 @@ int main() {
             {
                 camera.sethauteur(intersection, _HEIGHT);
             }
-            
  
-            
-            
-
-
 
         }
         

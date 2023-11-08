@@ -109,6 +109,14 @@ void Camera::changeState(bool b, int i)
 {
 	Ui.changeState(b, i);
 }
+//void Camera::setPhysics(float m)
+//{
+//	Physics p(m);
+//	physic = p;
+//}
+//void Camera::updatePhysics()
+//{
+//}
 void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle){
 
 
