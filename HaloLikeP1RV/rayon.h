@@ -27,7 +27,7 @@ public :
 
 	// CONSTRUCTEURS ///////////////////////////////////
 	rayon(glm::vec3 O, glm::vec3 D, vector<vraiFace> f);
-	rayon(Camera &camera, vector<vraiFace> f);
+	rayon( vector<vraiFace> f);
 
 
 	// GETTERS /////////////////////////////////////////

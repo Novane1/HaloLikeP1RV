@@ -13,6 +13,8 @@
 #include "glm/glm/gtc/matrix_transform.hpp"
 #include "UI.h"
 #include "Player.h"
+#include "Physics.h"
+#include "rayon.h"
 using namespace std;
 // Définition de la classe caméra
 class Camera {
@@ -25,6 +27,9 @@ class Camera {
 	GLdouble actualAngleY ;
 	UI Ui;
 	Player player;
+	Physics jump;
+
+
 	
 public :
 	
@@ -49,8 +54,10 @@ public :
 	virtual void affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick);
 	virtual void affichagePlayer();
 	virtual void changeState(bool b, int i);// change l'état d'un élément de l'UI de notre caméra
-	
-
+	virtual void setJump();
+	virtual void updateJump(float intersectiony);
+	virtual bool isJumping();
+	virtual void resetJump();
 	
 };
 

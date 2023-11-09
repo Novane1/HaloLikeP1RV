@@ -109,7 +109,7 @@ GLvoid clavier() {
 
     if (keys[GLFW_KEY_LEFT_SHIFT]) { SPEED = runSpeed; }
     else { SPEED = walkSpeed; }
-
+    
     if (keys[GLFW_KEY_W]) { dZ = -SPEED; }
     else {
         if (keys[GLFW_KEY_S]) { dZ = SPEED; }
@@ -119,11 +119,17 @@ GLvoid clavier() {
 
     if (keys[GLFW_KEY_A]) { dX = strafeSpeed; }
     else {
+        
         if (keys[GLFW_KEY_D]) { dX = -strafeSpeed; }
         else { dX = 0; }
     }
     if (keys[GLFW_KEY_C]) { camera.changeState(false, 0); camera.changeState(true, 1); camera.changeState(true, 2); camera.changeState(true, 3); }
     if (keys[GLFW_KEY_Z]) { camera.changeState(true, 0); camera.changeState(false, 1); camera.changeState(false, 2); camera.changeState(false, 3); }
+
+    if (keys[GLFW_KEY_SPACE]) {
+        camera.setJump();
+    }
+
 }
 GLvoid souris_au_centre(GLFWwindow* window, double xpos, double ypos)
 {
@@ -197,8 +203,8 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
-    navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
+    navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
     monde.LoadTexture("Terrain.png");
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
@@ -266,7 +272,7 @@ int main() {
 
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     
-    rayon downSnap(camera,navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
+    rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
 
     while (!glfwWindowShouldClose(window)) {
@@ -303,20 +309,23 @@ int main() {
 
         camera.goFrontCamera(dZ);
         camera.goSideCamera(dX);
-
         
-        // Calcul d'intersection
-        if (dZ != 0 || dX != 0) {
-            
-            glm::vec3 prevI = intersection;
-            intersection = downSnap.ptIntersectionF(camera.getPosition());
+           intersection = downSnap.ptIntersectionF(camera.getPosition());
+
             if (intersection != glm::vec3{ -100,-100,-100 })
             {
-                camera.sethauteur(intersection, _HEIGHT);
+ 
+                if (!camera.isJumping())
+                {
+                        camera.sethauteur(intersection, _HEIGHT);
+                }
+
             }
+            
+            camera.updateJump(intersection.y);
  
 
-        }
+
         
         
 ;

@@ -5,7 +5,7 @@
 #include "Objet3D.h"
 #include "glm/glm/glm.hpp"
 
-#define DISTANCECALCUL 10
+#define DISTANCECALCUL 50
 
 // Contructeurs
 rayon::rayon(glm::vec3 O, glm::vec3 D,vector<vraiFace> f)
@@ -14,9 +14,9 @@ rayon::rayon(glm::vec3 O, glm::vec3 D,vector<vraiFace> f)
 	faces = f;
 	return;
 }
-rayon::rayon(Camera& camera, vector<vraiFace> f)
+rayon::rayon( vector<vraiFace> f)
 {
-	Origin = camera.getPosition();
+	Origin = glm::vec3(0);
 	faces = f;
 	return;
 }
@@ -124,7 +124,7 @@ bool RayIntersectsTriangle2(glm::vec3 rayOrigin,
 glm::vec3 rayon::ptIntersectionF( glm::vec3 pos)
 {
 	
-	cout << pos.x << " " << pos.y << " " << pos.z << endl;
+
 	glm::vec3 pt(0.0f);// pt d'intersection
 	glm::vec3 down;
 	down.x = 0;

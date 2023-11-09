@@ -109,14 +109,48 @@ void Camera::changeState(bool b, int i)
 {
 	Ui.changeState(b, i);
 }
-//void Camera::setPhysics(float m)
-//{
-//	Physics p(m);
-//	physic = p;
-//}
-//void Camera::updatePhysics()
-//{
-//}
+void Camera::setJump()
+{
+	if (!jump.getIsJumping()) {
+		jump.setJump(10.0f,camera_position.y);
+	}
+}
+
+void Camera::updateJump(float intersectiony)
+{
+	//cout << jump.isGoingDown() << endl;
+	if (jump.getIsJumping())
+	{
+		
+		jump.actualizeJump();
+		//cout << intersectiony << "   " << jump.getYCoord() << endl;
+		if (intersectiony > (jump.getYCoord()-4.0) && jump.isGoingDown()) {
+			jump.resetJump();
+		}
+		else {
+			float delta = camera_position.y;
+			camera_position.y = jump.getYCoord();
+			delta = camera_position.y - delta;
+
+			camera_center_vector.y += delta;
+
+		}
+		
+	}
+}
+
+bool Camera::isJumping()
+{
+	return jump.getIsJumping();
+}
+
+void Camera::resetJump()
+{
+	jump.resetJump();
+}
+
+
+
 void Camera::updateRotation(float xOffset,float yOffset, GLdouble mouseSensitivityAngle){
 
 
