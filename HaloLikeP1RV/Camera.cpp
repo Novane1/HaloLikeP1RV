@@ -118,16 +118,17 @@ void Camera::setJump()
 
 void Camera::updateJump(float intersectiony)
 {
-	//cout << jump.isGoingDown() << endl;
+
 	if (jump.getIsJumping())
 	{
 		
 		jump.actualizeJump();
-		//cout << intersectiony << "   " << jump.getYCoord() << endl;
-		if (intersectiony > (jump.getYCoord()-4.0) && jump.isGoingDown()) {
+		
+		if (intersectiony > (jump.getYCoord()-4.0) && jump.isGoingDown()) { // on est en dessous du navMesh
 			jump.resetJump();
 		}
-		else {
+		else { // on peut continuer à descendre
+			// on remet bien la target de la caméra au bon endroit
 			float delta = camera_position.y;
 			camera_position.y = jump.getYCoord();
 			delta = camera_position.y - delta;

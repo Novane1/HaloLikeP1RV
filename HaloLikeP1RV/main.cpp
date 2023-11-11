@@ -204,7 +204,9 @@ int main() {
 
     //// LOAD OBJETS DE NATHAN
     monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
+
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
+
     monde.LoadTexture("Terrain.png");
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
@@ -312,15 +314,17 @@ int main() {
         
            intersection = downSnap.ptIntersectionF(camera.getPosition());
 
-            if (intersection != glm::vec3{ -100,-100,-100 })
-            {
+           if (intersection != glm::vec3{ -100,-100,-100 })
+           {
  
-                if (!camera.isJumping())
-                {
-                        camera.sethauteur(intersection, _HEIGHT);
-                }
+               if (!camera.isJumping())
+               {
+                   camera.sethauteur(intersection, _HEIGHT);
+               }
 
-            }
+           }
+    
+            
             
             camera.updateJump(intersection.y);
  

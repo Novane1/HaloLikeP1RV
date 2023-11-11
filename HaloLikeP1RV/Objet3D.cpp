@@ -70,26 +70,23 @@ void Objet3D::setVraiFaces()
     glm::vec3 tmp;
     glm::vec2 tmp2;
 
-    //cout << norms.size() << endl;
-    //cout << faces.size() << endl;
+
 
     for (const Face& face : faces) {
         
         tmp.x = vertices[face.v1 - 1].x; tmp.y = vertices[face.v1 - 1].y; tmp.z = vertices[face.v1 - 1].z;
         trueface.vertexA = tmp;
 
+ 
         tmp.x = vertices[face.v2 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
         trueface.vertexB = tmp;
 
-        tmp.x = vertices[face.v3 - 1].x; tmp.y = vertices[face.v2 - 1].y; tmp.z = vertices[face.v2 - 1].z;
+
+        tmp.x = vertices[face.v3 - 1].x; tmp.y = vertices[face.v3 - 1].y; tmp.z = vertices[face.v3 - 1].z;
         trueface.vertexC = tmp;
 
-        // Coordonnées de texture, non utilisé pour l'instant
-        /*tmp2.x = textureCoord[face.vt1 - 1].v1;
-        tmp2.y = textureCoord[face.vt1 - 1].v2;
-        trueface.texCoords = tmp2;*/
+ 
 
-        //cout << face.normal - 1 << endl;
         tmp = norms[face.normal - 1];
         trueface.normal = tmp;
 
@@ -259,7 +256,7 @@ void Objet3D::LoadOBJ(const char* filename)
             }
         }
         this->setVraiFaces();
-        //cout << vraiFaces.size() << endl;
+
         file.close();
         
         for (const Face& face : faces) { // on met en place la liste de tout les points avec leur coordonnée de texture
