@@ -59,7 +59,7 @@ public :
 	void LoadTexture(const char* path);
 	void LoadOBJ(const char* filename);
 	void affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
-
+	void affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
 };
 
 #endif

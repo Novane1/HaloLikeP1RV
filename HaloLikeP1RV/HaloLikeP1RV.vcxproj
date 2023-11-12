@@ -165,6 +165,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="rayon.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="stb-master\stb_vorbis.c" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="rayon.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
     <ClInclude Include="stb-master\stb_c_lexer.h" />
     <ClInclude Include="stb-master\stb_divide.h" />

@@ -38,6 +38,7 @@ Objet3D glove;
 // TEST NAVMESH
 Objet3D monde;
 Objet3D navMesh;
+Objet3D skybox;
 //Debug
 glm::vec3 previousCam(0, 0, 0);
 // FIN TEST
@@ -203,11 +204,14 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
-    navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map2.obj");
-
+    navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
+
+    skybox.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
+
+    
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
 
@@ -272,7 +276,47 @@ int main() {
     }
 )";
 
+    const char* vertexShaderSourceSkyBox = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    out vec3 pos;
+    void main() {
+        gl_Position =   projection *view *model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+    pos = aPos;
+    }
+)";
+
+
+    const char* fragmentShaderSourceSkyBox = R"(
+    #version 330 core
+
+    out vec4 FragColor;
+    in vec3 pos;
+    const vec4 skytop = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    const vec4 skyhorizon = vec4(0.3294f, 0.92157f, 1.0f, 1.0f);
+   
+    void main() {
+        vec3 pointOnSphere = normalize(pos);
+        float a = pointOnSphere.y;
+
+        FragColor =mix(skyhorizon, skytop, a);
+       
+    }
+)";
+
+    /*const vec4 skytop = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    const vec4 skyhorizon = vec4(0.3294f, 0.92157f, 1.0f, 1.0f);
+    vec4 pointOnSphere = normalize(pos);
+    float a = pointOnSphere.y;
+    FragColor = mix(skyhorizon, skytop, a);*/
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
+    Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     
     rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
@@ -295,8 +339,9 @@ int main() {
         glove.affichage();
         camera.affichageUI(keys, mouseClick);
 
-
-        glEnable(GL_CULL_FACE);
+        skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+ 
+        
 
 
         glPushMatrix();
@@ -328,11 +373,6 @@ int main() {
             
             camera.updateJump(intersection.y);
  
-
-
-        
-        
-;
         glDisable(GL_TEXTURE_2D);
 
         glfwSwapBuffers(window);
