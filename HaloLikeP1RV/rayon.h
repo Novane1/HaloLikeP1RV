@@ -28,12 +28,13 @@ public :
 	// CONSTRUCTEURS ///////////////////////////////////
 	rayon(glm::vec3 O, glm::vec3 D, vector<vraiFace> f);
 	rayon( vector<vraiFace> f);
+	rayon();
 
 
 	// GETTERS /////////////////////////////////////////
 	float getOx(); float getOy(); float getOz();
 	glm::vec3 getOrigin() const;
-
+	bool isVraiFaceNull();
 	/* POUR IMPLEMENTATION D'AUTRES DIRECTIONS PLUS TARD
 	int getdirx(); int getdiry(); int getdirz(); 
 	glm::vec3 getDirection(); */
@@ -41,7 +42,7 @@ public :
 
 	// SETTERS /////////////////////////////////////////
 	void setLocation(glm::vec3 O);
-
+	void setVraiFaces(vector<vraiFace> f);
 	/* POUR IMPLEMENTATION D'AUTRES DIRECTIONS PLUS TARD
 	void setDirection(glm::vec3 D); */
 
@@ -56,7 +57,7 @@ public :
 
 	// Point d'intersection (si intersection) entre face et rayon
 	glm::vec3 ptIntersectionF( glm::vec3 pos);
-
+	bool ptIntersectionGlobalF(glm::vec3 pos, glm::vec3 dir);
 
 };
 

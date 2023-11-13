@@ -54,13 +54,13 @@
     <ClCompile Include="Ennemi.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Physics.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

@@ -21,6 +21,9 @@ Objet3D::Objet3D()
     viewMatrix = glm::mat4(1.0f);
 }
 
+Objet3D::~Objet3D()
+{}
+
 // Getters
 vector<Vertex> Objet3D::getVertices()
 {
@@ -254,6 +257,7 @@ void Objet3D::LoadOBJ(const char* filename)
                 textureCoord.push_back(tex);
             }
         }
+
         this->setVraiFaces();
 
         file.close();

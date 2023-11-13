@@ -38,6 +38,9 @@ public :
 	// Constructeurs
 	Objet3D();
 
+	// Destructeurs
+	virtual ~Objet3D();
+
 	// Getters
 	vector<Vertex> getVertices();
 	vector<Face> getFaces();  

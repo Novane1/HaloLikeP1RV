@@ -22,6 +22,11 @@ rayon::rayon( vector<vraiFace> f)
 
 	return;
 }
+rayon::rayon()
+{
+
+	return;
+}
 
 // Getters
 float rayon::getOx()
@@ -40,11 +45,22 @@ glm::vec3 rayon::getOrigin() const
 {
 	return Origin;
 }
+bool rayon::isVraiFaceNull()
+{
+	return faces.size() == 0;
+}
 void rayon::setLocation(glm::vec3 O)
 {
 	Origin = O;
 	return;
 }
+
+
+void rayon::setVraiFaces(vector<vraiFace> f) {
+
+	faces = f;
+}
+
 
 bool RayIntersectsTriangle(glm::vec3 rayOrigin,
 	glm::vec3 rayVector,
@@ -113,6 +129,29 @@ glm::vec3 rayon::ptIntersectionF( glm::vec3 pos)
 	}
 	pt = { -100,-100,-100 }; return pt;
 		
+}
+
+bool rayon::ptIntersectionGlobalF(glm::vec3 pos,glm::vec3 dir)
+{
+
+
+	glm::vec3 pt;
+
+
+
+
+
+
+
+	// Pour toutes les faces, vérifier l'intersection puis l'inclusion du pt dans la surface de la face.
+	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
+
+			bool isOk = RayIntersectsTriangle(pos, dir, (*face).vertexC, (*face).vertexB, (*face).vertexA, pt);
+			if (isOk) { return true; }
+
+	}
+	return false;
+
 }
 
 		

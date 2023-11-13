@@ -81,9 +81,7 @@ GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
         for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
             if ((*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()))) {
                 cout << (*it)->addHealth(-5) << endl;
-                if ((*it)->getHealth() <= 0) { 
-                    // Le buter 
-                }
+                if ((*it)->getHealth() <= 0) { delete (*it); }
             }
         }
         
