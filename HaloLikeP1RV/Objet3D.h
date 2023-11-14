@@ -4,6 +4,7 @@
 #include <vector>
 #include "Texture.h"
 #include "Shader.h"
+#include "Collider.h"
 
 using namespace std;
 class Objet3D
@@ -16,6 +17,7 @@ protected :
 	vector<Tex> textureCoord;
 	Texture texture;
 	glm::mat4 viewMatrix;
+	Collider collider;
 	
 	// SHADERS
 	// Pour l'affichage en OpenGL moderne
@@ -61,8 +63,11 @@ public :
 	void affichage();
 	void LoadTexture(const char* path);
 	void LoadOBJ(const char* filename);
+	void LoadCOllider(const char* filename);
 	void affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
 	void affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
+	void drawCollider();
+	Collider* getCollider();
 };
 
 #endif

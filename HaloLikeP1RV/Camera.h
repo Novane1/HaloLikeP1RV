@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Physics.h"
 #include "rayon.h"
+#include "Collider.h"
 using namespace std;
 // Définition de la classe caméra
 class Camera {
@@ -28,6 +29,8 @@ class Camera {
 	UI Ui;
 	Player player;
 	Physics jump;
+	Collider c;
+	
 
 
 	
@@ -47,8 +50,8 @@ public :
 	virtual void addY(float y);
 	// METHODES
 	virtual void updateCamera();//Mettre les coordonnées de notre objet camera dans la vrai caméra de la scène
-	virtual void goFrontCamera(float speed); // Augmente la coordonnée Z  de la caméra de z 
-	virtual void goSideCamera(float speed);
+	virtual void goFrontCamera(float speed, vector<Collider*> otherCollider); // Augmente la coordonnée Z  de la caméra de z 
+	virtual void goSideCamera(float speed, vector<Collider*> otherCollider);
 	virtual void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle);
 	virtual void updateViewMatrix();
 	virtual void affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick);
@@ -58,6 +61,9 @@ public :
 	virtual void updateJump(float intersectiony);
 	virtual bool isJumping();
 	virtual void resetJump();
+	virtual void setCollider(const char* filename);
+	virtual void drawCollider();
+	virtual bool isThereCollision(Collider collider);
 	
 };
 

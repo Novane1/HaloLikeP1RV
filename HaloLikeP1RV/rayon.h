@@ -1,11 +1,13 @@
 #pragma once
 
+
 #include <Windows.h>
-#include <vector>
 #include "glm/glm/glm.hpp"
+#include <iostream>
 #include "Geometry.h"
-#include "Camera.h"
-#include "Objet3D.h"
+#include <vector>
+using namespace std;
+
 
 //class Camera;
 //class Objet3D;
@@ -15,6 +17,7 @@
 // Contient le navMesh
 class rayon
 {
+	
 	// ATTRIBUTS ///////////////////////////////////////
 	glm::vec3 Origin;
 	vector<vraiFace> faces;

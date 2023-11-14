@@ -156,8 +156,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Ennemi.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
@@ -172,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="Ennemi.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="glm\glm\common.hpp" />

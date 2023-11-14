@@ -72,6 +72,7 @@ float far1 = 100.0f;
 std::vector<bool> keys(GLFW_KEY_LAST, false);
 std::vector<bool> mouseClick(2, false);
 bool shouldExit = false;
+vector<Collider*> otherCollider; // everything but the camera's collider
 
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -213,7 +214,7 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    /*monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
@@ -222,8 +223,9 @@ int main() {
 
     
     player.LoadTexture("zelda.png");
-    player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
-
+    player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
+    player.LoadCOllider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
+    otherCollider.push_back(player.getCollider());
     knifeHandle.LoadTexture("knifeHandle.png");
     knifeHandle.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
 
@@ -231,10 +233,10 @@ int main() {
     knifeBlade.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
     glove.LoadTexture("glove.png");
-    glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");*/
-
+    glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");
     ///Load objet ECN
-    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+   /* monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
     navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
@@ -255,7 +257,7 @@ int main() {
     knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
     glove.LoadTexture("glove.png");
-    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");*/
     //// FIN LOAD
 
 
@@ -372,7 +374,7 @@ int main() {
         camera.affichageUI(keys, mouseClick);
 
         skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-
+        
 
 
 
@@ -385,9 +387,11 @@ int main() {
         gluPartialDisk(quadric, 0.0, 1.0, 100, 1, 0.0, 360.0);
         glEnable(GL_DEPTH_TEST);
         glPopMatrix();
+        
+        
 
-        camera.goFrontCamera(dZ);
-        camera.goSideCamera(dX);
+        camera.goFrontCamera(dZ,otherCollider);
+        camera.goSideCamera(dX,otherCollider);
 
         intersection = downSnap.ptIntersectionF(camera.getPosition());
 
@@ -400,11 +404,14 @@ int main() {
             }
 
         }
+
+           
+       
         
-        
+       
             
-            camera.updateJump(intersection.y);
- 
+        camera.updateJump(intersection.y);
+        
         glDisable(GL_TEXTURE_2D);
 
         glfwSwapBuffers(window);

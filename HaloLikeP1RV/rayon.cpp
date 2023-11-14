@@ -2,7 +2,7 @@
 #include <iostream>
 #include "glm/glm/glm.hpp"
 #include "Camera.h"
-#include "Objet3D.h"
+
 #include "glm/glm/glm.hpp"
 
 #define DISTANCECALCUL 100000
@@ -136,9 +136,6 @@ bool rayon::ptIntersectionGlobalF(glm::vec3 pos,glm::vec3 dir)
 
 
 	glm::vec3 pt;
-
-
-
 
 
 

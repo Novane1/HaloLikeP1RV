@@ -308,6 +308,11 @@ void Objet3D::LoadOBJ(const char* filename)
         glBindVertexArray(0);
 }
 
+void Objet3D::LoadCOllider(const char* filename)
+{
+    collider.LoadCollider(filename);
+}
+
 void Objet3D::affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp)
 {
 
@@ -340,6 +345,16 @@ void Objet3D::affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3
     glBindVertexArray(0);
     glUseProgram(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Objet3D::drawCollider()
+{
+    collider.affichage();
+}
+
+Collider* Objet3D::getCollider()
+{
+    return &collider;
 }
 
 

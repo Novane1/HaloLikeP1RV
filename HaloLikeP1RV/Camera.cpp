@@ -67,7 +67,7 @@ void Camera::updateCamera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	//camera_position.y = 0;
 }
-void Camera::goFrontCamera(float speed)
+void Camera::goFrontCamera(float speed, vector<Collider*> otherCollider)
 {
 	glm::vec3 target = camera_position - camera_center_vector;// vector forward
 	glm::normalize(target);// normalizing so we have just the direction 
@@ -75,9 +75,23 @@ void Camera::goFrontCamera(float speed)
 	camera_position.z = camera_position.z + speed * target.z;
 	camera_center_vector.x = camera_center_vector.x + speed * target.x; // we change the target of the camera 
 	camera_center_vector.z = camera_center_vector.z + speed * target.z;
+	for (Collider* it : otherCollider) 
+	{
+		if (this->isThereCollision(*it)) 
+		{
+			camera_position.x = camera_position.x - speed * target.x; // we go in the direction of the vector forward
+			camera_position.z = camera_position.z - speed * target.z;
+			camera_center_vector.x = camera_center_vector.x - speed * target.x; // we change the target of the camera 
+			camera_center_vector.z = camera_center_vector.z - speed * target.z;
+			return;
+		}
+	}
+	return;
+	
+	
 	//this->updateCamera();
 }
-void Camera::goSideCamera(float speed)
+void Camera::goSideCamera(float speed, vector<Collider*> otherCollider)
 {
 	glm::vec3 target = camera_position - camera_center_vector; // vector forward
 	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
@@ -86,7 +100,18 @@ void Camera::goSideCamera(float speed)
 	camera_position.z = camera_position.z + speed * right.z; // we go in the direction of the vector right
 	camera_center_vector.x = camera_center_vector.x + speed * right.x; // we change the target of the camera 
 	camera_center_vector.z = camera_center_vector.z + speed * right.z;
-	//this->updateCamera();
+	for (Collider* it : otherCollider)
+	{
+		if (this->isThereCollision(*it))
+		{
+			camera_position.x = camera_position.x - speed * right.x; // we go in the direction of the vector right
+			camera_position.z = camera_position.z - speed * right.z; // we go in the direction of the vector right
+			camera_center_vector.x = camera_center_vector.x - speed * right.x; // we change the target of the camera 
+			camera_center_vector.z = camera_center_vector.z - speed * right.z;
+			return;
+		}
+	}
+	return;
 }
 void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick)
 {
@@ -148,6 +173,21 @@ bool Camera::isJumping()
 void Camera::resetJump()
 {
 	jump.resetJump();
+}
+
+void Camera::setCollider(const char* filename)
+{
+	c.LoadCollider(filename);
+}
+
+void Camera::drawCollider()
+{
+	c.affichage();
+}
+
+bool Camera::isThereCollision(Collider collider)
+{
+	return c.checkCollision(collider,camera_position);
 }
 
 
