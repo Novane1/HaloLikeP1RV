@@ -15,6 +15,7 @@ protected :
 	vector<vraiFace> vraiFaces;
 	rayon ray;
 	glm::vec3 offset;
+	bool isActive;
 	
 
 public:
@@ -28,6 +29,9 @@ public:
 	void affichage();
 	void setOffset(glm::vec3 pos);
 	glm::vec3 getOffset();
+	Collider();
+	void setActive(bool set);
+	bool getActive();
 	
 };
 

@@ -156,7 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Ennemi.cpp" />

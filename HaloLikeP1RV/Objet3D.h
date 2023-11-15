@@ -18,6 +18,8 @@ protected :
 	Texture texture;
 	glm::mat4 viewMatrix;
 	Collider collider;
+	bool isActive;
+
 	
 	// SHADERS
 	// Pour l'affichage en OpenGL moderne
@@ -50,14 +52,16 @@ public :
 	Texture getTexture();
 	vector<Tex> getTextureCoord();
 	vector<vraiFace> getvraiFaces();
-
+	bool getActive();
+	
 	// Setters
 	void setVertices(vector<Vertex> v);
 	void setFaces(vector<Face> f);
 	void setTextureCoord(vector<Tex> t);
 	void setTexture(Texture t);
-
+	void setActive(bool act);
 	void setVraiFaces(); // A appeler une seule fois par objet, après loadOBJ pour transferer la structure de données
+	void setColliderState(bool set);
 
 	// Methodes 
 	void affichage();

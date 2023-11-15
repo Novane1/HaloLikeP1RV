@@ -76,7 +76,9 @@ void Collider::LoadCollider(const char* filename)
 
 bool Collider::checkCollision(Collider c,glm::vec3 offset) // Ne marche pas si le collider en entrée contient celle sur lequel on applique le test
 {
-    
+    if (!isActive || !c.getActive()) {
+        return false;
+    }
     for (Vertex v : c.getVertices()) {
         glm::vec3 temp(v.x-offset.x, v.y-offset.y, v.z-offset.z);
         if (isInCollider(temp)) {
@@ -104,7 +106,6 @@ bool Collider::isInCollider(glm::vec3 pos) // Convex enveloppe
     glm::vec3 dirZ = glm::vec3(0, 0, 1);
     return ray.ptIntersectionGlobalF(pos, dirX) && ray.ptIntersectionGlobalF(pos, dirY) && ray.ptIntersectionGlobalF(pos, dirZ);
 }
-
 
 
 void Collider::setVraiFaces()
@@ -168,6 +169,21 @@ void Collider::setOffset(glm::vec3 pos)
 glm::vec3 Collider::getOffset()
 {
     return offset;
+}
+
+Collider::Collider()
+{
+    isActive = true;
+}
+
+void Collider::setActive(bool set)
+{
+    isActive = set;
+}
+
+bool Collider::getActive()
+{
+    return isActive;
 }
 
 

@@ -81,9 +81,11 @@ GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
         //////////////////////////////////////////
         for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
             if ((*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()))) {
-                cout << (*it)->addHealth(-5) << endl;
+                (*it)->addHealth(- 5);
+                (*it)->startDamageAnimation();
                 if ((*it)->getHealth() <= 0) { 
-                    // Le buter 
+                    (*it)->setActive(false);
+ 
                 }
             }
         }
@@ -214,7 +216,7 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    /*monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
@@ -234,9 +236,9 @@ int main() {
 
     glove.LoadTexture("glove.png");
     glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
-    camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");
+    camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");*/
     ///Load objet ECN
-   /* monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
     navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
@@ -248,7 +250,9 @@ int main() {
 
 
     player.LoadTexture("zelda.png");
-    player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zelda.obj");
+    player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
+    player.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
+    otherCollider.push_back(player.getCollider());
 
     knifeHandle.LoadTexture("knifeHandle.png");
     knifeHandle.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
@@ -257,7 +261,8 @@ int main() {
     knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
     glove.LoadTexture("glove.png");
-    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");*/
+    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    camera.setCollider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj"); 
     //// FIN LOAD
 
 
@@ -345,11 +350,6 @@ int main() {
     }
 )";
 
-    /*const vec4 skytop = vec4(0.0f, 0.0f, 1.0f, 1.0f);
-    const vec4 skyhorizon = vec4(0.3294f, 0.92157f, 1.0f, 1.0f);
-    vec4 pointOnSphere = normalize(pos);
-    float a = pointOnSphere.y;
-    FragColor = mix(skyhorizon, skytop, a);*/
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     
@@ -369,7 +369,14 @@ int main() {
         clavier();
 
         monde.affichage(); // TEST NAVMESH
-        player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+        if ((player.getDamageFrame() / 10) % 2 == 0)
+        {
+
+            player.affichage();
+            
+        }
+        else { player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); }
+        
 
         camera.affichageUI(keys, mouseClick);
 
@@ -388,7 +395,6 @@ int main() {
         glEnable(GL_DEPTH_TEST);
         glPopMatrix();
         
-        
 
         camera.goFrontCamera(dZ,otherCollider);
         camera.goSideCamera(dX,otherCollider);
@@ -405,10 +411,12 @@ int main() {
 
         }
 
+
+        for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
+            (*it)->increaseDamageFrame();
+        }
+
            
-       
-        
-       
             
         camera.updateJump(intersection.y);
         

@@ -19,6 +19,7 @@ using namespace std;
 Objet3D::Objet3D()
 {
     viewMatrix = glm::mat4(1.0f);
+    isActive = true;
 }
 
 Objet3D::~Objet3D()
@@ -49,6 +50,10 @@ vector<vraiFace> Objet3D::getvraiFaces()
 {
     return vraiFaces;
 }
+bool Objet3D::getActive()
+{
+    return isActive;
+}
 // Setters
 void Objet3D::setVertices(vector<Vertex> v)
 {
@@ -65,6 +70,12 @@ void Objet3D::setTextureCoord(vector<Tex> t)
 void Objet3D::setTexture(Texture t)
 {
     texture = t;
+}
+
+void Objet3D::setActive(bool act)
+{
+    isActive = act;
+    collider.setActive(act);
 }
 
 void Objet3D::setVraiFaces()
@@ -99,9 +110,16 @@ void Objet3D::setVraiFaces()
     return;
 }
 
+void Objet3D::setColliderState(bool set)
+{
+    collider.setActive(set);
+}
+
 // Methodes
 void Objet3D::affichage()
 {
+    if (isActive)
+    {
         glm::mat4 projectionMatrix = glm::perspective(glm::radians(90.0f), 800.0f / 600.0f, 0.1f, 100.0f);
         glm::mat4 mvpMatrix = projectionMatrix * viewMatrix;
         //GLint mvpLocation = glGetUniformLocation(shaderProgram, "MVP");
@@ -124,41 +142,46 @@ void Objet3D::affichage()
         }
 
         glEnd();
+    }
+        
     
 }
 
 void Objet3D::affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp)
 {
+    if (isActive)
+    {
+        glm::mat4 model = glm::mat4(1.0f);
 
-    glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
-    glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+        float fov = glm::radians(90.0f);  // Field of view in radians
+        float aspectRatio = 800.0f / 600.0f;  // Width divided by height
+        float nearClip = 0.1f;
+        float farClip = 100.0f;
 
-    float fov = glm::radians(90.0f);  // Field of view in radians
-    float aspectRatio = 800.0f / 600.0f;  // Width divided by height
-    float nearClip = 0.1f;
-    float farClip = 100.0f;
+        // Create the projection matrix
+        glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
 
-    // Create the projection matrix
-    glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
 
+        // Use the shader program and set the model matrix as a uniform.
+        glUseProgram(shader.getShader());
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
+
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+        //Display
+        glBindVertexArray(VAO);
+
+        glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
+        //End of display
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
     
-    // Use the shader program and set the model matrix as a uniform.
-    glUseProgram(shader.getShader());
-    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
-    glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-    glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
-
-    glBindTexture(GL_TEXTURE_2D, texture.getID());
-    //Display
-    glBindVertexArray(VAO);
-
-    glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
-    //End of display
-    glBindVertexArray(0);
-    glUseProgram(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Objet3D::LoadTexture(const char* path)
