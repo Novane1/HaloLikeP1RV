@@ -66,6 +66,7 @@ public :
 	// Methodes 
 	void affichage();
 	void LoadTexture(const char* path);
+	void LoadTextureT(const char* path);
 	void LoadOBJ(const char* filename);
 	void LoadCOllider(const char* filename);
 	void affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);

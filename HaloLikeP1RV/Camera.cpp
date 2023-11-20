@@ -28,6 +28,7 @@ Camera::Camera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	actualAngleX = 3.141592 / 2;
 	actualAngleY = 0;
+	playerHealth = 100;
 	
 }
 
@@ -41,6 +42,14 @@ glm::vec3 Camera::getTarget()
 void Camera::setPlayer(Player p)
 {
 	player = p;
+}
+
+
+
+
+float Camera::getHealth()
+{
+	return playerHealth;
 }
 
 void Camera::addY(float y)
@@ -113,12 +122,12 @@ void Camera::goSideCamera(float speed, vector<Collider*> otherCollider)
 	}
 	return;
 }
-void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick)
+void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader)
 {
 	glPushMatrix();// On sauvegarde la matrice actuelle, vu que l'on veut effectuer des modifs de cette matrice seulement pour l'UI
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // On reset la matrice de vue à l'identité, comme ca on affichage par rapport à la caméra et les objets restent ainsi fixes par rapport à la caméra
-	Ui.affichage(keys, mouseClick);
+	Ui.affichage(keys, mouseClick, healthShader,camera_position,camera_center_vector);
 	glPopMatrix();// On reprend la matrice qui était présente avant l'affichage de l'UI
 }
 void Camera::affichagePlayer()
@@ -133,6 +142,10 @@ void Camera::affichagePlayer()
 void Camera::changeState(bool b, int i)
 {
 	Ui.changeState(b, i);
+}
+void Camera::setHealth(float h)
+{
+	playerHealth = h;
 }
 void Camera::setJump()
 {

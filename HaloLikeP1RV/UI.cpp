@@ -13,7 +13,7 @@ void UI::changeState(bool b, int i)
     isShowed[i] = b;
 }
 
-void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick)
+void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,glm::vec3 pos,glm::vec3 target)
 {
 	for (int i = 0; i < listeUI.size(); i++) {
 		//reset des animations
@@ -78,7 +78,10 @@ void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick)
 			}
 			//Reste
 			//////////////////////
-
+			else if (i==4)
+			{
+				listeUI[i].affichageShader(healthShader, pos, target, glm::vec3(0.0, 1.0, 0.0)); // si rien de tout ca, on affiche juste
+			}
 			else
 			{
 				listeUI[i].affichage(); // si rien de tout ca, on affiche juste

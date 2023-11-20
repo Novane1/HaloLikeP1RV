@@ -158,7 +158,7 @@ void Objet3D::affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3
         float fov = glm::radians(90.0f);  // Field of view in radians
         float aspectRatio = 800.0f / 600.0f;  // Width divided by height
         float nearClip = 0.1f;
-        float farClip = 100.0f;
+        float farClip = 10000.0f;
 
         // Create the projection matrix
         glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
@@ -214,6 +214,38 @@ void Objet3D::LoadTexture(const char* path)
         tex.setID(textureID);
         texture = tex;
     
+}
+
+void Objet3D::LoadTextureT(const char* path)
+{
+    // Load the image using STB Image
+    int width, height, channels;
+    unsigned char* image = stbi_load(path, &width, &height, &channels, 0);
+
+    if (!image) {
+        cout << "Failed to load texture: " << path << endl;
+        return;
+    }
+
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Set texture parameters for basic rendering
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    // Load the image data into the texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+
+    // Free the image data
+    stbi_image_free(image);
+    Texture tex;
+    tex.setID(textureID);
+    texture = tex;
+
 }
 
 void Objet3D::LoadOBJ(const char* filename)

@@ -31,6 +31,8 @@ Player testPlayer;
 Objet3D playerObj;
 UI listUI;
 Objet3D gun;
+Objet3D heart;
+Objet3D healthBar;
 Objet3D second;
 Objet3D knifeHandle;
 Objet3D knifeBlade;
@@ -48,10 +50,10 @@ vector<Face> faces;
 vector<Tex> texture;
 bool red = true;
 bool blue = true;
-GLdouble SPEED = .03;
-GLdouble strafeSpeed = 0.02;
-GLdouble walkSpeed = 0.03;
-GLdouble runSpeed = 0.05;
+GLdouble SPEED = .07;
+GLdouble strafeSpeed = 0.04;
+GLdouble walkSpeed = 0.05;
+GLdouble runSpeed = 0.11;
 GLdouble mouseSensitivityAngle = .002;
 const GLdouble minYAngle = -3.141592 / 2.0; // Minimum angle (e.g., -90 degrees)
 const GLdouble maxYAngle = 3.141592 / 2.0;
@@ -248,6 +250,12 @@ int main() {
     gun.LoadTexture("gun.png");
     gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
 
+    /*healthBar.LoadTexture("healthbar.png");
+    healthBar.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/healthbar.obj");*/
+ 
+    heart.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/heart3D.obj");
+
+
 
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
@@ -270,6 +278,7 @@ int main() {
     listUI.AddObject(knifeHandle);
     listUI.AddObject(knifeBlade);
     listUI.AddObject(glove);
+    listUI.AddObject(heart);
     //
     camera.setUI(listUI);
     camera.changeState(0, false);
@@ -280,7 +289,7 @@ int main() {
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 100.0f);
+    gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 10000.0f);
     
     // Shader in CG
     const char* vertexShaderSource = R"(
@@ -350,8 +359,44 @@ int main() {
     }
 )";
 
+    const char* vertexShaderSourceHealth = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    out vec3 pos;
+    void main() {
+        gl_Position =   model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+        pos = aPos;
+    }
+)";
+
+
+    const char* fragmentShaderSourceHealth = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+    in vec3 pos;
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+        vec3 pointOnSphere = normalize(pos);
+        float a = pointOnSphere.z;
+
+        vec4 redColor = vec4(1.0, 0.0, 0.0, 1.0);
+        vec4 redColorC = vec4(1.0, 0.2, 0.2, 1.0); 
+        FragColor = mix(redColorC, redColor, a);
+        
+    }
+)";
+
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
+    Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
     
     rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
@@ -378,10 +423,10 @@ int main() {
         else { player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); }
         
 
-        camera.affichageUI(keys, mouseClick);
+        camera.affichageUI(keys, mouseClick,healthShader);
 
         skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-        
+
 
 
 
