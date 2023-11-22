@@ -24,14 +24,16 @@ class Camera {
 	glm::vec3 camera_center_vector;
 	glm::mat4 viewMatrix;
 	glm::vec3 camera_initial_position;
-	float playerHealth;
+	int playerHealth;
+	int actFrame;
 	GLdouble actualAngleX ;
 	GLdouble actualAngleY ;
 	UI Ui;
 	Player player;
 	Physics jump;
 	Collider c;
-	
+	bool isInvicible;
+	int isInvicibleActTime;
 
 
 	
@@ -67,7 +69,8 @@ public :
 	virtual void setCollider(const char* filename);
 	virtual void drawCollider();
 	virtual bool isThereCollision(Collider collider);
-	
+	virtual void updateCheckInvicibility();
+	virtual void updateFrame();
 };
 
 #endif

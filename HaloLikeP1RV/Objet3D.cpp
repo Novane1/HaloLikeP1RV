@@ -316,7 +316,7 @@ void Objet3D::LoadOBJ(const char* filename)
         this->setVraiFaces();
 
         file.close();
-        
+        float temp;
         for (const Face& face : faces) { // on met en place la liste de tout les points avec leur coordonnée de texture
 
             PointText p;
@@ -326,18 +326,30 @@ void Objet3D::LoadOBJ(const char* filename)
             p.position.z = vertices[face.v1 - 1].z;
             p.u = textureCoord[face.vt1 - 1].v1;
             p.v = textureCoord[face.vt1 - 1].v2;
+            p.normal = norms[face.normal - 1];
+            temp = p.normal.y;
+            p.normal.y = p.normal.z;
+            p.normal.z = temp;
             pointsTexture.push_back(p);
             p.position.x = vertices[face.v2 - 1].x;
             p.position.y = vertices[face.v2 - 1].y;
             p.position.z = vertices[face.v2 - 1].z;
             p.u = textureCoord[face.vt2 - 1].v1;
             p.v = textureCoord[face.vt2 - 1].v2;
+            temp = p.normal.y;
+            p.normal.y = p.normal.z;
+            p.normal.z = temp;
+            p.normal = norms[face.normal - 1];
             pointsTexture.push_back(p);
             p.position.x = vertices[face.v3 - 1].x;
             p.position.y = vertices[face.v3 - 1].y;
             p.position.z = vertices[face.v3 - 1].z;
             p.u = textureCoord[face.vt3 - 1].v1;
             p.v = textureCoord[face.vt3 - 1].v2;
+            temp = p.normal.y;
+            p.normal.y = p.normal.z;
+            p.normal.z = temp;
+            p.normal = norms[face.normal - 1];
             pointsTexture.push_back(p);
 
 
@@ -359,6 +371,8 @@ void Objet3D::LoadOBJ(const char* filename)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(PointText), (void*)offsetof(PointText, position));
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(PointText), (void*)offsetof(PointText, u));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(PointText), (void*)offsetof(PointText, normal));
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 }
@@ -400,6 +414,55 @@ void Objet3D::affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3
     glBindVertexArray(0);
     glUseProgram(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Objet3D::affichageHeartBar(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, int health,int frame)
+{
+
+    if (isActive)
+    {
+
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 modelF = glm::mat4(1.0f);
+        glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
+        float fov = glm::radians(90.0f);  // Field of view in radians
+        float aspectRatio = 800.0f / 600.0f;  // Width divided by height
+        float nearClip = 0.1f;
+        float farClip = 10000.0f;
+
+        // Create the projection matrix
+        glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
+
+
+        // Use the shader program and set the model matrix as a uniform.
+        glUseProgram(shader.getShader());
+        
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+        glBindVertexArray(VAO);
+        for (int i = 0; i < health; i++) {
+            
+            modelF = glm::translate(model, glm::vec3(0.1f*i, sin(frame*0.01f+i)/40, 0.0f));
+            
+            glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(modelF));
+            cout << frame << endl;
+            glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
+        }
+        
+
+        
+        //Display
+        
+
+       
+        //End of display
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 void Objet3D::drawCollider()

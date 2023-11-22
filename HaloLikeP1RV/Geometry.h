@@ -30,6 +30,7 @@ struct vraiFace {
 struct PointText { // On a un point avec sa coordonnées de texture (pas indices, coordonnée)
     glm::vec3 position;
     float u, v;
+    glm::vec3 normal;
 };
 
 #endif 

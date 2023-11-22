@@ -13,7 +13,7 @@ void UI::changeState(bool b, int i)
     isShowed[i] = b;
 }
 
-void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,glm::vec3 pos,glm::vec3 target)
+void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,glm::vec3 pos,glm::vec3 target,int health,int frameHealth)
 {
 	for (int i = 0; i < listeUI.size(); i++) {
 		//reset des animations
@@ -80,7 +80,7 @@ void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader 
 			//////////////////////
 			else if (i==4)
 			{
-				listeUI[i].affichageShader(healthShader, pos, target, glm::vec3(0.0, 1.0, 0.0)); // si rien de tout ca, on affiche juste
+				listeUI[i].affichageHeartBar(healthShader, pos, target, glm::vec3(0.0, 1.0, 0.0),health,frameHealth); // si rien de tout ca, on affiche juste
 			}
 			else
 			{

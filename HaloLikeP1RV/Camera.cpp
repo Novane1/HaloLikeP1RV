@@ -28,7 +28,10 @@ Camera::Camera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	actualAngleX = 3.141592 / 2;
 	actualAngleY = 0;
-	playerHealth = 100;
+	playerHealth = 5;
+	isInvicibleActTime = 0;
+	isInvicible = false;
+	actFrame = 0;
 	
 }
 
@@ -92,6 +95,7 @@ void Camera::goFrontCamera(float speed, vector<Collider*> otherCollider)
 			camera_position.z = camera_position.z - speed * target.z;
 			camera_center_vector.x = camera_center_vector.x - speed * target.x; // we change the target of the camera 
 			camera_center_vector.z = camera_center_vector.z - speed * target.z;
+			if (!isInvicible) { playerHealth -= 1; isInvicible = true; }
 			return;
 		}
 	}
@@ -117,6 +121,9 @@ void Camera::goSideCamera(float speed, vector<Collider*> otherCollider)
 			camera_position.z = camera_position.z - speed * right.z; // we go in the direction of the vector right
 			camera_center_vector.x = camera_center_vector.x - speed * right.x; // we change the target of the camera 
 			camera_center_vector.z = camera_center_vector.z - speed * right.z;
+			if(!isInvicible){ playerHealth -= 1; isInvicible = true;}
+			
+			
 			return;
 		}
 	}
@@ -127,7 +134,7 @@ void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick, S
 	glPushMatrix();// On sauvegarde la matrice actuelle, vu que l'on veut effectuer des modifs de cette matrice seulement pour l'UI
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // On reset la matrice de vue à l'identité, comme ca on affichage par rapport à la caméra et les objets restent ainsi fixes par rapport à la caméra
-	Ui.affichage(keys, mouseClick, healthShader,camera_position,camera_center_vector);
+	Ui.affichage(keys, mouseClick, healthShader,camera_position,camera_center_vector,playerHealth,actFrame);
 	glPopMatrix();// On reprend la matrice qui était présente avant l'affichage de l'UI
 }
 void Camera::affichagePlayer()
@@ -201,6 +208,24 @@ void Camera::drawCollider()
 bool Camera::isThereCollision(Collider collider)
 {
 	return c.checkCollision(collider,camera_position);
+}
+
+void Camera::updateCheckInvicibility()
+{
+	if (isInvicible) 
+	{ 
+		if(isInvicibleActTime<=100)
+		{
+			isInvicibleActTime += 1;
+		}
+		else { isInvicibleActTime = 0; isInvicible = false; }
+		
+	}
+}
+
+void Camera::updateFrame()
+{
+	actFrame++;
 }
 
 

@@ -14,6 +14,6 @@ protected:
 public:
     void AddObject(Objet3D o); // Ajoute un objet à la listeUI
     void changeState(bool b, int i); // Chanfe l'état de l'objet i de isShowed en b
-    void affichage(std::vector<bool> keys, std::vector<bool> mouseClick,Shader healthShader, glm::vec3 pos, glm::vec3 target); // affichage de l'UI
+    void affichage(std::vector<bool> keys, std::vector<bool> mouseClick,Shader healthShader, glm::vec3 pos, glm::vec3 target,int health, int frameHealth); // affichage de l'UI
 
 };

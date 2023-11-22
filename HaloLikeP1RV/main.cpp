@@ -218,11 +218,11 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    /*monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     monde.LoadTexture("Terrain.png");
-
+    heart.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/heart.obj");
     skybox.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
 
     
@@ -238,39 +238,39 @@ int main() {
 
     glove.LoadTexture("glove.png");
     glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
-    camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");*/
+    camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");
     ///Load objet ECN
-    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    //monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
-    navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
-    monde.LoadTexture("Terrain.png");
+    //navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    //monde.LoadTexture("Terrain.png");
 
-    skybox.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
+    //skybox.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
 
-    gun.LoadTexture("gun.png");
-    gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
+    //gun.LoadTexture("gun.png");
+    //gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
 
-    /*healthBar.LoadTexture("healthbar.png");
-    healthBar.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/healthbar.obj");*/
+    ///*healthBar.LoadTexture("healthbar.png");
+    //healthBar.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/healthbar.obj");*/
  
-    heart.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/heart3D.obj");
+    //heart.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/heart3D.obj");
 
 
 
-    player.LoadTexture("zelda.png");
-    player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
-    player.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
-    otherCollider.push_back(player.getCollider());
+    //player.LoadTexture("zelda.png");
+    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
+    //player.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
+    //otherCollider.push_back(player.getCollider());
 
-    knifeHandle.LoadTexture("knifeHandle.png");
-    knifeHandle.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
+    //knifeHandle.LoadTexture("knifeHandle.png");
+    //knifeHandle.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
 
-    knifeBlade.LoadTexture("knifeBlade.png");
-    knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
+    //knifeBlade.LoadTexture("knifeBlade.png");
+    //knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
-    glove.LoadTexture("glove.png");
-    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
-    camera.setCollider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj"); 
+    //glove.LoadTexture("glove.png");
+    //glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    //camera.setCollider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj"); 
     //// FIN LOAD
 
 
@@ -363,15 +363,18 @@ int main() {
     #version 330 core
     layout(location = 0) in vec3 aPos;
     layout(location = 1) in vec2 aTexCoord;
+    layout(location = 2) in vec3 normal;
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
     out vec2 TexCoord;
     out vec3 pos;
+    out vec3 norm;
     void main() {
         gl_Position =   model * vec4(aPos, 1.0);
         TexCoord = aTexCoord;
-        pos = aPos;
+        pos = vec3(model * vec4(aPos, 1.0));
+        norm = normal;
     }
 )";
 
@@ -381,19 +384,31 @@ int main() {
     in vec2 TexCoord;
     out vec4 FragColor;
     in vec3 pos;
+    in vec3 norm;
     uniform sampler2D texture1; // Texture unit
 
     void main() {
-        vec3 pointOnSphere = normalize(pos);
-        float a = pointOnSphere.z;
+        vec3 redColor = vec3(1.0, 0.0, 0.0);
 
-        vec4 redColor = vec4(1.0, 0.0, 0.0, 1.0);
-        vec4 redColorC = vec4(1.0, 0.2, 0.2, 1.0); 
-        FragColor = mix(redColorC, redColor, a);
+    
+        vec3 norma = normalize(norm);
+        vec3 lPos = vec3(5,5,0);
+        vec3 lightDir = normalize(pos - vec3(0,5,0));
+        float diff = max(max(dot(norma, lightDir),0),0.4);
+        vec3 diffuse = diff * redColor;
+
+        FragColor =vec4(diffuse, 1.0);
         
     }
 )";
+    
 
+   /* vec3 pointOnSphere = normalize(pos);
+    float a = pointOnSphere.z;
+    
+    vec4 redColor = vec4(1.0, 0.0, 0.0, 1.0);
+    vec4 redColorC = vec4(1.0, 0.2, 0.2, 1.0);
+    FragColor = mix(redColorC, redColor, a);*/
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
@@ -462,8 +477,9 @@ int main() {
         }
 
            
-            
+        camera.updateFrame();
         camera.updateJump(intersection.y);
+        camera.updateCheckInvicibility();
         
         glDisable(GL_TEXTURE_2D);
 
