@@ -17,12 +17,16 @@
 #include "Shader.h"
 #include "Ennemi.h"
 #include <GLFW/glfw3.h>
+#include "al.h"
+#include "alc.h"
+#include "AudioManager.h"
 
 using namespace std;
 
 // VARIABLES GLOBALES
 
 #define _HEIGHT 4.0
+// Function to check for OpenAL errors
 
 int width, height, channels;
 //Objets
@@ -165,7 +169,18 @@ GLfloat Norme(glm::vec3 vec1, glm::vec3 vec2) {
 
 int main() {
     // Initialize GLFW
+        /// Audio
+   // Initialize OpenAL
+
+
+    AudioManager* audioManager = new AudioManager();
+    const char* dsmusic = "dsmusic.wav";
+    audioManager->AddSong(dsmusic);
+
+    // Play the source
     
+
+
     if (!glfwInit()) {
         std::cout << "Failed to initialize GLFW" << std::endl;
         return -1;
@@ -415,7 +430,10 @@ int main() {
     
     rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
+    
 
+
+    audioManager->playSong(0);
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -494,6 +512,6 @@ int main() {
 
     // Clean up
     glfwTerminate();
-
+    audioManager->destroy();
     return 0;
 }
