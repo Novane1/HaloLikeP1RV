@@ -70,6 +70,7 @@ public :
 	void LoadOBJ(const char* filename);
 	void LoadCOllider(const char* filename);
 	void affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
+	void affichageShaderOffset(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp,glm::vec3 offset);
 	void affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
 	void affichageHeartBar(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp,int health,int frame);
 	void drawCollider();

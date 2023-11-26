@@ -59,7 +59,7 @@ void AudioManager::AddSong(const char* audioFilePath)
     }
 
     // Set the buffer data
-    alBufferData(buffer, AL_FORMAT_MONO16, audioData.data(), fileSize, 44100);  // Adjust sample rate as needed
+    alBufferData(buffer, AL_FORMAT_STEREO16, audioData.data(), fileSize, 48000);  // Adjust sample rate as needed
     checkALError("Failed to set buffer data");
 
     // Attach the buffer to the source

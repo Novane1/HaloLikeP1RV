@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -160,22 +160,27 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Ennemi.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Objet3D.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="rayon.cpp" />
+    <ClCompile Include="ReloadManager.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShootBar.cpp" />
     <ClCompile Include="Skybox.cpp" />
     <ClCompile Include="stb-master\stb_vorbis.c" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Crosshair.h" />
     <ClInclude Include="Ennemi.h" />
     <ClInclude Include="Geometry.h" />
     <ClInclude Include="glm\glm\common.hpp" />
@@ -225,7 +230,9 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="rayon.h" />
+    <ClInclude Include="ReloadManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShootBar.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
     <ClInclude Include="stb-master\stb_c_lexer.h" />
@@ -249,6 +256,7 @@
     <ClInclude Include="stb-master\stb_voxel_render.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glm\glm\gtc\bitfield.inl" />

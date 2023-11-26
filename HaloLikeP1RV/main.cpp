@@ -20,7 +20,10 @@
 #include "al.h"
 #include "alc.h"
 #include "AudioManager.h"
-
+#include "Crosshair.h"
+#include "ShootBar.h"
+#include "ReloadManager.h"
+#include "World.h"
 using namespace std;
 
 // VARIABLES GLOBALES
@@ -34,6 +37,7 @@ Ennemi player(1.0f,20.0f);
 Player testPlayer;
 Objet3D playerObj;
 UI listUI;
+Objet3D smog;
 Objet3D gun;
 Objet3D heart;
 Objet3D healthBar;
@@ -41,6 +45,7 @@ Objet3D second;
 Objet3D knifeHandle;
 Objet3D knifeBlade;
 Objet3D glove;
+Objet3D spawnPoints;
 // TEST NAVMESH
 Objet3D monde;
 Objet3D navMesh;
@@ -79,22 +84,29 @@ std::vector<bool> keys(GLFW_KEY_LAST, false);
 std::vector<bool> mouseClick(2, false);
 bool shouldExit = false;
 vector<Collider*> otherCollider; // everything but the camera's collider
+Crosshair crosshair;
+ShootBar shootBar;
 
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         mouseClick[0] = true;
+        shootBar.downAmo();
         // Il faut faire des dégats sur ennemi
         //////////////////////////////////////////
-        for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
-            if ((*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()))) {
-                (*it)->addHealth(- 5);
-                (*it)->startDamageAnimation();
-                if ((*it)->getHealth() <= 0) { 
-                    (*it)->setActive(false);
- 
+        if (shootBar.getAmo() > 0)// A-t-on es balles?
+        {
+            for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
+                if ((*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()))) {
+                    (*it)->addHealth(-5);
+                    (*it)->startDamageAnimation();
+                    if ((*it)->getHealth() <= 0) {
+                        (*it)->setActive(false);
+
+                    }
                 }
             }
         }
+        
         
     }
     else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE) {
@@ -234,8 +246,10 @@ int main() {
 
     //// LOAD OBJETS DE NATHAN
     monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    spawnPoints.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    navMesh.LoadTexture("Terrain.png");
     monde.LoadTexture("Terrain.png");
     heart.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/heart.obj");
     skybox.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
@@ -254,6 +268,8 @@ int main() {
     glove.LoadTexture("glove.png");
     glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
     camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");
+
+    smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
     ///Load objet ECN
     //monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
 
@@ -362,12 +378,12 @@ int main() {
 
     out vec4 FragColor;
     in vec3 pos;
-    const vec4 skytop = vec4(0.0f, 0.0f, 1.0f, 1.0f);
-    const vec4 skyhorizon = vec4(0.3294f, 0.92157f, 1.0f, 1.0f);
+    const vec4 skytop =vec4(0.0f, 0.0f, 0.2f, 1.0f); 
+    const vec4 skyhorizon = vec4(1.0f, 0.5f, 0.0f, 1.0f);
    
     void main() {
         vec3 pointOnSphere = normalize(pos);
-        float a = pointOnSphere.y;
+        float a = min(pointOnSphere.y+0.8,1.0);
 
         FragColor =mix(skyhorizon, skytop, a);
        
@@ -416,6 +432,71 @@ int main() {
         
     }
 )";
+
+
+    const char* vertexShaderSourceSmog = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    layout(location = 2) in vec3 normal;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    out vec3 pos;
+    out vec3 norm;
+
+
+
+    void main() {
+        gl_Position =   projection * view * model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+        pos = vec3(model * vec4(aPos, 1.0));
+        norm = normal;
+    }
+)";
+
+
+    const char* fragmentShaderSourceSmog = R"(
+    #version 330 core
+
+    out vec4 FragColor;
+    in vec3 pos;
+
+
+float rand(vec2 co) {
+        return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+    }
+    void main() {
+         vec3 pointOnSphere = normalize(pos);
+
+        // Adjust the frequency and amplitude for the noise pattern
+        float frequency = 5.0;
+        float amplitude = 1.0;
+
+        // Generate noise for the electricity pattern
+        float noise = rand(pos.xy * frequency);
+
+        // Create a sine function for periodic variation
+        float sineFactor = sin(pos.y * 10.0);
+
+        // Combine noise and sine function for variation
+        float electricityPattern = noise + sineFactor;
+
+        // Adjust the color based on the position along the electricity
+        vec3 electricityColor = vec3(0.0, 1.0, 1.0); // Adjust color as needed
+        electricityColor *= mix(0.2, 1.0, abs(pos.y));
+
+        // Calculate the final color using the combined pattern and base color
+        vec3 finalColor = electricityColor * electricityPattern * amplitude;
+
+        // Add some brightness to enhance the effect
+        finalColor += vec3(0.2);
+
+        FragColor = vec4(finalColor, 1.0);
+        
+    }
+)";
     
 
    /* vec3 pointOnSphere = normalize(pos);
@@ -427,6 +508,7 @@ int main() {
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
+    Shader smogShader(vertexShaderSourceSmog, fragmentShaderSourceSmog);
     
     rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
@@ -434,6 +516,8 @@ int main() {
 
 
     audioManager->playSong(0);
+
+    ReloadManager reloadManager(smog, smogShader, spawnPoints.getvraiFaces(),&shootBar);
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -446,7 +530,7 @@ int main() {
 
         clavier();
 
-        monde.affichage(); // TEST NAVMESH
+        navMesh.affichage(); // TEST NAVMESH
         if ((player.getDamageFrame() / 10) % 2 == 0)
         {
 
@@ -459,21 +543,15 @@ int main() {
         camera.affichageUI(keys, mouseClick,healthShader);
 
         skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-
-
-
-
-        glPushMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glDisable(GL_DEPTH_TEST);
-        glTranslatef(0, 0, -100); // Placement du point de visée
-        GLUquadricObj* quadric = gluNewQuadric();
-        gluPartialDisk(quadric, 0.0, 1.0, 100, 1, 0.0, 360.0);
-        glEnable(GL_DEPTH_TEST);
-        glPopMatrix();
+        shootBar.affichage();
         
 
+        // Crosshair
+        crosshair.affichageCrosshair();
+        //reload
+        reloadManager.actTime(camera.getPosition(),camera.getTarget());
+        reloadManager.affichage(camera.getPosition(), camera.getTarget());
+        //
         camera.goFrontCamera(dZ,otherCollider);
         camera.goSideCamera(dX,otherCollider);
 

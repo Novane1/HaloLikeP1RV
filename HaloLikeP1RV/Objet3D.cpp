@@ -184,6 +184,42 @@ void Objet3D::affichageShader(Shader shader, glm::vec3 cameraPosition, glm::vec3
     
 }
 
+void Objet3D::affichageShaderOffset(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, glm::vec3 offset)
+{
+    if (isActive)
+    {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, offset);
+        glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
+        float fov = glm::radians(90.0f);  // Field of view in radians
+        float aspectRatio = 800.0f / 600.0f;  // Width divided by height
+        float nearClip = 0.1f;
+        float farClip = 10000.0f;
+
+        // Create the projection matrix
+        glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
+
+
+        // Use the shader program and set the model matrix as a uniform.
+        glUseProgram(shader.getShader());
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
+
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+        //Display
+        glBindVertexArray(VAO);
+
+        glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
+        //End of display
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+}
+
 void Objet3D::LoadTexture(const char* path)
 {
         // Load the image using STB Image
@@ -448,7 +484,7 @@ void Objet3D::affichageHeartBar(Shader shader, glm::vec3 cameraPosition, glm::ve
             modelF = glm::translate(model, glm::vec3(0.1f*i, sin(frame*0.01f+i)/40, 0.0f));
             
             glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(modelF));
-            cout << frame << endl;
+
             glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
         }
         

@@ -5,6 +5,11 @@ GLuint Shader::getShader()
     return shaderProgram;
 }
 
+Shader::Shader()
+{
+    ;
+}
+
 Shader::Shader(const char* vertexShaderSource, const char* fragmentShaderSource)
 {
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);

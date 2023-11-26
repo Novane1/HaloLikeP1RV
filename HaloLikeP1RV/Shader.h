@@ -14,6 +14,7 @@ public:
     //Getter
     GLuint getShader();
     //Constructeur
+    Shader();
     Shader(const char* vertexShaderSource, const char* fragmentShaderSource);
 
 };
