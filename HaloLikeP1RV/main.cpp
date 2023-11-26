@@ -50,6 +50,7 @@ Objet3D spawnPoints;
 Objet3D monde;
 Objet3D navMesh;
 Objet3D skybox;
+Objet3D meteor;
 //Debug
 glm::vec3 previousCam(0, 0, 0);
 // FIN TEST
@@ -268,6 +269,9 @@ int main() {
     glove.LoadTexture("glove.png");
     glove.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
     camera.setCollider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj");
+
+    meteor.LoadTexture("meteor.png");
+    meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
 
     smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
     ///Load objet ECN
@@ -497,7 +501,38 @@ float rand(vec2 co) {
         
     }
 )";
-    
+    const char* vertexShaderSourceGround = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    void main() {
+        gl_Position =   projection *view *model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+    }
+)";
+
+
+    const char* fragmentShaderSourceGround = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+    vec4 texColor = texture(texture1, TexCoord); 
+    vec4 darkEarthBrown = vec4(0.4, 0.2, 0.1,1.0); // Red color
+
+    float blendFactor = 0.5; // You can change this value
+
+    FragColor = mix(texColor, darkEarthBrown, blendFactor);
+    }
+)";
 
    /* vec3 pointOnSphere = normalize(pos);
     float a = pointOnSphere.z;
@@ -509,6 +544,7 @@ float rand(vec2 co) {
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
     Shader smogShader(vertexShaderSourceSmog, fragmentShaderSourceSmog);
+    Shader groundShader(vertexShaderSourceGround, fragmentShaderSourceGround);
     
     rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
     glm::vec3 intersection(0.0f);
@@ -530,7 +566,7 @@ float rand(vec2 co) {
 
         clavier();
 
-        navMesh.affichage(); // TEST NAVMESH
+        monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); // TEST NAVMESH
         if ((player.getDamageFrame() / 10) % 2 == 0)
         {
 
@@ -539,7 +575,7 @@ float rand(vec2 co) {
         }
         else { player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); }
         
-
+        meteor.affichage();
         camera.affichageUI(keys, mouseClick,healthShader);
 
         skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));

@@ -22,6 +22,7 @@ Ennemi::Ennemi(float d, float h)
 	listEnnemi.push_back(this);
 	damageFrame = 0;
 	isInvicible = false;
+	ourPos = glm::vec3(0);
 }
 
 Ennemi::~Ennemi()
