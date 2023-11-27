@@ -104,3 +104,13 @@ void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader 
 
 
 }
+
+bool UI::isKnife()
+{
+	return isShowed[1];
+}
+
+bool UI::isGun()
+{
+	 return isShowed[0];
+}

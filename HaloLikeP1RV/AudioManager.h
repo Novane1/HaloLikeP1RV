@@ -14,7 +14,7 @@ protected :
     ALCcontext* context;
 public:
 	AudioManager();
-    void AddSong(const char* audioFilePath);
+    void AddSong(const char* audioFilePath,float v);
     void destroy();
     void playSong(int i);
 };

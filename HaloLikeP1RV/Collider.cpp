@@ -74,13 +74,15 @@ void Collider::LoadCollider(const char* filename)
     
 }
 
-bool Collider::checkCollision(Collider c,glm::vec3 offset) // Ne marche pas si le collider en entrée contient celle sur lequel on applique le test
+bool Collider::checkCollision(Collider c,glm::vec3 offset,glm::vec3 posiColli) // Ne marche pas si le collider en entrée contient celle sur lequel on applique le test
 {
     if (!isActive || !c.getActive()) {
         return false;
     }
     for (Vertex v : c.getVertices()) {
         glm::vec3 temp(v.x-offset.x, v.y-offset.y, v.z-offset.z);
+        temp -= posiColli;
+
         if (isInCollider(temp)) {
             return true;
         }
@@ -104,7 +106,7 @@ bool Collider::isInCollider(glm::vec3 pos) // Convex enveloppe
     glm::vec3 dirX = glm::vec3(1, 0, 0);
     glm::vec3 dirY = glm::vec3(0, 1, 0);
     glm::vec3 dirZ = glm::vec3(0, 0, 1);
-    return ray.ptIntersectionGlobalF(pos, dirX) && ray.ptIntersectionGlobalF(pos, dirY) && ray.ptIntersectionGlobalF(pos, dirZ);
+    return ray.ptIntersectionGlobalFBool(pos, dirX) && ray.ptIntersectionGlobalFBool(pos, dirY) && ray.ptIntersectionGlobalFBool(pos, dirZ);
 }
 
 

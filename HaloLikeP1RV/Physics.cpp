@@ -37,7 +37,7 @@ void Physics::actualizeJump()
 {
 	if (isJumping)
 	{
-		yCoord = actualYInitialPosition + actualInitialSpeed * t - 9.81 * t * t / 2;
+		yCoord = actualYInitialPosition + actualInitialSpeed * t - 20 * t * t / 2;
 		t += 0.01;
 		
 	}
@@ -49,5 +49,5 @@ void Physics::actualizeJump()
 bool Physics::isGoingDown()
 {
 
-	return (yCoord - (actualYInitialPosition + actualInitialSpeed * t - 9.81 * t * t / 2))>0.0;
+	return (yCoord - (actualYInitialPosition + actualInitialSpeed * t - 20 * t * t / 2))>0.0;
 }

@@ -23,7 +23,7 @@ AudioManager::AudioManager()
     alcMakeContextCurrent(context);
 }
 
-void AudioManager::AddSong(const char* audioFilePath)
+void AudioManager::AddSong(const char* audioFilePath, float v)
 {
     nbFile++;
 
@@ -31,6 +31,7 @@ void AudioManager::AddSong(const char* audioFilePath)
 
     buff.push_back(0); // Reserve a space in the vector
     sourc.push_back(0);
+
 
     alGenBuffers(1, &buffer);
     checkALError("Failed to generate OpenAL buffer");
@@ -40,6 +41,8 @@ void AudioManager::AddSong(const char* audioFilePath)
     checkALError("Failed to generate OpenAL source");
     sourc[nbFile - 1] = source; // Assign the generated source to the vector
    
+
+
 
 
     std::ifstream audioFile(audioFilePath, std::ios::binary | std::ios::ate);
@@ -65,6 +68,11 @@ void AudioManager::AddSong(const char* audioFilePath)
     // Attach the buffer to the source
     alSourcei(source, AL_BUFFER, buffer);
     checkALError("Failed to attach buffer to source");
+
+    // Set the volume of the sound source to 0.5 (you can use any value between 0.0 and 1.0)
+    alSourcef(source, AL_GAIN, v);
+    checkALError("Failed to attach buffer to volume");
+    
 }
 
 void AudioManager::destroy()

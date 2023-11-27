@@ -21,7 +21,7 @@ protected :
 public:
 	
 	void LoadCollider(const char* filename);
-	bool checkCollision(Collider c,glm::vec3 offset);
+	bool checkCollision(Collider c,glm::vec3 offset,glm::vec3 posiColli);
 	vector<Vertex> getVertices();
 	vector<Face> getFaces();
 	bool isInCollider(glm::vec3 pos);

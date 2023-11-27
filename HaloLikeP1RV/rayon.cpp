@@ -131,7 +131,7 @@ glm::vec3 rayon::ptIntersectionF( glm::vec3 pos)
 		
 }
 
-bool rayon::ptIntersectionGlobalF(glm::vec3 pos,glm::vec3 dir)
+glm::vec3 rayon::ptIntersectionGlobalF(glm::vec3 pos,glm::vec3 dir)
 {
 
 
@@ -144,11 +144,28 @@ bool rayon::ptIntersectionGlobalF(glm::vec3 pos,glm::vec3 dir)
 	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
 
 			bool isOk = RayIntersectsTriangle(pos, dir, (*face).vertexC, (*face).vertexB, (*face).vertexA, pt);
-			if (isOk) { return true; }
+			if (isOk) { return pt; }
+
+	}
+	return glm::vec3(-1000000,-1000000,-1000000);
+
+}
+
+bool rayon::ptIntersectionGlobalFBool(glm::vec3 pos, glm::vec3 dir)
+{
+	glm::vec3 pt;
+
+
+
+
+	// Pour toutes les faces, vérifier l'intersection puis l'inclusion du pt dans la surface de la face.
+	for (vector<vraiFace>::iterator face = faces.begin(); face != faces.end(); face++) {
+
+		bool isOk = RayIntersectsTriangle(pos, dir, (*face).vertexC, (*face).vertexB, (*face).vertexA, pt);
+		if (isOk) { return true; }
 
 	}
 	return false;
-
 }
 
 		

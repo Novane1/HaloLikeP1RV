@@ -13,15 +13,15 @@ using namespace std;
 // Constructeur de base
 Camera::Camera()
 {
-	camera_initial_position.x = 0;
+	camera_initial_position.x = -5;
 	camera_initial_position.y = 1.5;
-	camera_initial_position.z = 0;
-	camera_position.x = 0;
+	camera_initial_position.z = -5;
+	camera_position.x = -5;
 	camera_position.y = 1.5;
-	camera_position.z = 0;
-	camera_center_vector.x = 0;
+	camera_position.z = -5;
+	camera_center_vector.x = -5;
 	camera_center_vector.y = 1.5;
-	camera_center_vector.z = -4;
+	camera_center_vector.z = -9;
 	camera_up_vector.y = 0;
 	camera_up_vector.y = 1;
 	camera_up_vector.z = 0;
@@ -60,6 +60,11 @@ void Camera::addY(float y)
 	camera_position.y += y;
 }
 
+UI Camera::getUI()
+{
+	return Ui;
+}
+
 void Camera::sethauteur(glm::vec3 inter, float hauteur)
 {
 	float delta = camera_position.y;
@@ -79,7 +84,7 @@ void Camera::updateCamera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	//camera_position.y = 0;
 }
-void Camera::goFrontCamera(float speed, vector<Collider*> otherCollider)
+void Camera::goFrontCamera(float speed, vector<Objet3D*> otherCollider)
 {
 	glm::vec3 target = camera_position - camera_center_vector;// vector forward
 	glm::normalize(target);// normalizing so we have just the direction 
@@ -87,9 +92,9 @@ void Camera::goFrontCamera(float speed, vector<Collider*> otherCollider)
 	camera_position.z = camera_position.z + speed * target.z;
 	camera_center_vector.x = camera_center_vector.x + speed * target.x; // we change the target of the camera 
 	camera_center_vector.z = camera_center_vector.z + speed * target.z;
-	for (Collider* it : otherCollider) 
+	for (Objet3D* it : otherCollider) 
 	{
-		if (this->isThereCollision(*it)) 
+		if (this->isThereCollision(*it->getCollider(), it->getPos()))
 		{
 			camera_position.x = camera_position.x - speed * target.x; // we go in the direction of the vector forward
 			camera_position.z = camera_position.z - speed * target.z;
@@ -104,7 +109,7 @@ void Camera::goFrontCamera(float speed, vector<Collider*> otherCollider)
 	
 	//this->updateCamera();
 }
-void Camera::goSideCamera(float speed, vector<Collider*> otherCollider)
+void Camera::goSideCamera(float speed, vector<Objet3D*> otherCollider)
 {
 	glm::vec3 target = camera_position - camera_center_vector; // vector forward
 	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
@@ -113,10 +118,11 @@ void Camera::goSideCamera(float speed, vector<Collider*> otherCollider)
 	camera_position.z = camera_position.z + speed * right.z; // we go in the direction of the vector right
 	camera_center_vector.x = camera_center_vector.x + speed * right.x; // we change the target of the camera 
 	camera_center_vector.z = camera_center_vector.z + speed * right.z;
-	for (Collider* it : otherCollider)
+	for (Objet3D* it : otherCollider)
 	{
-		if (this->isThereCollision(*it))
+		if (this->isThereCollision(*it->getCollider(),it->getPos()))
 		{
+			
 			camera_position.x = camera_position.x - speed * right.x; // we go in the direction of the vector right
 			camera_position.z = camera_position.z - speed * right.z; // we go in the direction of the vector right
 			camera_center_vector.x = camera_center_vector.x - speed * right.x; // we change the target of the camera 
@@ -205,9 +211,9 @@ void Camera::drawCollider()
 	c.affichage();
 }
 
-bool Camera::isThereCollision(Collider collider)
+bool Camera::isThereCollision(Collider collider,glm::vec3 posi)
 {
-	return c.checkCollision(collider,camera_position);
+	return c.checkCollision(collider,camera_position,posi);
 }
 
 void Camera::updateCheckInvicibility()

@@ -6,6 +6,11 @@ void Ennemi::setHealth(float h)
 	health = h;
 }
 
+void Ennemi::setHeight(float h)
+{
+	ourPos.y = h;
+}
+
 float Ennemi::getHealth()
 {
 	return health;
@@ -15,6 +20,8 @@ int Ennemi::getDamageFrame()
 {
 	return damageFrame;
 }
+
+
 
 Ennemi::Ennemi(float d, float h)
 {
@@ -29,18 +36,25 @@ Ennemi::~Ennemi()
 {
 }
 
-bool Ennemi::isShot(glm::vec3 pos, glm::vec3 dir)
+float Ennemi::isShot(glm::vec3 pos, glm::vec3 dir)
 {
 	if (snap.isVraiFaceNull()) {
 		snap.setVraiFaces(vraiFaces);
 	}
 	if (!isInvicible)
 	{
-		return snap.ptIntersectionGlobalF(pos, dir);
+		glm::vec3 pt = snap.ptIntersectionGlobalF(pos+ourPos, dir);
+		if (pt == glm::vec3(-1000000, -1000000, -1000000)) {
+			return 0;
+		}
+		else {
+			return glm::length(pt-pos-ourPos);
+		}
+		
 	}
 	else 
 	{
-		return false;
+		return 0;
 	}
 	
 
@@ -69,6 +83,8 @@ void Ennemi::resetDamageAnimation()
 {
 	damageFrame = 0;
 }
+
+
 
 float Ennemi::addHealth(float h)
 {

@@ -60,7 +60,8 @@ public :
 
 	// Point d'intersection (si intersection) entre face et rayon
 	glm::vec3 ptIntersectionF( glm::vec3 pos);
-	bool ptIntersectionGlobalF(glm::vec3 pos, glm::vec3 dir);
+	glm::vec3 ptIntersectionGlobalF(glm::vec3 pos, glm::vec3 dir);
+	bool ptIntersectionGlobalFBool(glm::vec3 pos, glm::vec3 dir);
 
 };
 

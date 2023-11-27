@@ -54,6 +54,10 @@ bool Objet3D::getActive()
 {
     return isActive;
 }
+glm::vec3 Objet3D::getPos()
+{
+    return ourPos;
+}
 // Setters
 void Objet3D::setVertices(vector<Vertex> v)
 {
@@ -512,4 +516,16 @@ Collider* Objet3D::getCollider()
 }
 
 
+void Objet3D::initPos()
+{
+    glm::vec3 avr(0.0, 0.0, 0.0);
+    float i = 0;
+    for (vector<Vertex>::iterator it = vertices.begin(); it != vertices.end(); it++) {
+        avr.x += (*it).x;
+        avr.y += (*it).y;
+        avr.z += (*it).z;
+        i += 1.0;
+    }
+    ourPos = avr / i;
 
+}

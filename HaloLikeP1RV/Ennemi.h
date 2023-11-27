@@ -12,24 +12,30 @@ protected:
 	rayon snap;
 	int damageFrame;
 	bool isInvicible;
-	glm::vec3 ourPos;
+	
+
+
 
 public:
 	static vector<Ennemi*> listEnnemi;
 	//Setters
 	void setHealth(float h);
+	void setHeight(float h);
 	//Getters
 	float getHealth();
 	int getDamageFrame();
+
 	//Contructeurs
 	Ennemi(float d, float h);
 
 	//Fonctions
+	 // Initialiser la position par rapport à la moyenne des positions
 	float addHealth(float h); // soustraire h de health
-	bool isShot(glm::vec3 pos, glm::vec3 dir);
+	float isShot(glm::vec3 pos, glm::vec3 dir);
 	void startDamageAnimation();
 	void increaseDamageFrame();
 	void resetDamageAnimation();
+
 	//destructor
 	virtual ~Ennemi();
 };

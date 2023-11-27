@@ -24,8 +24,7 @@ void ReloadManager::actTime(glm::vec3 camPos, glm::vec3 camTarget)
 {
 	if (!isActive) { time += 1.0f; }
 	
-	cout << "pos obj" << pos.x << " " << pos.y << " " << pos.z << endl;
-	cout << "pos cam" << camPos.x << " " << camPos.y << " " << camPos.z << endl << endl;
+
 	if (isActive && this->isIn(camPos)) {
 
 		isActive = false;

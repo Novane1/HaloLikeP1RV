@@ -33,9 +33,10 @@ using namespace std;
 
 int width, height, channels;
 //Objets
-Ennemi player(1.0f,20.0f);
+Ennemi player(1.0f,50.0f);
 Player testPlayer;
 Objet3D playerObj;
+Objet3D diamond;
 UI listUI;
 Objet3D smog;
 Objet3D gun;
@@ -55,13 +56,14 @@ Objet3D meteor;
 glm::vec3 previousCam(0, 0, 0);
 // FIN TEST
 //Variables main
+AudioManager* audioManager = new AudioManager();
 vector<Vertex> vertices;
 vector<Face> faces;
 vector<Tex> texture;
 bool red = true;
 bool blue = true;
 GLdouble SPEED = .07;
-GLdouble strafeSpeed = 0.04;
+GLdouble strafeSpeed = 0.05;
 GLdouble walkSpeed = 0.05;
 GLdouble runSpeed = 0.11;
 GLdouble mouseSensitivityAngle = .002;
@@ -84,7 +86,7 @@ float far1 = 100.0f;
 std::vector<bool> keys(GLFW_KEY_LAST, false);
 std::vector<bool> mouseClick(2, false);
 bool shouldExit = false;
-vector<Collider*> otherCollider; // everything but the camera's collider
+vector<Objet3D*> otherEnnemiCollider; // everything but the camera's collider
 Crosshair crosshair;
 ShootBar shootBar;
 
@@ -92,19 +94,30 @@ GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         mouseClick[0] = true;
         shootBar.downAmo();
+        if (camera.getUI().isGun()) {
+            audioManager->playSong(1);
+        }
         // Il faut faire des dégats sur ennemi
         //////////////////////////////////////////
         if (shootBar.getAmo() > 0)// A-t-on es balles?
         {
+            float temp;
             for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
-                if ((*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()))) {
-                    (*it)->addHealth(-5);
-                    (*it)->startDamageAnimation();
-                    if ((*it)->getHealth() <= 0) {
-                        (*it)->setActive(false);
+                temp = (*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()));
+                bool a = camera.getUI().isKnife(); bool b = camera.getUI().isGun();
+                
+                    if ((camera.getUI().isKnife()&& temp > 0 && temp < 6.0f)|| (camera.getUI().isGun()&&temp!=0))
+                    {
+                        
+                        (*it)->addHealth(-5);
+                        (*it)->startDamageAnimation();
+                        if ((*it)->getHealth() <= 0) {
+                            (*it)->setActive(false);
 
+                        }
                     }
-                }
+                    
+                
             }
         }
         
@@ -186,9 +199,11 @@ int main() {
    // Initialize OpenAL
 
 
-    AudioManager* audioManager = new AudioManager();
+   
     const char* dsmusic = "dsmusic.wav";
-    audioManager->AddSong(dsmusic);
+    const char* laser = "laser.wav";
+    audioManager->AddSong(dsmusic,0.3f);
+    audioManager->AddSong(laser,1.0f);
 
     // Play the source
     
@@ -246,7 +261,7 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+  /*  monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     spawnPoints.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -273,41 +288,51 @@ int main() {
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
 
-    smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
+    smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");*/
+
+
     ///Load objet ECN
-    //monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    spawnPoints.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
-    //navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
-    //monde.LoadTexture("Terrain.png");
+    navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    monde.LoadTexture("Terrain.png");
 
-    //skybox.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
+    skybox.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/skybox.obj");
 
-    //gun.LoadTexture("gun.png");
-    //gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
+    gun.LoadTexture("gun.png");
+    gun.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/gun.obj");
 
-    ///*healthBar.LoadTexture("healthbar.png");
-    //healthBar.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/healthbar.obj");*/
  
-    //heart.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/heart3D.obj");
+    heart.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/heart.obj");
 
 
 
-    //player.LoadTexture("zelda.png");
-    //player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
-    //player.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
-    //otherCollider.push_back(player.getCollider());
+    player.LoadTexture("zelda.png");
+    player.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
+    player.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
+    otherEnnemiCollider.push_back(&player);
 
-    //knifeHandle.LoadTexture("knifeHandle.png");
-    //knifeHandle.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
+    knifeHandle.LoadTexture("knifeHandle.png");
+    knifeHandle.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
 
-    //knifeBlade.LoadTexture("knifeBlade.png");
-    //knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
+    knifeBlade.LoadTexture("knifeBlade.png");
+    knifeBlade.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeBlade.obj");
 
-    //glove.LoadTexture("glove.png");
-    //glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
-    //camera.setCollider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj"); 
+    glove.LoadTexture("glove.png");
+    glove.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/glove.obj");
+    camera.setCollider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/cameraCollider.obj"); 
+
+    meteor.LoadTexture("meteor.png");
+    meteor.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
+
+    smog.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
+
+    diamond.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Diamond.obj");
+    diamond.LoadTexture("Diamond.jpg");
     //// FIN LOAD
 
+    player.initPos();
 
     listUI.AddObject(gun);
     listUI.AddObject(knifeHandle);
@@ -327,6 +352,37 @@ int main() {
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 10000.0f);
     
     // Shader in CG
+    const char* vertexShaderSourceBase = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    void main() {
+        gl_Position =   projection *view *model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+    }
+)";
+
+
+    const char* fragmentShaderSourceBase = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+    vec4 texColor = texture(texture1, TexCoord); 
+
+
+    FragColor = texColor;
+    }
+)";
+
     const char* vertexShaderSource = R"(
     #version 330 core
     layout(location = 0) in vec3 aPos;
@@ -545,15 +601,17 @@ float rand(vec2 co) {
     Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
     Shader smogShader(vertexShaderSourceSmog, fragmentShaderSourceSmog);
     Shader groundShader(vertexShaderSourceGround, fragmentShaderSourceGround);
-    
-    rayon downSnap(navMesh.getvraiFaces()); // Initalisation du rayon de projection pour la coordonnée en y
+    Shader baseShader(vertexShaderSourceBase, fragmentShaderSourceBase);
+    // Initalisation du rayon de projection pour la coordonnée en y
+    rayon downSnap(navMesh.getvraiFaces());
     glm::vec3 intersection(0.0f);
-    
 
-
+    // Lancement du OST original
     audioManager->playSong(0);
 
     ReloadManager reloadManager(smog, smogShader, spawnPoints.getvraiFaces(),&shootBar);
+
+
     while (!glfwWindowShouldClose(window)) {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -566,21 +624,22 @@ float rand(vec2 co) {
 
         clavier();
 
-        monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); // TEST NAVMESH
-        if ((player.getDamageFrame() / 10) % 2 == 0)
-        {
 
-            player.affichage();
-            
-        }
-        else { player.affichageShader(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0)); }
+        // AFFICHAGE DES OBJETS
+        monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
         
-        meteor.affichage();
+        if ((player.getDamageFrame() / 10) % 2 == 0) { player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos()); }
+        else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0),-player.getPos()); }
+
+        //meteor.affichage();
         camera.affichageUI(keys, mouseClick,healthShader);
 
         skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-        shootBar.affichage();
+        if (camera.getUI().isGun()) {
+            shootBar.affichage();
+        }
         
+        diamond.affichage();
 
         // Crosshair
         crosshair.affichageCrosshair();
@@ -588,20 +647,28 @@ float rand(vec2 co) {
         reloadManager.actTime(camera.getPosition(),camera.getTarget());
         reloadManager.affichage(camera.getPosition(), camera.getTarget());
         //
-        camera.goFrontCamera(dZ,otherCollider);
-        camera.goSideCamera(dX,otherCollider);
+        camera.goFrontCamera(dZ,otherEnnemiCollider);
+        camera.goSideCamera(dX,otherEnnemiCollider);
 
-        intersection = downSnap.ptIntersectionF(camera.getPosition());
-
+        
+        // Intersection Joueur
+        intersection = downSnap.ptIntersectionF(player.getPos());
+       
         if (intersection != glm::vec3{ -100,-100,-100 })
         {
-
             if (!camera.isJumping())
             {
-                camera.sethauteur(intersection, _HEIGHT);
+                player.setHeight(intersection.y);
             }
-
         }
+
+        // Intersection Ennemi
+        intersection = downSnap.ptIntersectionF(camera.getPosition());
+        if (intersection != glm::vec3{ -100,-100,-100 })
+        {
+            camera.sethauteur(intersection, _HEIGHT);
+        }
+
 
 
         for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {

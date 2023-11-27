@@ -19,7 +19,7 @@ protected :
 	glm::mat4 viewMatrix;
 	Collider collider;
 	bool isActive;
-
+	glm::vec3 ourPos;
 	
 	// SHADERS
 	// Pour l'affichage en OpenGL moderne
@@ -41,7 +41,7 @@ public :
 
 	// Constructeurs
 	Objet3D();
-
+	void initPos();
 	// Destructeurs
 	virtual ~Objet3D();
 
@@ -53,7 +53,7 @@ public :
 	vector<Tex> getTextureCoord();
 	vector<vraiFace> getvraiFaces();
 	bool getActive();
-	
+	glm::vec3 getPos();
 	// Setters
 	void setVertices(vector<Vertex> v);
 	void setFaces(vector<Face> f);
