@@ -81,7 +81,7 @@
     <ClCompile Include="PatternManager.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c">
+    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

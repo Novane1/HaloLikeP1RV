@@ -11,9 +11,10 @@ void UI::AddObject(Objet3D o)
 void UI::changeState(bool b, int i)
 {
     isShowed[i] = b;
+	
 }
 
-void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,glm::vec3 pos,glm::vec3 target,int health,int frameHealth)
+void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,Shader alphaShader,glm::vec3 pos,glm::vec3 target,int health,int frameHealth)
 {
 	for (int i = 0; i < listeUI.size(); i++) {
 		//reset des animations
@@ -82,6 +83,11 @@ void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader 
 			{
 				listeUI[i].affichageHeartBar(healthShader, pos, target, glm::vec3(0.0, 1.0, 0.0),health,frameHealth); // si rien de tout ca, on affiche juste
 			}
+			else if (i == 5)
+			{
+				listeUI[i].affichageShader(alphaShader, pos, target, glm::vec3(0.0, 1.0, 0.0)); // si rien de tout ca, on affiche juste
+				
+			}
 			else
 			{
 				listeUI[i].affichage(); // si rien de tout ca, on affiche juste
@@ -113,4 +119,9 @@ bool UI::isKnife()
 bool UI::isGun()
 {
 	 return isShowed[0];
+}
+
+vector<bool> UI::isShowedFunc()
+{
+	return isShowed;
 }

@@ -24,6 +24,7 @@
 #include "ShootBar.h"
 #include "ReloadManager.h"
 #include "World.h"
+
 using namespace std;
 
 // VARIABLES GLOBALES
@@ -33,6 +34,7 @@ using namespace std;
 
 int width, height, channels;
 //Objets
+
 Ennemi player(1.0f,50.0f);
 Player testPlayer;
 Objet3D playerObj;
@@ -52,6 +54,7 @@ Objet3D monde;
 Objet3D navMesh;
 Objet3D skybox;
 Objet3D meteor;
+Objet3D death;
 //Debug
 glm::vec3 previousCam(0, 0, 0);
 // FIN TEST
@@ -222,6 +225,10 @@ int main() {
 
     //// Create a fullscreen window
     //GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Fullscreen Game", monitor, NULL);
+   /* GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Fullscreen Window", monitor, NULL);*/
     GLFWwindow* window = glfwCreateWindow(800, 600, "My GLFW Window", nullptr, nullptr);
     if (!window) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -261,7 +268,10 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-  /*  monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    death.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
+    death.LoadTexture("death.jpg");
+
+    monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     spawnPoints.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
     navMesh.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -274,7 +284,7 @@ int main() {
     player.LoadTexture("zelda.png");
     player.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldo.obj");
     player.LoadCOllider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/zeldoCollider.obj");
-    otherCollider.push_back(player.getCollider());
+    otherEnnemiCollider.push_back(&player);
     knifeHandle.LoadTexture("knifeHandle.png");
     knifeHandle.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/knifeHandle.obj");
 
@@ -288,11 +298,10 @@ int main() {
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
 
-    smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");*/
-
-
+    smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
+   
     ///Load objet ECN
-    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    /*monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     spawnPoints.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
     navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -329,7 +338,7 @@ int main() {
     smog.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
 
     diamond.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Diamond.obj");
-    diamond.LoadTexture("Diamond.jpg");
+    diamond.LoadTexture("Diamond.jpg");*/
     //// FIN LOAD
 
     player.initPos();
@@ -339,9 +348,12 @@ int main() {
     listUI.AddObject(knifeBlade);
     listUI.AddObject(glove);
     listUI.AddObject(heart);
-    //
+    listUI.AddObject(death);
+    listUI.changeState(false, 0);
+    listUI.changeState(false,5);
     camera.setUI(listUI);
-    camera.changeState(0, false);
+   
+    
     camera.setPlayer(testPlayer);
   
     glEnable(GL_DEPTH_TEST);
@@ -366,6 +378,19 @@ int main() {
     }
 )";
 
+    const char* vertexShaderSourceAlpha = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    out vec2 TexCoord;
+    void main() {
+        gl_Position =   model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+    }
+)";
 
     const char* fragmentShaderSourceBase = R"(
     #version 330 core
@@ -377,11 +402,38 @@ int main() {
     void main() {
 
     vec4 texColor = texture(texture1, TexCoord); 
-
+    
 
     FragColor = texColor;
     }
 )";
+
+
+
+
+    const char* fragmentShaderSourceAlpha = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+    vec4 texColor = texture(texture1, TexCoord); 
+    texColor.a = 0.7f;
+
+    FragColor = texColor;
+    }
+)";
+
+
+
+
+
+
+
+
 
     const char* vertexShaderSource = R"(
     #version 330 core
@@ -396,7 +448,6 @@ int main() {
         TexCoord = aTexCoord;
     }
 )";
-
 
     const char* fragmentShaderSource = R"(
     #version 330 core
@@ -415,6 +466,17 @@ int main() {
     FragColor = mix(texColor, redColor, blendFactor);
     }
 )";
+
+
+
+
+
+
+ 
+
+
+
+
 
     const char* vertexShaderSourceSkyBox = R"(
     #version 330 core
@@ -602,6 +664,7 @@ float rand(vec2 co) {
     Shader smogShader(vertexShaderSourceSmog, fragmentShaderSourceSmog);
     Shader groundShader(vertexShaderSourceGround, fragmentShaderSourceGround);
     Shader baseShader(vertexShaderSourceBase, fragmentShaderSourceBase);
+    Shader alphaShader(vertexShaderSourceAlpha, fragmentShaderSourceAlpha);
     // Initalisation du rayon de projection pour la coordonnée en y
     rayon downSnap(navMesh.getvraiFaces());
     glm::vec3 intersection(0.0f);
@@ -613,84 +676,124 @@ float rand(vec2 co) {
 
 
     while (!glfwWindowShouldClose(window)) {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        camera.updateCamera();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Enable texturing
-
-        glEnable(GL_TEXTURE_2D);
-
-        clavier();
-
-
-        // AFFICHAGE DES OBJETS
-        monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-        
-        if ((player.getDamageFrame() / 10) % 2 == 0) { player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos()); }
-        else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0),-player.getPos()); }
-
-        //meteor.affichage();
-        camera.affichageUI(keys, mouseClick,healthShader);
-
-        skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-        if (camera.getUI().isGun()) {
-            shootBar.affichage();
-        }
-        
-        diamond.affichage();
-
-        // Crosshair
-        crosshair.affichageCrosshair();
-        //reload
-        reloadManager.actTime(camera.getPosition(),camera.getTarget());
-        reloadManager.affichage(camera.getPosition(), camera.getTarget());
-        //
-        camera.goFrontCamera(dZ,otherEnnemiCollider);
-        camera.goSideCamera(dX,otherEnnemiCollider);
-
-        
-        // Intersection Joueur
-        intersection = downSnap.ptIntersectionF(player.getPos());
-       
-        if (intersection != glm::vec3{ -100,-100,-100 })
+        if (camera.getHealth() <= 0) 
         {
-            if (!camera.isJumping())
-            {
-                player.setHeight(intersection.y);
+            glEnable(GL_BLEND);
+
+            // Set the blending function
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glfwSetCursorPosCallback(window, nullptr);
+            camera.changeState(false, 0);
+            camera.changeState(false, 1);
+            camera.changeState(false ,2);
+            camera.changeState(false, 3);
+            camera.changeState(false, 4);
+            camera.changeState(true, 5);
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_TEXTURE_2D);
+            clavier();
+            monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+            skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+            camera.affichageUI(keys, mouseClick, healthShader,alphaShader);
+
+            
+            glDisable(GL_TEXTURE_2D);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+            
+        }
+        else 
+        {
+            glMatrixMode(GL_MODELVIEW);
+            glLoadIdentity();
+            camera.updateCamera();
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            // Enable texturing
+
+            glEnable(GL_TEXTURE_2D);
+
+            clavier();
+
+
+            // AFFICHAGE DES OBJETS
+            monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+
+            if ((player.getDamageFrame() / 10) % 2 == 0) 
+            { 
+                player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos() ); 
             }
-        }
-
-        // Intersection Ennemi
-        intersection = downSnap.ptIntersectionF(camera.getPosition());
-        if (intersection != glm::vec3{ -100,-100,-100 })
-        {
-            camera.sethauteur(intersection, _HEIGHT);
-        }
-
-
-
-        for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
-            (*it)->increaseDamageFrame();
-        }
-
+            else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos()); }
+         
            
-        camera.updateFrame();
-        camera.updateJump(intersection.y);
-        camera.updateCheckInvicibility();
+            //meteor.affichage();
+            camera.affichageUI(keys, mouseClick, healthShader,  alphaShader);
+
+            skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+            if (camera.getUI().isGun()) {
+                shootBar.affichage();
+            }
+
+            
+
+            // Crosshair
+            crosshair.affichageCrosshair();
+            //reload
+            reloadManager.actTime(camera.getPosition(), camera.getTarget());
+            reloadManager.affichage(camera.getPosition(), camera.getTarget());
+            //
+
+
+            camera.goFrontCamera(dZ, otherEnnemiCollider);
+            camera.goSideCamera(dX, otherEnnemiCollider);
+
+
+            // Intersection Joueur
+            intersection = downSnap.ptIntersectionF(player.getPos());
+
+            if (intersection != glm::vec3{ -100,-100,-100 })
+            {
+                if (!camera.isJumping())
+                {
+                    player.setHeight(intersection.y);
+                }
+            }
+
+            // Intersection Ennemi
+            intersection = downSnap.ptIntersectionF(camera.getPosition());
+            if (intersection != glm::vec3{ -100,-100,-100 })
+            {
+                camera.sethauteur(intersection, _HEIGHT);
+            }
+
+
+
+            for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
+                (*it)->increaseDamageFrame();
+            }
+
+
+            camera.updateFrame();
+            camera.updateJump(intersection.y);
+            camera.updateCheckInvicibility();
+
+            glDisable(GL_TEXTURE_2D);
+
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+
+        }
         
-        glDisable(GL_TEXTURE_2D);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-
         // Exit on Echap
         if (shouldExit) {
             break;
         }
+        
     }
-
+    
     // Clean up
     glfwTerminate();
     audioManager->destroy();

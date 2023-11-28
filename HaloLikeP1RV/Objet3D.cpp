@@ -192,8 +192,10 @@ void Objet3D::affichageShaderOffset(Shader shader, glm::vec3 cameraPosition, glm
 {
     if (isActive)
     {
+        
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, offset);
+        glm::mat4 modelF = glm::mat4(1.0f);
+        modelF = glm::translate(model, offset);
         glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
         float fov = glm::radians(90.0f);  // Field of view in radians
@@ -207,7 +209,7 @@ void Objet3D::affichageShaderOffset(Shader shader, glm::vec3 cameraPosition, glm
 
         // Use the shader program and set the model matrix as a uniform.
         glUseProgram(shader.getShader());
-        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(modelF));
         glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
@@ -477,7 +479,7 @@ void Objet3D::affichageHeartBar(Shader shader, glm::vec3 cameraPosition, glm::ve
 
         // Use the shader program and set the model matrix as a uniform.
         glUseProgram(shader.getShader());
-        
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
         glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);

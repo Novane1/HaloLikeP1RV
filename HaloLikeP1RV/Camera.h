@@ -59,7 +59,7 @@ public :
 	virtual void goSideCamera(float speed, vector<Objet3D*> otherCollider);
 	virtual void updateRotation(float xOffset, float yOffset, GLdouble mouseSensitivityAngle);
 	virtual void updateViewMatrix();
-	virtual void affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader);
+	virtual void affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader, Shader alphaShader);
 	virtual void affichagePlayer();
 	virtual void changeState(bool b, int i);// change l'état d'un élément de l'UI de notre caméra
 	virtual void setJump();
