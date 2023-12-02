@@ -142,11 +142,12 @@ void Collider::setVraiFaces()
     return;
 }
 
-void Collider::affichage()
+void Collider::affichage(glm::vec3 colliPos)
 {
 
     //glUniformMatrix4fv(mvpLocation, 1, GL_FALSE, glm::value_ptr(mvpMatrix));
-
+    glPushMatrix();
+    glTranslatef(colliPos.x, colliPos.y, colliPos.z);
     glBegin(GL_TRIANGLES);
     for (const Face& face : faces) {// affichage de la scène
 
@@ -161,6 +162,7 @@ void Collider::affichage()
     }
 
     glEnd();
+    glPopMatrix();
 }
 
 void Collider::setOffset(glm::vec3 pos)

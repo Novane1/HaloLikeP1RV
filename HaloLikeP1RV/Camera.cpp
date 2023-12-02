@@ -28,7 +28,7 @@ Camera::Camera()
 	viewMatrix = glm::lookAt(camera_position, camera_center_vector, camera_up_vector);
 	actualAngleX = 3.141592 / 2;
 	actualAngleY = 0;
-	playerHealth = 1;
+	playerHealth = 10;
 	isInvicibleActTime = 0;
 	isInvicible = false;
 	actFrame = 0;
@@ -209,7 +209,7 @@ void Camera::setCollider(const char* filename)
 
 void Camera::drawCollider()
 {
-	c.affichage();
+	c.affichage(camera_position);
 }
 
 bool Camera::isThereCollision(Collider collider,glm::vec3 posi)

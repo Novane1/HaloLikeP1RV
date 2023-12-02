@@ -26,7 +26,7 @@ public:
 	vector<Face> getFaces();
 	bool isInCollider(glm::vec3 pos);
 	void setVraiFaces();
-	void affichage();
+	void affichage(glm::vec3 colliPos);
 	void setOffset(glm::vec3 pos);
 	glm::vec3 getOffset();
 	Collider();

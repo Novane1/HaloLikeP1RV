@@ -62,7 +62,7 @@ public :
 	void setActive(bool act);
 	void setVraiFaces(); // A appeler une seule fois par objet, après loadOBJ pour transferer la structure de données
 	void setColliderState(bool set);
-
+	void setPos(glm::vec3 p);
 	// Methodes 
 	void affichage();
 	void LoadTexture(const char* path);
@@ -74,6 +74,7 @@ public :
 	void affichageSkybox(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp);
 	void affichageHeartBar(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp,int health,int frame);
 	void drawCollider();
+	void affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, float t, glm::vec3 meteorPos);
 	Collider* getCollider();
 };
 

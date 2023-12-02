@@ -24,7 +24,7 @@
 #include "ShootBar.h"
 #include "ReloadManager.h"
 #include "World.h"
-
+#include "PatternManager.h"
 using namespace std;
 
 // VARIABLES GLOBALES
@@ -92,6 +92,7 @@ bool shouldExit = false;
 vector<Objet3D*> otherEnnemiCollider; // everything but the camera's collider
 Crosshair crosshair;
 ShootBar shootBar;
+PatternManager pMeteor;
 
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -297,6 +298,8 @@ int main() {
 
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
+    meteor.LoadCOllider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteorCollider.obj");
+    otherEnnemiCollider.push_back(&meteor);
 
     smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
    
@@ -353,6 +356,7 @@ int main() {
     listUI.changeState(false,5);
     camera.setUI(listUI);
    
+    pMeteor.setMeteor(&meteor);
     
     camera.setPlayer(testPlayer);
   
@@ -426,6 +430,7 @@ int main() {
     FragColor = texColor;
     }
 )";
+
 
 
 
@@ -619,6 +624,8 @@ float rand(vec2 co) {
         
     }
 )";
+
+
     const char* vertexShaderSourceGround = R"(
     #version 330 core
     layout(location = 0) in vec3 aPos;
@@ -626,10 +633,18 @@ float rand(vec2 co) {
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
+    uniform vec3 meteorPos;
+    uniform float t;
     out vec2 TexCoord;
+    out vec3 pos;
+    out float outT;
+    out vec3 metPos;
     void main() {
         gl_Position =   projection *view *model * vec4(aPos, 1.0);
         TexCoord = aTexCoord;
+        pos = vec3(model * vec4(aPos, 1.0)); 
+        outT = t;
+        metPos = meteorPos;
     }
 )";
 
@@ -638,20 +653,31 @@ float rand(vec2 co) {
     #version 330 core
     in vec2 TexCoord;
     out vec4 FragColor;
-
+    in float outT;
+    in vec3 metPos;
+    in vec3 pos;
     uniform sampler2D texture1; // Texture unit
 
     void main() {
-
+    float x = outT;
+    float distanceToCenter = length(pos.xz - metPos.xz);
     vec4 texColor = texture(texture1, TexCoord); 
-    vec4 darkEarthBrown = vec4(0.4, 0.2, 0.1,1.0); // Red color
+    vec4 darkEarthBrown = vec4(0.4, 0.2, 0.1,1.0); 
+ vec4 redColor = vec4(0.7f, 0.35f, 0.0f,1.0f); // Red color
 
     float blendFactor = 0.5; // You can change this value
 
-    FragColor = mix(texColor, darkEarthBrown, blendFactor);
+    
+
+     if (distanceToCenter <= x) {
+        FragColor = mix(texColor, redColor, 0.7);
+
+        } else {
+
+            FragColor = mix(texColor, darkEarthBrown, blendFactor);
+        }
     }
 )";
-
    /* vec3 pointOnSphere = normalize(pos);
     float a = pointOnSphere.z;
     
@@ -719,9 +745,15 @@ float rand(vec2 co) {
             clavier();
 
 
-            // AFFICHAGE DES OBJETS
-            monde.affichageShader(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
 
+            //monde.affichageShader(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+            if (!pMeteor.getIsActive()) {
+                pMeteor.meteorAttack(glm::vec3(50),glm::vec3(-20));
+            }
+            pMeteor.updateMeteor(baseShader, camera.getPosition(), camera.getTarget());
+            
+            monde.affichageGround(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), pMeteor.getT() * 10.0f , pMeteor.getActivePoint());
+            cout << pMeteor.getT() << endl;
             if ((player.getDamageFrame() / 10) % 2 == 0) 
             { 
                 player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos() ); 
