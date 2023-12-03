@@ -12,12 +12,12 @@
 #include "stb_image_write.h"
 #include <sstream>
 #include <fstream>
-
 using namespace std;
 
 // Constructeur
 Objet3D::Objet3D()
 {
+    ourPos = glm::vec3(0);
     viewMatrix = glm::mat4(1.0f);
     isActive = true;
 }
@@ -122,6 +122,7 @@ void Objet3D::setColliderState(bool set)
 void Objet3D::setPos(glm::vec3 p)
 {
     ourPos = p;
+    collider.setOffset(ourPos);
 }
 
 // Methodes
@@ -517,7 +518,7 @@ void Objet3D::drawCollider()
     collider.affichage(ourPos);
 }
 
-void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, float t, glm::vec3 meteorPos)
+void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, float t, glm::vec3 meteorPos, glm::vec3 bossPos)
 {
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
@@ -539,6 +540,7 @@ void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3
     glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
     glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
     glUniform3fv(glGetUniformLocation(shader.getShader(), "meteorPos"), 1, glm::value_ptr(meteorPos));
+    glUniform3fv(glGetUniformLocation(shader.getShader(), "bossPos"), 1, glm::value_ptr(bossPos));
     glUniform1f(glGetUniformLocation(shader.getShader(), "t") , t);
 
     glBindTexture(GL_TEXTURE_2D, texture.getID());
@@ -567,6 +569,7 @@ void Objet3D::initPos()
         avr.z += (*it).z;
         i += 1.0;
     }
+
     ourPos = avr / i;
 
 }

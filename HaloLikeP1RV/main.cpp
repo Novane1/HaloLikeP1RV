@@ -25,6 +25,7 @@
 #include "ReloadManager.h"
 #include "World.h"
 #include "PatternManager.h"
+#include "MovementManager.h"
 using namespace std;
 
 // VARIABLES GLOBALES
@@ -94,21 +95,25 @@ Crosshair crosshair;
 ShootBar shootBar;
 PatternManager pMeteor;
 
+
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         mouseClick[0] = true;
-        shootBar.downAmo();
+        if (camera.getUI().isGun()) {
+            shootBar.downAmo();
+        }
+        
         if (camera.getUI().isGun()) {
             audioManager->playSong(1);
         }
         // Il faut faire des dégats sur ennemi
         //////////////////////////////////////////
-        if (shootBar.getAmo() > 0)// A-t-on es balles?
+        if (shootBar.getAmo() > 0)// A-t-on des balles?
         {
             float temp;
             for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
                 temp = (*it)->isShot(camera.getPosition(), glm::normalize(camera.getTarget() - camera.getPosition()));
-                bool a = camera.getUI().isKnife(); bool b = camera.getUI().isGun();
+               
                 
                     if ((camera.getUI().isKnife()&& temp > 0 && temp < 6.0f)|| (camera.getUI().isGun()&&temp!=0))
                     {
@@ -299,7 +304,7 @@ int main() {
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
     meteor.LoadCOllider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteorCollider.obj");
-    otherEnnemiCollider.push_back(&meteor);
+    //otherEnnemiCollider.push_back(&meteor);
 
     smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
    
@@ -344,7 +349,7 @@ int main() {
     diamond.LoadTexture("Diamond.jpg");*/
     //// FIN LOAD
 
-    player.initPos();
+    //player.initPos();
 
     listUI.AddObject(gun);
     listUI.AddObject(knifeHandle);
@@ -358,6 +363,8 @@ int main() {
    
     pMeteor.setMeteor(&meteor);
     
+    MovementManager movManager(&player);
+
     camera.setPlayer(testPlayer);
   
     glEnable(GL_DEPTH_TEST);
@@ -634,17 +641,20 @@ float rand(vec2 co) {
     uniform mat4 view;
     uniform mat4 projection;
     uniform vec3 meteorPos;
+    uniform vec3 bossPos;
     uniform float t;
     out vec2 TexCoord;
     out vec3 pos;
     out float outT;
     out vec3 metPos;
+    out vec3 bPos;
     void main() {
         gl_Position =   projection *view *model * vec4(aPos, 1.0);
         TexCoord = aTexCoord;
         pos = vec3(model * vec4(aPos, 1.0)); 
         outT = t;
         metPos = meteorPos;
+        bPos = bossPos;
     }
 )";
 
@@ -656,26 +666,35 @@ float rand(vec2 co) {
     in float outT;
     in vec3 metPos;
     in vec3 pos;
+    in vec3 bPos;
     uniform sampler2D texture1; // Texture unit
 
     void main() {
     float x = outT;
     float distanceToCenter = length(pos.xz - metPos.xz);
+    float distanceToBoss = length(pos.xz - bPos.xz);
     vec4 texColor = texture(texture1, TexCoord); 
     vec4 darkEarthBrown = vec4(0.4, 0.2, 0.1,1.0); 
- vec4 redColor = vec4(0.7f, 0.35f, 0.0f,1.0f); // Red color
+ vec4 orangeColor = vec4(0.7f, 0.35f, 0.0f,1.0f); // Red color
+vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
 
     float blendFactor = 0.5; // You can change this value
 
     
 
      if (distanceToCenter <= x) {
-        FragColor = mix(texColor, redColor, 0.7);
+        FragColor = mix(texColor, orangeColor, 0.7);
 
-        } else {
+        } 
+    else if (distanceToBoss<=10.0f) {
 
-            FragColor = mix(texColor, darkEarthBrown, blendFactor);
+            FragColor = mix(texColor, redColor, blendFactor);
         }
+    else if (distanceToBoss>=300.0f) {
+
+            FragColor = mix(texColor, redColor, blendFactor);
+        }
+    else{FragColor = mix(texColor, darkEarthBrown, blendFactor);}
     }
 )";
    /* vec3 pointOnSphere = normalize(pos);
@@ -746,24 +765,26 @@ float rand(vec2 co) {
 
 
 
-            //monde.affichageShader(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
-            if (!pMeteor.getIsActive()) {
-                pMeteor.meteorAttack(glm::vec3(50),glm::vec3(-20));
-            }
+            ////monde.affichageShader(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
+            //if (!pMeteor.getIsActive()) {
+            //    pMeteor.meteorAttack(glm::vec3(50),glm::vec3(-20));
+            //}
+            
+            movManager.updatePos(camera, pMeteor);
             pMeteor.updateMeteor(baseShader, camera.getPosition(), camera.getTarget());
             
-            monde.affichageGround(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), pMeteor.getT() * 10.0f , pMeteor.getActivePoint());
-            cout << pMeteor.getT() << endl;
+            monde.affichageGround(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), pMeteor.getT() * 10.0f , pMeteor.getActivePoint(),player.getPos());
+            
             if ((player.getDamageFrame() / 10) % 2 == 0) 
             { 
-                player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos() ); 
+                player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos() ); 
             }
-            else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), -player.getPos()); }
-         
+            else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos()); }
+           
            
             //meteor.affichage();
             camera.affichageUI(keys, mouseClick, healthShader,  alphaShader);
-
+            player.drawCollider();
             skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
             if (camera.getUI().isGun()) {
                 shootBar.affichage();
@@ -788,17 +809,23 @@ float rand(vec2 co) {
 
             if (intersection != glm::vec3{ -100,-100,-100 })
             {
-                if (!camera.isJumping())
-                {
-                    player.setHeight(intersection.y);
-                }
+                
+                 player.setPos(glm::vec3(player.getPos().x,intersection.y, player.getPos().z));
+                 
+                
             }
+           
 
             // Intersection Ennemi
             intersection = downSnap.ptIntersectionF(camera.getPosition());
+
             if (intersection != glm::vec3{ -100,-100,-100 })
             {
-                camera.sethauteur(intersection, _HEIGHT);
+                if (!camera.isJumping())
+                {
+                    camera.sethauteur(intersection, _HEIGHT);
+                }
+                
             }
 
 

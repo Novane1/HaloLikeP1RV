@@ -81,8 +81,7 @@ bool Collider::checkCollision(Collider c,glm::vec3 offset,glm::vec3 posiColli) /
     }
     for (Vertex v : c.getVertices()) {
         glm::vec3 temp(v.x-offset.x, v.y-offset.y, v.z-offset.z);
-        temp -= posiColli;
-
+        temp += posiColli;
         if (isInCollider(temp)) {
             return true;
         }

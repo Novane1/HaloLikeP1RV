@@ -96,6 +96,7 @@ void Camera::goFrontCamera(float speed, vector<Objet3D*> otherCollider)
 	{
 		if (this->isThereCollision(*it->getCollider(), it->getPos()))
 		{
+			
 			camera_position.x = camera_position.x - speed * target.x; // we go in the direction of the vector forward
 			camera_position.z = camera_position.z - speed * target.z;
 			camera_center_vector.x = camera_center_vector.x - speed * target.x; // we change the target of the camera 
@@ -120,7 +121,7 @@ void Camera::goSideCamera(float speed, vector<Objet3D*> otherCollider)
 	camera_center_vector.z = camera_center_vector.z + speed * right.z;
 	for (Objet3D* it : otherCollider)
 	{
-		if (this->isThereCollision(*it->getCollider(),it->getPos()))
+		if (this->isThereCollision(*(it->getCollider()),it->getPos()))
 		{
 			
 			camera_position.x = camera_position.x - speed * right.x; // we go in the direction of the vector right

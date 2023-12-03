@@ -163,6 +163,7 @@
     <ClCompile Include="Crosshair.cpp" />
     <ClCompile Include="Ennemi.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MovementManager.cpp" />
     <ClCompile Include="Objet3D.cpp" />
     <ClCompile Include="PatternManager.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -227,6 +228,7 @@
     <ClInclude Include="glm\glm\vec3.hpp" />
     <ClInclude Include="glm\glm\vec4.hpp" />
     <ClInclude Include="glm\glm\vector_relational.hpp" />
+    <ClInclude Include="MovementManager.h" />
     <ClInclude Include="Objet3D.h" />
     <ClInclude Include="PatternManager.h" />
     <ClInclude Include="Physics.h" />

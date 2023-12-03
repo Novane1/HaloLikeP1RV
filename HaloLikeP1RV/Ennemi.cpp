@@ -43,12 +43,12 @@ float Ennemi::isShot(glm::vec3 pos, glm::vec3 dir)
 	}
 	if (!isInvicible)
 	{
-		glm::vec3 pt = snap.ptIntersectionGlobalF(pos+ourPos, dir);
+		glm::vec3 pt = snap.ptIntersectionGlobalF(pos-ourPos, dir);
 		if (pt == glm::vec3(-1000000, -1000000, -1000000)) {
 			return 0;
 		}
 		else {
-			return glm::length(pt-pos-ourPos);
+			return glm::length(pt-pos+ourPos);
 		}
 		
 	}
