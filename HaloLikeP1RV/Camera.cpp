@@ -119,6 +119,8 @@ void Camera::goSideCamera(float speed, vector<Objet3D*> otherCollider)
 	camera_position.z = camera_position.z + speed * right.z; // we go in the direction of the vector right
 	camera_center_vector.x = camera_center_vector.x + speed * right.x; // we change the target of the camera 
 	camera_center_vector.z = camera_center_vector.z + speed * right.z;
+
+
 	for (Objet3D* it : otherCollider)
 	{
 		if (this->isThereCollision(*(it->getCollider()),it->getPos()))
@@ -138,6 +140,7 @@ void Camera::goSideCamera(float speed, vector<Objet3D*> otherCollider)
 }
 void Camera::affichageUI(std::vector<bool> keys, std::vector<bool> mouseClick, Shader healthShader,Shader alphaShader)
 {
+	this->updateCamera();
 	glPushMatrix();// On sauvegarde la matrice actuelle, vu que l'on veut effectuer des modifs de cette matrice seulement pour l'UI
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // On reset la matrice de vue à l'identité, comme ca on affichage par rapport à la caméra et les objets restent ainsi fixes par rapport à la caméra
@@ -234,6 +237,58 @@ void Camera::updateCheckInvicibility()
 void Camera::updateFrame()
 {
 	actFrame++;
+}
+
+void Camera::go(float speedFront, float speedStrafe, vector<Objet3D*> otherCollider)
+{
+	/// <summary>
+	/// Strafe
+	/// </summary>
+	/// <param name="speedFront"></param>
+	/// <param name="speedStrafe"></param>
+	/// <param name="otherCollider"></param>
+	glm::vec3 target = camera_position - camera_center_vector; // vector forward
+	glm::vec3 right = glm::cross(target, camera_up_vector); // we get the right vector of our camera
+
+	camera_position.x = camera_position.x + speedStrafe * right.x; // we go in the direction of the vector right
+	camera_position.z = camera_position.z + speedStrafe * right.z; // we go in the direction of the vector right
+	camera_center_vector.x = camera_center_vector.x + speedStrafe * right.x; // we change the target of the camera 
+	camera_center_vector.z = camera_center_vector.z + speedStrafe * right.z;
+	/// <summary>
+	/// Front
+	/// </summary>
+	/// <param name="speedFront"></param>
+	/// <param name="speedStrafe"></param>
+	/// <param name="otherCollider"></param>
+	
+	glm::normalize(target);// normalizing so we have just the direction 
+	camera_position.x = camera_position.x + speedFront * target.x; // we go in the direction of the vector forward
+	camera_position.z = camera_position.z + speedFront * target.z;
+	camera_center_vector.x = camera_center_vector.x + speedFront * target.x; // we change the target of the camera 
+	camera_center_vector.z = camera_center_vector.z + speedFront * target.z;
+
+	for (Objet3D* it : otherCollider)
+	{
+		if (this->isThereCollision(*it->getCollider(), it->getPos()))
+		{
+			camera_position.x = camera_position.x - speedStrafe * right.x; // we go in the direction of the vector right
+			camera_position.z = camera_position.z - speedStrafe * right.z; // we go in the direction of the vector right
+			camera_center_vector.x = camera_center_vector.x - speedStrafe * right.x; // we change the target of the camera 
+			camera_center_vector.z = camera_center_vector.z - speedStrafe * right.z;
+
+
+			camera_position.x = camera_position.x - speedFront * target.x; // we go in the direction of the vector forward
+			camera_position.z = camera_position.z - speedFront * target.z;
+			camera_center_vector.x = camera_center_vector.x - speedFront * target.x; // we change the target of the camera 
+			camera_center_vector.z = camera_center_vector.z - speedFront * target.z;
+			if (!isInvicible) { playerHealth -= 1; isInvicible = true; }
+			return;
+		}
+	}
+
+	
+	return;
+
 }
 
 

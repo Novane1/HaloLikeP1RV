@@ -518,7 +518,7 @@ void Objet3D::drawCollider()
     collider.affichage(ourPos);
 }
 
-void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, float t, glm::vec3 meteorPos, glm::vec3 bossPos)
+void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, float t, glm::vec3 meteorPos, glm::vec3 bossPos, float longCircleRadius, float closeCircleRadius)
 {
     glm::mat4 model = glm::mat4(1.0f);
     glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
@@ -542,6 +542,9 @@ void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3
     glUniform3fv(glGetUniformLocation(shader.getShader(), "meteorPos"), 1, glm::value_ptr(meteorPos));
     glUniform3fv(glGetUniformLocation(shader.getShader(), "bossPos"), 1, glm::value_ptr(bossPos));
     glUniform1f(glGetUniformLocation(shader.getShader(), "t") , t);
+    glUniform1f(glGetUniformLocation(shader.getShader(), "longRadius"), longCircleRadius);
+    glUniform1f(glGetUniformLocation(shader.getShader(), "closeRadius"), closeCircleRadius);
+
 
     glBindTexture(GL_TEXTURE_2D, texture.getID());
     //Display
@@ -556,6 +559,45 @@ void Objet3D::affichageGround(Shader shader, glm::vec3 cameraPosition, glm::vec3
 Collider* Objet3D::getCollider()
 {
     return &collider;
+}
+
+void Objet3D::affichageShaderPlayer(Shader shader, glm::vec3 cameraPosition, glm::vec3 cameraTarget, glm::vec3 cameraUp, glm::vec3 offset, float closeRange)
+{
+    if (isActive)
+    {
+
+        glm::mat4 model = glm::mat4(1.0f);
+        glm::mat4 modelF = glm::mat4(1.0f);
+        modelF = glm::translate(model, offset);
+        glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
+
+        float fov = glm::radians(90.0f);  // Field of view in radians
+        float aspectRatio = 800.0f / 600.0f;  // Width divided by height
+        float nearClip = 0.1f;
+        float farClip = 10000.0f;
+
+        // Create the projection matrix
+        glm::mat4 projection = glm::perspective(fov, aspectRatio, nearClip, farClip);
+
+
+        // Use the shader program and set the model matrix as a uniform.
+        glUseProgram(shader.getShader());
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "model"), 1, GL_FALSE, glm::value_ptr(modelF));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "view"), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(glGetUniformLocation(shader.getShader(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        glUniform1i(glGetUniformLocation(shader.getShader(), "texture1"), 0);
+        glUniform1f(glGetUniformLocation(shader.getShader(), "closeRange"), closeRange);
+
+        glBindTexture(GL_TEXTURE_2D, texture.getID());
+        //Display
+        glBindVertexArray(VAO);
+
+        glDrawElements(GL_TRIANGLES, pointsTexture.size(), GL_UNSIGNED_INT, 0);
+        //End of display
+        glBindVertexArray(0);
+        glUseProgram(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 }
 
 

@@ -85,6 +85,7 @@ void UI::affichage(std::vector<bool> keys, std::vector<bool> mouseClick, Shader 
 			}
 			else if (i == 5)
 			{
+
 				listeUI[i].affichageShader(alphaShader, pos, target, glm::vec3(0.0, 1.0, 0.0)); // si rien de tout ca, on affiche juste
 				
 			}

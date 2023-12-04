@@ -15,9 +15,14 @@ protected:
 	float closeRangle;
 	bool attackLongRange;
 	float longRange;
-	
+	float longCircleRadius;
+	bool meteorChase;
+	float closeCircleRadius;
 public:
 	MovementManager(Ennemi* o);
 	void updatePos(Camera &c, PatternManager &p);
+	float getlongRadius();
+	float getCloseRange();
+	float getcloseRadius();
 };
 

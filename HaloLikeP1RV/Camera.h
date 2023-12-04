@@ -71,6 +71,7 @@ public :
 	virtual bool isThereCollision(Collider collider,glm::vec3 posi);
 	virtual void updateCheckInvicibility();
 	virtual void updateFrame();
+	virtual void go(float speedFront, float speedStrafe, vector<Objet3D*> otherCollider);
 };
 
 #endif

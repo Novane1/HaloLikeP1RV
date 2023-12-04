@@ -93,7 +93,7 @@ bool shouldExit = false;
 vector<Objet3D*> otherEnnemiCollider; // everything but the camera's collider
 Crosshair crosshair;
 ShootBar shootBar;
-PatternManager pMeteor;
+
 
 
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -274,7 +274,7 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    death.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
+    /*death.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
     death.LoadTexture("death.jpg");
 
     monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -304,12 +304,15 @@ int main() {
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
     meteor.LoadCOllider("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/meteorCollider.obj");
-    //otherEnnemiCollider.push_back(&meteor);
+    otherEnnemiCollider.push_back(&meteor);
 
     smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
-   
+   */
     ///Load objet ECN
-    /*monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
+    death.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
+    death.LoadTexture("death.jpg");
+
+    monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
     spawnPoints.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/spawnPoints.obj");
 
     navMesh.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -342,14 +345,16 @@ int main() {
 
     meteor.LoadTexture("meteor.png");
     meteor.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/meteor.obj");
+    meteor.LoadCOllider("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/meteorCollider.obj");
+    otherEnnemiCollider.push_back(&meteor);
 
     smog.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
 
     diamond.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Diamond.obj");
-    diamond.LoadTexture("Diamond.jpg");*/
+    diamond.LoadTexture("Diamond.jpg");
     //// FIN LOAD
 
-    //player.initPos();
+    
 
     listUI.AddObject(gun);
     listUI.AddObject(knifeHandle);
@@ -361,11 +366,11 @@ int main() {
     listUI.changeState(false,5);
     camera.setUI(listUI);
    
-    pMeteor.setMeteor(&meteor);
+    PatternManager pMeteor(&meteor);
     
     MovementManager movManager(&player);
 
-    camera.setPlayer(testPlayer);
+    
   
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -382,12 +387,75 @@ int main() {
     uniform mat4 model;
     uniform mat4 view;
     uniform mat4 projection;
+
     out vec2 TexCoord;
     void main() {
         gl_Position =   projection *view *model * vec4(aPos, 1.0);
         TexCoord = aTexCoord;
+
     }
 )";
+
+    
+
+    const char* fragmentShaderSourceBase = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    out vec4 FragColor;
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+
+    vec4 texColor = texture(texture1, TexCoord); 
+    
+
+    FragColor = texColor;
+    }
+)";
+
+
+
+
+
+    const char* vertexShaderSourceBaseP = R"(
+    #version 330 core
+    layout(location = 0) in vec3 aPos;
+    layout(location = 1) in vec2 aTexCoord;
+    uniform mat4 model;
+    uniform mat4 view;
+    uniform mat4 projection;
+    uniform float closeRange;
+    out float outCloseRange;
+    out vec2 TexCoord;
+    void main() {
+        gl_Position =   projection *view *model * vec4(aPos, 1.0);
+        TexCoord = aTexCoord;
+        outCloseRange = closeRange;
+    }
+)";
+
+
+
+    const char* fragmentShaderSourceBaseP = R"(
+    #version 330 core
+    in vec2 TexCoord;
+    in float outCloseRange;
+    out vec4 FragColor;
+    
+
+    uniform sampler2D texture1; // Texture unit
+
+    void main() {
+
+    vec4 texColor = texture(texture1, TexCoord); 
+    
+    texColor.a = outCloseRange;
+    FragColor = texColor;
+    }
+)";
+
 
     const char* vertexShaderSourceAlpha = R"(
     #version 330 core
@@ -402,26 +470,6 @@ int main() {
         TexCoord = aTexCoord;
     }
 )";
-
-    const char* fragmentShaderSourceBase = R"(
-    #version 330 core
-    in vec2 TexCoord;
-    out vec4 FragColor;
-
-    uniform sampler2D texture1; // Texture unit
-
-    void main() {
-
-    vec4 texColor = texture(texture1, TexCoord); 
-    
-
-    FragColor = texColor;
-    }
-)";
-
-
-
-
     const char* fragmentShaderSourceAlpha = R"(
     #version 330 core
     in vec2 TexCoord;
@@ -642,9 +690,13 @@ float rand(vec2 co) {
     uniform mat4 projection;
     uniform vec3 meteorPos;
     uniform vec3 bossPos;
+    uniform float longRadius;
     uniform float t;
+    uniform float closeRadius;
+    out float outCloseRadius;
     out vec2 TexCoord;
     out vec3 pos;
+    out float outLongRadius;
     out float outT;
     out vec3 metPos;
     out vec3 bPos;
@@ -655,6 +707,8 @@ float rand(vec2 co) {
         outT = t;
         metPos = meteorPos;
         bPos = bossPos;
+        outLongRadius = longRadius;
+        outCloseRadius = closeRadius;
     }
 )";
 
@@ -667,6 +721,8 @@ float rand(vec2 co) {
     in vec3 metPos;
     in vec3 pos;
     in vec3 bPos;
+    in float outLongRadius;
+    in float outCloseRadius;
     uniform sampler2D texture1; // Texture unit
 
     void main() {
@@ -686,11 +742,11 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
         FragColor = mix(texColor, orangeColor, 0.7);
 
         } 
-    else if (distanceToBoss<=10.0f) {
+    else if (distanceToBoss<=outCloseRadius) {
 
             FragColor = mix(texColor, redColor, blendFactor);
         }
-    else if (distanceToBoss>=300.0f) {
+    else if (distanceToBoss>=outLongRadius && distanceToBoss<=(outLongRadius+1.0f) ) {
 
             FragColor = mix(texColor, redColor, blendFactor);
         }
@@ -710,6 +766,7 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
     Shader groundShader(vertexShaderSourceGround, fragmentShaderSourceGround);
     Shader baseShader(vertexShaderSourceBase, fragmentShaderSourceBase);
     Shader alphaShader(vertexShaderSourceAlpha, fragmentShaderSourceAlpha);
+    Shader playerShader(vertexShaderSourceBaseP, fragmentShaderSourceBaseP);
     // Initalisation du rayon de projection pour la coordonnée en y
     rayon downSnap(navMesh.getvraiFaces());
     glm::vec3 intersection(0.0f);
@@ -724,7 +781,7 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
         if (camera.getHealth() <= 0) 
         {
             glEnable(GL_BLEND);
-
+            
             // Set the blending function
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glfwSetCursorPosCallback(window, nullptr);
@@ -745,13 +802,17 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
 
             
             glDisable(GL_TEXTURE_2D);
-
+            glDisable(GL_BLEND);
             glfwSwapBuffers(window);
             glfwPollEvents();
             
         }
         else 
         {
+            glEnable(GL_BLEND);
+
+            // Set the blending function
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
             camera.updateCamera();
@@ -773,18 +834,27 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
             movManager.updatePos(camera, pMeteor);
             pMeteor.updateMeteor(baseShader, camera.getPosition(), camera.getTarget());
             
-            monde.affichageGround(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), pMeteor.getT() * 10.0f , pMeteor.getActivePoint(),player.getPos());
-            
+            monde.affichageGround(groundShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), pMeteor.getT() * 10.0f , pMeteor.getActivePoint(),player.getPos(),movManager.getlongRadius(), movManager.getcloseRadius());
+            float a = movManager.getCloseRange();
+
+            if (a == 0) {
+                a = 1.0f;
+            }
+            if (a >= 1) {
+                a = 1.0f;
+            }
+
             if ((player.getDamageFrame() / 10) % 2 == 0) 
             { 
-                player.affichageShaderOffset(baseShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos() ); 
+               
+                player.affichageShaderPlayer(playerShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos(),a);
             }
-            else { player.affichageShaderOffset(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos()); }
+            else { player.affichageShaderPlayer(redDamageShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0), player.getPos(),a); }
            
            
             //meteor.affichage();
             camera.affichageUI(keys, mouseClick, healthShader,  alphaShader);
-            player.drawCollider();
+            
             skybox.affichageSkybox(skyboxShader, camera.getPosition(), camera.getTarget(), glm::vec3(0.0, 1.0, 0.0));
             if (camera.getUI().isGun()) {
                 shootBar.affichage();
@@ -799,9 +869,9 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
             reloadManager.affichage(camera.getPosition(), camera.getTarget());
             //
 
-
-            camera.goFrontCamera(dZ, otherEnnemiCollider);
-            camera.goSideCamera(dX, otherEnnemiCollider);
+            camera.go(dZ, dX, otherEnnemiCollider);
+            /*camera.goFrontCamera(dZ, otherEnnemiCollider);
+            camera.goSideCamera(dX, otherEnnemiCollider);*/
 
 
             // Intersection Joueur
@@ -850,8 +920,12 @@ vec4 redColor = vec4(1.0f, 0.0f, 0.0f,1.0f); // Red color
         if (shouldExit) {
             break;
         }
+        glDisable(GL_BLEND);
         
     }
+
+
+
     
     // Clean up
     glfwTerminate();
