@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="CallbackFunction.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
     <ClInclude Include="Crosshair.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="rayon.h" />
     <ClInclude Include="ReloadManager.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderDeclaration.h" />
     <ClInclude Include="ShootBar.h" />
     <ClInclude Include="Skybox.h" />
     <ClInclude Include="stb-master\stb_connected_components.h" />
