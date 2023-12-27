@@ -156,7 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\Dev\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\..\glad\src\glad.c" />
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -228,6 +228,7 @@
     <ClInclude Include="glm\glm\vec3.hpp" />
     <ClInclude Include="glm\glm\vec4.hpp" />
     <ClInclude Include="glm\glm\vector_relational.hpp" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="MovementManager.h" />
     <ClInclude Include="Objet3D.h" />
     <ClInclude Include="PatternManager.h" />

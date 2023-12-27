@@ -31,84 +31,74 @@ using namespace std;
 // VARIABLES GLOBALES
 
 #define _HEIGHT 4.0
-// Function to check for OpenAL errors
-
 int width, height, channels;
 //Objets
 
-Ennemi player(1.0f,50.0f);
-Player testPlayer;
-Objet3D playerObj;
-Objet3D diamond;
-UI listUI;
-Objet3D smog;
-Objet3D gun;
-Objet3D heart;
-Objet3D healthBar;
-Objet3D second;
-Objet3D knifeHandle;
-Objet3D knifeBlade;
-Objet3D glove;
-Objet3D spawnPoints;
-// TEST NAVMESH
-Objet3D monde;
-Objet3D navMesh;
-Objet3D skybox;
-Objet3D meteor;
-Objet3D death;
-//Debug
-glm::vec3 previousCam(0, 0, 0);
+Ennemi player(1.0f,50.0f); // main ennemi
+Objet3D diamond; // useless rn
+UI listUI; // List of our UI object
+Objet3D smog; // Orb to get back our ammo
+Objet3D gun; // gun
+Objet3D heart; // hearth that simbolie health of our player
+Objet3D knifeHandle; // Part of our knife
+Objet3D knifeBlade;// Part of our knife
+Objet3D glove;// Part of our knife
+Objet3D spawnPoints; // spawn points for our "smog" (so ammo)
+Objet3D monde; // world
+Objet3D navMesh; // navmesh for player to travel in
+Objet3D skybox; // skybox
+Objet3D meteor; // meteor for the ennemi's attack
+Objet3D death; //death screen
+
+
 // FIN TEST
 //Variables main
-AudioManager* audioManager = new AudioManager();
-vector<Vertex> vertices;
-vector<Face> faces;
-vector<Tex> texture;
-bool red = true;
-bool blue = true;
+AudioManager* audioManager = new AudioManager(); // To put music
+//All of our speed
 GLdouble SPEED = .07;
 GLdouble strafeSpeed = 0.05;
 GLdouble walkSpeed = 0.05;
 GLdouble runSpeed = 0.11;
-GLdouble mouseSensitivityAngle = .002;
+//End of our speeds
+GLdouble mouseSensitivityAngle = .002; // Sensitivity for mouse
 const GLdouble minYAngle = -3.141592 / 2.0; // Minimum angle (e.g., -90 degrees)
 const GLdouble maxYAngle = 3.141592 / 2.0;
-float oldMouseX = -1;
-float oldMouseY = -1;
-float xOffset = 0;
-float yOffset = 0;
-float dX = 0; // décalage selon l'axe X en déplacement
-float dZ = 0;// décalage selon l'axe Z en déplacement
-glm::mat4 view; // matrice de vue
+float oldMouseX = -1; //Old mouse X coordonate
+float oldMouseY = -1; //Old mouse Y coordonate
+float xOffset = 0; // X Offset between actual mouse coordonate and previous one
+float yOffset = 0; // Y Offset between actual mouse coordonate and previous one
+float dX = 0; // X Axis offset for mooving
+float dZ = 0; // Y Axis offset for mooving
 Camera camera; //Définition de la caméra
-// Taille de la fenêtre
+//Window parameters
 int windowW = 640;
 int windowH = 480;
 float focale = 65.0f;
 float near1 = 0.1f;
 float far1 = 100.0f;
-std::vector<bool> keys(GLFW_KEY_LAST, false);
-std::vector<bool> mouseClick(2, false);
-bool shouldExit = false;
+//End of window parameters
+std::vector<bool> keys(GLFW_KEY_LAST, false); // Vector to know the state of our keyboard's keys
+std::vector<bool> mouseClick(2, false); // // Vector to know the state of our mous's keys
+bool shouldExit = false; // Condition to exit main game
 vector<Objet3D*> otherEnnemiCollider; // everything but the camera's collider
-Crosshair crosshair;
-ShootBar shootBar;
+Crosshair crosshair; //Crosshair
+ShootBar shootBar; // Amo counter bar
 
 
 
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-        mouseClick[0] = true;
+        mouseClick[0] = true; // changing the state of our mouse key
         if (camera.getUI().isGun()) {
-            shootBar.downAmo();
+            shootBar.downAmo(); // We drop some ammo
         }
         
         if (camera.getUI().isGun()) {
-            audioManager->playSong(1);
+            audioManager->playSong(1); // Shoot sound
         }
-        // Il faut faire des dégats sur ennemi
+        // We need to apply damage
         //////////////////////////////////////////
-        if (shootBar.getAmo() > 0)// A-t-on des balles?
+        if (shootBar.getAmo() > 0)// Do we have enough ammo?
         {
             float temp;
             for (vector<Ennemi*>::iterator it = player.listEnnemi.begin(); it != player.listEnnemi.end(); it++) {
@@ -274,7 +264,7 @@ int main() {
     // FIN LOAD
 
     //// LOAD OBJETS DE NATHAN
-    /*death.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
+    death.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
     death.LoadTexture("death.jpg");
 
     monde.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -307,9 +297,9 @@ int main() {
     otherEnnemiCollider.push_back(&meteor);
 
     smog.LoadOBJ("C:/Users/Utilisateur/source/repos/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
-   */
+   
     ///Load objet ECN
-    death.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
+    /*death.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/death.obj");
     death.LoadTexture("death.jpg");
 
     monde.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/map.obj");
@@ -351,7 +341,7 @@ int main() {
     smog.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/smog.obj");
 
     diamond.LoadOBJ("C:/Users/Eleve/source/repos/Novane1/HaloLikeP1RV/HaloLikeP1RV/Modele/Diamond.obj");
-    diamond.LoadTexture("Diamond.jpg");
+    diamond.LoadTexture("Diamond.jpg");*/
     //// FIN LOAD
 
     

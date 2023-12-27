@@ -29,8 +29,7 @@ void MovementManager::updatePos(Camera& c, PatternManager& p)
 		meteorChase = false;
 	}
 
-	/*cout << glm::length(pos - p.getMetPos()) << endl;
-	cout << p.getIsActive() << endl;*/
+	
 
 	if (idle) {
 		tIdle += 0.01;

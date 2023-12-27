@@ -5,6 +5,7 @@
 #include "glm/glm/glm.hpp"
 #include "glm/glm/gtc/matrix_transform.hpp"
 #include "glm/glm/glm.hpp"
+#include "glm/glm/gtx/compatibility.hpp"
 #include "glm/glm/gtc/type_ptr.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -566,9 +567,23 @@ void Objet3D::affichageShaderPlayer(Shader shader, glm::vec3 cameraPosition, glm
     if (isActive)
     {
 
-        glm::mat4 model = glm::mat4(1.0f);
+       
         glm::mat4 modelF = glm::mat4(1.0f);
-        modelF = glm::translate(model, offset);
+        
+        // Rotation to face the player
+        glm::vec3 dir = cameraPosition - ourPos ;
+
+        // Calculate the angle in radians
+        float angle = std::atan2(dir.x, dir.z);
+        angle = glm::mod(angle, glm::two_pi<float>());
+       
+
+        modelF = glm::translate(modelF, offset);
+        modelF = glm::rotate(modelF, angle, glm::vec3(0, 1, 0));
+
+        // Translations
+        
+       
         glm::mat4 view = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
         float fov = glm::radians(90.0f);  // Field of view in radians
