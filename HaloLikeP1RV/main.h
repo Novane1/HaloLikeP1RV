@@ -80,7 +80,8 @@ bool shouldExit = false; // Condition to exit main game
 vector<Objet3D*> otherEnnemiCollider; // everything but the camera's collider
 Crosshair crosshair; //Crosshair
 ShootBar shootBar; // Amo counter bar
-
+const char* dsmusic = "dsmusic.wav"; // Music name
+const char* laser = "laser.wav"; // Music name
 
 // CallBack Functions
 GLvoid mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {

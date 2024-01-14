@@ -4,24 +4,13 @@ using namespace std;
 
 
 
-
-
-
-
-
 int main() {
-    // Initialize GLFW
-        /// Audio
-   // Initialize OpenAL
-
-
+  
    
-    const char* dsmusic = "dsmusic.wav";
-    const char* laser = "laser.wav";
+    
     audioManager->AddSong(dsmusic,0.3f);
     audioManager->AddSong(laser,1.0f);
 
-    // Play the source
     
 
 
@@ -38,7 +27,6 @@ int main() {
         return -1;
     }
 
-    //Shader shader(vertexShaderSource, fragmentShaderSource);
     glfwMakeContextCurrent(window);
 
     if (!gladLoadGL()) {
@@ -53,9 +41,12 @@ int main() {
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
     
-    //// LOAD OBJETS DE NATHAN
+    //// LOAD OBJECT
     death.LoadOBJ("Modele/death.obj");
     death.LoadTexture("death.jpg");
+
+    gun.LoadOBJ("Modele/gun.obj");
+    gun.LoadTexture("gun.png");
 
     monde.LoadOBJ("Modele/map.obj");
     spawnPoints.LoadOBJ("Modele/spawnPoints.obj");
@@ -88,6 +79,7 @@ int main() {
 
     smog.LoadOBJ("Modele/smog.obj");
    
+    // Adding useful object to our UI
     listUI.AddObject(gun);
     listUI.AddObject(knifeHandle);
     listUI.AddObject(knifeBlade);
@@ -98,9 +90,10 @@ int main() {
     listUI.changeState(false,5);
     camera.setUI(listUI);
    
-    PatternManager pMeteor(&meteor);
+    // Creation of our ennemy pattern
+    PatternManager pMeteor(&meteor); // For his long range attack, the meteor
     
-    MovementManager movManager(&player);
+    MovementManager movManager(&player); // movement of our ennemy
 
     
   
@@ -110,7 +103,7 @@ int main() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.0f, 800.0f / 600.0f, 0.1f, 10000.0f);
-
+    // Creation of our different Shader
     Shader redDamageShader(vertexShaderSource, fragmentShaderSource);
     Shader skyboxShader(vertexShaderSourceSkyBox, fragmentShaderSourceSkyBox);
     Shader healthShader(vertexShaderSourceHealth, fragmentShaderSourceHealth);
@@ -119,30 +112,38 @@ int main() {
     Shader baseShader(vertexShaderSourceBase, fragmentShaderSourceBase);
     Shader alphaShader(vertexShaderSourceAlpha, fragmentShaderSourceAlpha);
     Shader playerShader(vertexShaderSourceBaseP, fragmentShaderSourceBaseP);
+    // End of the creation of our shader
 
-    rayon downSnap(navMesh.getvraiFaces());
+
+    rayon downSnap(navMesh.getvraiFaces());// Creation of a ray on our navmesh, useful for navmesh or damage
     glm::vec3 intersection(0.0f);
 
     // Lancement du OST original
     audioManager->playSong(0);
 
-    ReloadManager reloadManager(smog, smogShader, spawnPoints.getvraiFaces(),&shootBar);
+    ReloadManager reloadManager(smog, smogShader, spawnPoints.getvraiFaces(),&shootBar); // Reload manager with orb system
 
 
     while (!glfwWindowShouldClose(window)) {
-        if (camera.getHealth() <= 0) 
+        if (camera.getHealth() <= 0) // To play if we are dead
         {
             glEnable(GL_BLEND);
             
             // Set the blending function
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glfwSetCursorPosCallback(window, nullptr);
+
+            glfwSetCursorPosCallback(window, nullptr); // Disable our movement
+
+            // we desactivate our ATH, and we render our death screen
             camera.changeState(false, 0);
             camera.changeState(false, 1);
             camera.changeState(false ,2);
             camera.changeState(false, 3);
             camera.changeState(false, 4);
             camera.changeState(true, 5);
+            // ...
+
+
             glMatrixMode(GL_MODELVIEW);
             glLoadIdentity();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
